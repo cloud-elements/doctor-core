@@ -6,7 +6,7 @@ const importFormulas = require('./importFormulas');
 const createObjectDefinitions = require('../util/createObjectDefinitions');
 const createTransformations = require('../util/createTransformations');
 const createFormulas = require('../util/createFormulas');
-const createElements = require('../util/createElements');
+const createElements = require('./elements/createElements');
 const readFile = require('../util/readFile');
 
 const importBackupFromFile = async (fileData) => {

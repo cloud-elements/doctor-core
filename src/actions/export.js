@@ -1,15 +1,15 @@
 'use strict';
 require('log-prefix')(() => `[${new Date().toISOString()}] Doctor-core: %s`);
 const loadAccount = require('../util/loadAccount');
-const {startSpinner, stopSpinner} = require('../util/spinner');
+const { startSpinner, stopSpinner } = require('../util/spinner');
 const eventListener = require('../events/event-listener');
-const {removeCancelledJobId} = require('../events/cancelled-job');
+const { removeCancelledJobId } = require('../events/cancelled-job');
 const clearCancelledJobId = (jobId) => jobId && removeCancelledJobId(jobId);
 
 const functions = {
-  vdrs: require('./vdrs/download/downloadVdrs'),
+  vdrs: require('../core/vdrs/download/downloadVdrs'),
   formulas: require('../core/saveFormulas'),
-  elements: require('../core/saveElements'),
+  elements: require('../core/elements/saveElements'),
   all: require('../core/saveAll'),
 };
 
@@ -25,7 +25,7 @@ module.exports = async (object, account, options) => {
       process.exit(1);
     }
     eventListener.addListener();
-    await functions[object]({object, options});
+    await functions[object]({ object, options });
     clearCancelledJobId(options.jobId)
     await stopSpinner();
   } catch (err) {

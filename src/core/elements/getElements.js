@@ -1,11 +1,11 @@
 'use strict';
-const {emitter, EventTopic} = require('../events/emitter');
-const {isJobCancelled} = require('../events/cancelled-job');
-const {Assets, ArtifactStatus} = require('../constants/artifact');
-const {forEach, isNil, isEmpty, equals, pipe, reject} = require('ramda');
-const get = require('./get');
-const getExtendedElements = require('./getExtendedElements');
-const getPrivateElements = require('./getPrivateElements');
+const { emitter, EventTopic } = require('../../events/emitter');
+const { isJobCancelled } = require('../../events/cancelled-job');
+const { Assets, ArtifactStatus } = require('../../constants/artifact');
+const { forEach, isNil, isEmpty, equals, pipe, reject } = require('ramda');
+const get = require('../../util/get');
+const getExtendedElements = require('../../util/elements/getExtendedElements');
+const getPrivateElements = require('../../util/elements/getPrivateElements');
 const makePath = (element) => `elements/${element.id}/export`;
 const isNilOrEmpty = (val) => isNil(val) || isEmpty(val);
 const clearNull = pipe(reject(isNil));
@@ -13,7 +13,7 @@ const clearNull = pipe(reject(isNil));
 const downloadElements = async (elements, query, jobId, processId, isPrivate) => {
   console.log(`Initiating the download process for elements`);
   const downloadPromises = await elements.map(async (element) => {
-    const elementMetadata = JSON.stringify({private: isPrivate});
+    const elementMetadata = JSON.stringify({ private: isPrivate });
     try {
       if (isJobCancelled(jobId)) {
         emitter.emit(EventTopic.ASSET_STATUS, {
@@ -69,7 +69,7 @@ module.exports = async (elementKeys, jobId, processId) => {
     // Fetch all the extended elements again to get all required/hydrated fields.
     const extendedElementsExport = await downloadElements(
       extendedElements,
-      {extendedOnly: true},
+      { extendedOnly: true },
       jobId,
       processId,
       /* isPrivate */ false,
@@ -79,21 +79,21 @@ module.exports = async (elementKeys, jobId, processId) => {
         ? []
         : extendedElementsExport
       : isNilOrEmpty(extendedElementsExport)
-      ? privateElementsExport
-      : privateElementsExport.concat(extendedElementsExport);
+        ? privateElementsExport
+        : privateElementsExport.concat(extendedElementsExport);
     const newlyCreatedElements =
       !isNilOrEmpty(elementKeys) && Array.isArray(elementKeys)
         ? elementKeys.filter(
-            (elementKey) =>
-              elementKey.private && !privateElements.some((element) => equals(element.key, elementKey.key)),
-          )
+          (elementKey) =>
+            elementKey.private && !privateElements.some((element) => equals(element.key, elementKey.key)),
+        )
         : [];
     newlyCreatedElements.forEach((element) =>
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.ELEMENTS,
         assetName: element.key,
-        metadata: JSON.stringify({private: true}),
+        metadata: JSON.stringify({ private: true }),
         isNew: true,
       }),
     );

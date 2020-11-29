@@ -1,14 +1,14 @@
 'use strict';
-const {emitter, EventTopic} = require('../events/emitter');
-const {isJobCancelled} = require('../events/cancelled-job');
-const {Assets, ArtifactStatus} = require('../constants/artifact');
-const getPrivateElements = require('../util/getPrivateElements');
-const remove = require('../util/remove');
-const {isEmpty} = require('ramda');
+const { isEmpty } = require('ramda');
+const { Assets, ArtifactStatus } = require('../../constants/artifact');
+const { emitter, EventTopic } = require('../../events/emitter');
+const { isJobCancelled } = require('../../events/cancelled-job');
+const http = require('../../util/http');
+const getPrivateElements = require('../../util/elements/getPrivateElements');
 const makePath = (id) => `elements/${id}`;
 
 module.exports = async (options) => {
-  const {name, jobId, processId} = options;
+  const { name, jobId, processId } = options;
   const elements = await getPrivateElements(name);
   if (isEmpty(elements)) {
     console.log(`The doctor was unable to find the element ${name}.`);
@@ -29,7 +29,7 @@ module.exports = async (options) => {
         return null;
       }
       console.log(`Deleting element for element key - ${element.key}`);
-      await remove(makePath(element.id));
+      await http.delete(makePath(element.id));
       console.log(`Deleted element for element key - ${element.key}.`);
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,

@@ -2,8 +2,8 @@
 
 // Export the import and export functionality for doctor service
 module.exports = {
-    exportAsset: require('./src/core/export'),
-    importAsset: require('./src/core/import'),
-    deleteAsset: require('./src/core/delete'),
+    exportAsset: require('./src/actions/export'),
+    importAsset: require('./src/actions/import'),
+    deleteAsset: require('./src/actions/delete'),
     eventHandler: require('./src/events/emitter')
 };

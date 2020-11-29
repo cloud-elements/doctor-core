@@ -18,7 +18,7 @@ const {
 } = require('ramda');
 const readFile = require('../util/readFile');
 const buildElementsFromDir = require('../util/buildElementsFromDir');
-const createElements = require('../util/createElements');
+const createElements = require('./elements/createElements');
 const isNilOrEmpty = (val) => isNil(val) || isEmpty(val);
 
 const importElements = curry(async (elements, options) => {

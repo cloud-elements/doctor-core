@@ -7,7 +7,7 @@ const {removeCancelledJobId} = require('../events/cancelled-job');
 const clearCancelledJobId = (jobId) => jobId && removeCancelledJobId(jobId);
 
 const functions = {
-  vdrs: require('./vdrs/upload/uploadMultipleVdrs'),
+  vdrs: require('../core/vdrs/upload/uploadMultipleVdrs'),
   formulas: require('../core/importFormulas'),
   elements: require('../core/importElements'),
   all: require('../core/importBackup'),

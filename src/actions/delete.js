@@ -1,24 +1,25 @@
 'use strict';
 require('log-prefix')(() => `[${new Date().toISOString()}] Doctor-core: %s`);
-const {type} = require('ramda');
+const { type } = require('ramda');
 const loadAccount = require('../util/loadAccount');
-const {startSpinner, stopSpinner} = require('../util/spinner');
-const {removeCancelledJobId} = require('../events/cancelled-job');
+const { startSpinner, stopSpinner } = require('../util/spinner');
+const { removeCancelledJobId } = require('../events/cancelled-job');
 const clearCancelledJobId = (jobId) => jobId && removeCancelledJobId(jobId);
 
 const functions = {
-  commonResources: require('./removeCommonResources'),
-  vdrs: require('./removeCommonResources'),
-  formulaInstances: require('./removeFormulaInstances'),
-  instances: require('./removeInstances'),
-  elements: require('./removeElements'),
-  formulas: require('./removeFormulas'),
+  commonResources: require('../core/removeCommonResources'),
+  vdrs: require('../core/removeCommonResources'),
+  formulaInstances: require('../core/removeFormulaInstances'),
+  instances: require('../core/removeInstances'),
+  elements: require('../core/elements/removeElements'),
+  formulas: require('../core/removeFormulas'),
 };
+
 const specificFunctions = {
-  elements: require('./removeElement'),
-  formulas: require('./removeFormula'),
-  vdrs: require('./removeCommonResource'),
-  commonResources: require('./removeCommonResource'),
+  elements: require('../core/elements/removeElement'),
+  formulas: require('../core/removeFormula'),
+  vdrs: require('../core/removeCommonResource'),
+  commonResources: require('../core/removeCommonResource'),
 };
 
 const validateObject = (object, functions) => {
