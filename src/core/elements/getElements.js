@@ -1,12 +1,12 @@
 'use strict';
+const { forEach, isNil, isEmpty, equals, pipe, reject } = require('ramda');
+const getExtendedElements = require('../../util/elements/getExtendedElements');
+const getPrivateElements = require('../../util/elements/getPrivateElements');
 const { emitter, EventTopic } = require('../../events/emitter');
 const { isJobCancelled } = require('../../events/cancelled-job');
 const { Assets, ArtifactStatus } = require('../../constants/artifact');
-const { forEach, isNil, isEmpty, equals, pipe, reject } = require('ramda');
-const get = require('../../util/get');
-const getExtendedElements = require('../../util/elements/getExtendedElements');
-const getPrivateElements = require('../../util/elements/getPrivateElements');
 const { logDebug } = require('../../util/logger');
+const http = require('../../util/http');
 const makePath = (element) => `elements/${element.id}/export`;
 const isNilOrEmpty = (val) => isNil(val) || isEmpty(val);
 const clearNull = pipe(reject(isNil));
@@ -28,7 +28,7 @@ const downloadElements = async (elements, query, jobId, processId, isPrivate) =>
         return null;
       }
       logDebug(`Downloading element for element key - ${element.key}`);
-      const exportedElement = await get(makePath(element), query);
+      const exportedElement = await http.get(makePath(element), query);
       logDebug(`Downloaded element for element key - ${element.key}`);
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
