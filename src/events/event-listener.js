@@ -1,10 +1,11 @@
+const logDebug = require('../util/logger');
 const {addCancelledJobId} = require('./cancelled-job');
 const {emitter, EventTopic} = require('./emitter');
 
 // Doctor core listen for the events emitted from the doctor service and holds it in the global set.
 // Doctor checks whether the job is cancelled by checkig if that job id present in the global set
-const jobCancelledHandler = (args) => {
-  console.log(`${EventTopic.JOB_CANCELLED_SERVICE} event received from the doctor-service for job id: ${args.jobId}`)
+const jobCancelledHandler = (args = {}) => {
+  logDebug(`${EventTopic.JOB_CANCELLED_SERVICE} event received from the doctor-service for job id: ${args.jobId}`);
   addCancelledJobId(args.jobId);
 };
 

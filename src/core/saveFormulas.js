@@ -6,6 +6,7 @@ const applyVersion = require('../util/applyVersion');
 const saveToFile = require('../util/saveToFile');
 const saveToDir = require('../util/saveFormulasToDir');
 const saveTo = require('./saveTo');
+const logDebug = require('../util/logger');
 const makeMessage = (name) => `Saved Formula: ${name}.`;
 const log = forEach(pipe(prop('name'), makeMessage, console.log));
 
@@ -16,7 +17,7 @@ module.exports = (params) => {
     }
     return saveTo(pipeP(getDataToExport(getFormulas), applyVersion(__, params)), log, saveToFile, saveToDir)(params);
   } catch (error) {
-    console.log('Failed to complete formula operation: ', error.message);
+    logDebug(`Failed to complete formula operation: ${error.message}`);
     throw error;
   }
-};
+}

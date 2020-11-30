@@ -4,6 +4,7 @@ const { type } = require('ramda');
 const loadAccount = require('../util/loadAccount');
 const { startSpinner, stopSpinner } = require('../util/spinner');
 const { removeCancelledJobId } = require('../events/cancelled-job');
+const logDebug = require('../util/logger');
 const clearCancelledJobId = (jobId) => jobId && removeCancelledJobId(jobId);
 
 const functions = {
@@ -24,7 +25,7 @@ const specificFunctions = {
 
 const validateObject = (object, functions) => {
   if (!functions[object]) {
-    console.log('Command not found: %o', object);
+    logDebug(`Command not found: ${object}`);
     process.exit(1);
   }
 };

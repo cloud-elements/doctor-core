@@ -23,6 +23,7 @@ const buildVdrsFromDir = require('./readVdrsFromDir');
 const upsertVdrs = require('./upsertVdrs');
 const createObjectDefinitions = require('../../../util/createObjectDefinitions');
 const createTransformations = require('../../../util/createTransformations');
+const logDebug = require('../../../util/logger');
 const isNilOrEmpty = (val) => isNil(val) || isEmpty(val);
 
 const importVdrsV1 = async (commonResources, options) => {
@@ -46,7 +47,7 @@ const importVdrsV1 = async (commonResources, options) => {
           commonResources.transformations = transformations;
 
           if (isNilOrEmpty(commonResources.objectDefinition) && isNilOrEmpty(commonResources.transformations)) {
-            console.log(`The doctor was unable to find any vdr called ${vdrName}`);
+            logDebug(`The doctor was unable to find any vdr called ${vdrName}`);
             return;
           }
         });
@@ -68,7 +69,7 @@ const importVdrsV2 = async (vdrs, options) => {
         vdrNames.forEach((vdrName) => {
           const vdrToImport = propOr({}, vdrName)(vdrs);
           if (isNilOrEmpty(vdrToImport)) {
-            console.log(`The doctor was unable to find the vdr ${vdrName}.`);
+            logDebug(`The doctor was unable to find the vdr ${vdrName}.`);
           } else {
             vdrsToImport = assoc(vdrName, vdrToImport, vdrsToImport);
           }
@@ -106,7 +107,7 @@ module.exports = async (options) => {
       ],
     ])(options);
   } catch (error) {
-    console.log('Failed to complete VDR operation: ', error.message);
+    logDebug(`Failed to complete VDR operation: ${error.message}`);
     throw error;
   }
-};
+}

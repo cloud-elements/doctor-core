@@ -6,12 +6,13 @@ const { forEach, isNil, isEmpty, equals, pipe, reject } = require('ramda');
 const get = require('../../util/get');
 const getExtendedElements = require('../../util/elements/getExtendedElements');
 const getPrivateElements = require('../../util/elements/getPrivateElements');
+const logDebug = require('../../util/logger');
 const makePath = (element) => `elements/${element.id}/export`;
 const isNilOrEmpty = (val) => isNil(val) || isEmpty(val);
 const clearNull = pipe(reject(isNil));
 
 const downloadElements = async (elements, query, jobId, processId, isPrivate) => {
-  console.log(`Initiating the download process for elements`);
+  logDebug('Initiating the download process for elements');
   const downloadPromises = await elements.map(async (element) => {
     const elementMetadata = JSON.stringify({ private: isPrivate });
     try {
@@ -26,9 +27,9 @@ const downloadElements = async (elements, query, jobId, processId, isPrivate) =>
         });
         return null;
       }
-      console.log(`Downloading element for element key - ${element.key}`);
+      logDebug(`Downloading element for element key - ${element.key}`);
       const exportedElement = await get(makePath(element), query);
-      console.log(`Downloaded element for element key - ${element.key}`);
+      logDebug(`Downloaded element for element key - ${element.key}`);
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.ELEMENTS,

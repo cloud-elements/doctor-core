@@ -5,16 +5,17 @@ const {Assets, ArtifactStatus} = require('../constants/artifact');
 const {forEachObjIndexed, isEmpty} = require('ramda');
 const remove = require('../util/remove');
 const getVdrs = require('./vdrs/download/getVdrs');
+const logDebug = require('../util/logger');
 const makePath = (vdrname) => `common-resources/${vdrname}`;
 
 module.exports = async (options) => {
   const {name, jobId, processId} = options;
   const vdrs = await getVdrs(name);
   if (isEmpty(vdrs)) {
-    console.log(`The doctor was unable to find the vdrs ${name}.`);
+    logDebug(`The doctor was unable to find the vdrs ${name}.`);
     return;
   }
-  console.log(`Initiating the delete process for VDRs`);
+  logDebug('Initiating the delete process for VDRs');
   await forEachObjIndexed(async (vdr) => {
     try {
       if (isJobCancelled(jobId)) {
@@ -28,9 +29,9 @@ module.exports = async (options) => {
         });
         return null;
       }
-      console.log(`Deleting VDR for VDR name - ${vdr.vdrName}`);
+      logDebug(`Deleting VDR for VDR name - ${vdr.vdrName}`);
       await remove(makePath(vdr.vdrName), {force: true});
-      console.log(`Deleted VDR for VDR name - ${vdr.vdrName}`);
+      logDebug(`Deleted VDR for VDR name - ${vdr.vdrName}`);
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.VDRS,

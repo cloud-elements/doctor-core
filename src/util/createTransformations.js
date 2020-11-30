@@ -1,6 +1,7 @@
 'use strict';
 const {map, find, equals, keys, propEq, reduce, append} = require('ramda');
 const get = require('./get');
+const logDebug = require('./logger');
 const create = require('./post')
 const makePath = (elementKey, objectName) => `organizations/elements/${elementKey}/transformations/${objectName}`;
 const makePathGet = elementKey => `organizations/elements/${elementKey}/transformations`
@@ -18,11 +19,11 @@ module.exports = async (data) => {
             if(endpointObjectName) {
                 const cleaned = cleanTransformation(transformations[elementKey][endpointObjectName], data.objectDefinitions[endpointObjectName])
                 await update(makePath(elementKey, endpointObjectName), cleaned);
-                console.log(`Updated Transformation: ${endpointObjectName} - ${elementKey}`)
+                logDebug(`Updated Transformation: ${endpointObjectName} - ${elementKey}`);
             } else {
                 const cleaned = cleanTransformation(transformations[elementKey][objectName], data.objectDefinitions[objectName])
                 await create(makePath(elementKey, objectName), cleaned);
-                console.log(`Created Transformation: ${objectName} - ${elementKey}`)
+                logDebug(`Created Transformation: ${objectName} - ${elementKey}`);
             }
         })(keys(transformations[elementKey]))
     })(keys(transformations));
