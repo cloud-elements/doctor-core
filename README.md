@@ -13,6 +13,9 @@ Run a single test file
 $ jest getExtendedElements.test.js
 ```
 
+#### Note
+Debug and console.logs in doctor-core are disabled by default. To enable them, the `ENABLE_DEBUG_LOG` environment variable must be set to true (true for CLI by default)
+
 #### Steps to link local doctor-core project as a dependency in doctor-cli or doctor-service
 ```
 cd <path/to/doctor-core>                 # go into the doctor-core project directory
@@ -20,4 +23,3 @@ npm link                                 # creates global link
 cd <path/to/doctor-service/doctor-app>   # go into some other project directory.
 npm link @cloudelements/doctor-core      # link-install the package
 ```
-
