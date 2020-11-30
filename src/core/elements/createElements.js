@@ -10,7 +10,7 @@ const createElement = require('../../util/post')('elements');
 const makePath = (element) => `elements/${element.key}`;
 const update = require('../../util/update');
 const http = require('../../util/http');
-const logDebug = require('../../util/logger');
+const { logDebug } = require('../../util/logger');
 const isNilOrEmpty = (val) => isNil(val) || isEmpty(val);
 
 const fetchAllElements = async (elementsToImport) => {

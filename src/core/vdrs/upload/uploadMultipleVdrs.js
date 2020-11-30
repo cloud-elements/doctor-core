@@ -23,7 +23,7 @@ const buildVdrsFromDir = require('./readVdrsFromDir');
 const upsertVdrs = require('./upsertVdrs');
 const createObjectDefinitions = require('../../../util/createObjectDefinitions');
 const createTransformations = require('../../../util/createTransformations');
-const logDebug = require('../../../util/logger');
+const { logDebug } = require('../../../util/logger');
 const isNilOrEmpty = (val) => isNil(val) || isEmpty(val);
 
 const importVdrsV1 = async (commonResources, options) => {

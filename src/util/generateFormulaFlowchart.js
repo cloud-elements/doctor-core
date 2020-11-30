@@ -27,7 +27,7 @@ const {
 const {writeFileSync} = require('fs');
 const {htmlFormulaTemplate} = require('./mermaidTemplate');
 const align = require('./stringAlign');
-const logDebug = require('./logger');
+const { logDebug } = require('./logger');
 
 const sortSteps = (trigger, steps) => {
   try {

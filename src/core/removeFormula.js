@@ -5,7 +5,7 @@ const {Assets, ArtifactStatus} = require('../constants/artifact');
 const {isEmpty} = require('ramda');
 const remove = require('../util/remove');
 const getFormulas = require('../util/getFormulas');
-const logDebug = require('../util/logger');
+const { logDebug } = require('../util/logger');
 const makePath = (id) => `formulas/${id}`;
 
 module.exports = async (options) => {

@@ -4,7 +4,7 @@ const { existsSync } = require('fs')
 const readFile = require('../util/readFile')
 const { dirname } = require('path')
 const graphFormula = require('../util/generateFormulaFlowchart');
-const logDebug = require('../util/logger');
+const { logDebug } = require('../util/logger');
 
 const readFormula = async formulaFile => {
   if(!existsSync(formulaFile)){

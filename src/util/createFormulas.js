@@ -7,7 +7,7 @@ const get = require('./get');
 const postFormula = require('./post')('formulas');
 const makePath = (formula) => `formulas/${formula.id}`;
 const update = require('./update');
-const logDebug = require('./logger');
+const { logDebug } = require('./logger');
 
 const createFormula = curry(async (endpointFormulas, jobId, processId, formula) => {
   try {

@@ -1,7 +1,7 @@
 'use strict';
 const {map, find, equals, keys, propEq, reduce, append} = require('ramda');
 const get = require('./get');
-const logDebug = require('./logger');
+const { logDebug } = require('./logger');
 const create = require('./post')
 const makePath = (elementKey, objectName) => `organizations/elements/${elementKey}/transformations/${objectName}`;
 const makePathGet = elementKey => `organizations/elements/${elementKey}/transformations`

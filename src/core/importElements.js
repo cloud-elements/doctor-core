@@ -19,7 +19,7 @@ const {
 const readFile = require('../util/readFile');
 const buildElementsFromDir = require('../util/buildElementsFromDir');
 const createElements = require('./elements/createElements');
-const logDebug = require('../util/logger');
+const { logDebug } = require('../util/logger');
 const isNilOrEmpty = (val) => isNil(val) || isEmpty(val);
 
 const importElements = curry(async (elements, options) => {

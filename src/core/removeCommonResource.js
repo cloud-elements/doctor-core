@@ -5,7 +5,7 @@ const {Assets, ArtifactStatus} = require('../constants/artifact');
 const {forEachObjIndexed, isEmpty} = require('ramda');
 const remove = require('../util/remove');
 const getVdrs = require('./vdrs/download/getVdrs');
-const logDebug = require('../util/logger');
+const { logDebug } = require('../util/logger');
 const makePath = (vdrname) => `common-resources/${vdrname}`;
 
 module.exports = async (options) => {

@@ -3,9 +3,9 @@ const { isEmpty } = require('ramda');
 const { Assets, ArtifactStatus } = require('../../constants/artifact');
 const { emitter, EventTopic } = require('../../events/emitter');
 const { isJobCancelled } = require('../../events/cancelled-job');
-const http = require('../../util/http');
 const getPrivateElements = require('../../util/elements/getPrivateElements');
-const logDebug = require('../../util/logger');
+const http = require('../../util/http');
+const { logDebug } = require('../../util/logger');
 const makePath = (id) => `elements/${id}`;
 
 module.exports = async (options) => {

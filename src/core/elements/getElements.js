@@ -6,7 +6,7 @@ const { forEach, isNil, isEmpty, equals, pipe, reject } = require('ramda');
 const get = require('../../util/get');
 const getExtendedElements = require('../../util/elements/getExtendedElements');
 const getPrivateElements = require('../../util/elements/getPrivateElements');
-const logDebug = require('../../util/logger');
+const { logDebug } = require('../../util/logger');
 const makePath = (element) => `elements/${element.id}/export`;
 const isNilOrEmpty = (val) => isNil(val) || isEmpty(val);
 const clearNull = pipe(reject(isNil));

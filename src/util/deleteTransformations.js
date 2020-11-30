@@ -1,5 +1,5 @@
 'use strict';
-const logDebug = require('./logger');
+const { logDebug } = require('./logger');
 const mapP = require('./mapP');
 const makePath = (elementKey, objectName) => `organizations/elements/${elementKey}/transformations/${objectName}`;
 const remove = require('./remove');

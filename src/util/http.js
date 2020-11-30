@@ -1,9 +1,9 @@
 'use strict';
-
 const rp = require('request-promise');
+const { curry, test } = require('ramda');
 const authHeader = require('./authHeader');
 const baseUrl = require('./baseUrl');
-const { curry, test } = require('ramda');
+const { logError } = require('./logger');
 
 // TODO: Will be replacing request-promise with axios soon
 module.exports = {
@@ -40,7 +40,7 @@ module.exports = {
 		try {
 			return (await rp(options));
 		} catch (err) {
-			console.error(`Failed to create ${path} with name ${body ? body.name : body}. \n${err.message}`);
+			logError(`Failed to create ${path} with name ${body ? body.name : body}. \n${err.message}`);
 			throw err;
 		}
 	}),
@@ -57,7 +57,7 @@ module.exports = {
 		try {
 			return (await rp(options));
 		} catch (err) {
-			console.error(err.message);
+			logError(err.message);
 			throw err;
 		}
 	}),
@@ -74,7 +74,7 @@ module.exports = {
 		try {
 			return (await rp(options));
 		} catch (err) {
-			console.error(err.message);
+			logError(err.message);
 		}
 	}
-};
+}

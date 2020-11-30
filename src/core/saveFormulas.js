@@ -6,7 +6,7 @@ const applyVersion = require('../util/applyVersion');
 const saveToFile = require('../util/saveToFile');
 const saveToDir = require('../util/saveFormulasToDir');
 const saveTo = require('./saveTo');
-const logDebug = require('../util/logger');
+const { logDebug } = require('../util/logger');
 const makeMessage = (name) => `Saved Formula: ${name}.`;
 const log = forEach(pipe(prop('name'), makeMessage, console.log));
 

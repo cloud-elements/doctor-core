@@ -2,7 +2,7 @@
 
 const { curry } = require('ramda')
 var util = require('util');
-const logDebug = require('./logger');
+const { logDebug } = require('./logger');
 
 module.exports = curry((params, data) => {
     if (!data.hasOwnProperty('options.rawArgs')) {

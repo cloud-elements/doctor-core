@@ -5,7 +5,7 @@ const applyVersion = require('../../../util/applyVersion');
 const saveTo = require('../../saveTo');
 const saveToFile = require('../../../util/saveToFile');
 const {saveVdrsToDirNew, saveVdrsToDirOld} = require('./saveVdrsToDir');
-const logDebug = require('../../../util/logger');
+const { logDebug } = require('../../../util/logger');
 const log = (data) => forEachObjIndexed((object, key) => console.log(`Saved VDR: ${key}`))(data);
 
 module.exports = (params) => {

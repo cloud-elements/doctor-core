@@ -1,10 +1,9 @@
 'use strict';
-require('log-prefix')(() => `[${new Date().toISOString()}] Doctor-core: %s`);
 const { type } = require('ramda');
 const loadAccount = require('../util/loadAccount');
 const { startSpinner, stopSpinner } = require('../util/spinner');
 const { removeCancelledJobId } = require('../events/cancelled-job');
-const logDebug = require('../util/logger');
+const { logDebug } = require('../util/logger');
 const clearCancelledJobId = (jobId) => jobId && removeCancelledJobId(jobId);
 
 const functions = {

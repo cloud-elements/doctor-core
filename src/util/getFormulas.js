@@ -5,7 +5,7 @@ const {isJobCancelled} = require('../events/cancelled-job');
 const {Assets, ArtifactStatus} = require('../constants/artifact');
 const get = require('./get');
 const applyQuotes = require('./quoteString');
-const logDebug = require('./logger');
+const { logDebug } = require('./logger');
 
 module.exports = async (formulaKeys, jobId, processId) => {
   let param = '';

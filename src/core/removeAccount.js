@@ -6,7 +6,7 @@ const saveToFile = require('../util/saveToFile');
 const homeDir = (process.platform === 'win32') ? process.env.HOMEPATH : process.env.HOME;
 const filePath = path.normalize(`${homeDir}/.doctor/config.json`);
 const {pipe, filter, propEq, not, find} = require('ramda');
-const logDebug = require('../util/logger');
+const { logDebug } = require('../util/logger');
 
 module.exports = async (account) => {
     const accounts = await readFile(filePath); 

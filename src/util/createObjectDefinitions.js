@@ -1,7 +1,7 @@
 'use strict';
 const { find, equals, keys } = require('ramda');
 const get = require('./get');
-const logDebug = require('./logger');
+const { logDebug } = require('./logger');
 const create = require('./post')
 const makePath = objectName => `organizations/objects/${objectName}/definitions`;
 const update = require('./update');

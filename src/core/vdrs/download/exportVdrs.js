@@ -4,7 +4,7 @@ const get = require('../../../util/get');
 const {emitter, EventTopic} = require('../../../events/emitter');
 const {isJobCancelled} = require('../../../events/cancelled-job');
 const {Assets, ArtifactStatus} = require('../../../constants/artifact');
-const logDebug = require('../../../util/logger');
+const { logDebug } = require('../../../util/logger');
 const isNilOrEmpty = (val) => isNil(val) || isEmpty(val);
 const transduceVdrs = (vdrs) => (!isNilOrEmpty(vdrs) ? pipe(reject(isNil), indexBy(prop('vdrName')))(vdrs) : {});
 
