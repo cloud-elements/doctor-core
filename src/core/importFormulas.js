@@ -20,6 +20,7 @@ const readFile = require('../util/readFile');
 const applyVersion = require('../util/applyVersion');
 const buildFormulasFromDir = require('../util/buildFormulasFromDir');
 const createFormulas = require('../util/createFormulas');
+const { logDebug } = require('../util/logger');
 const isNilOrEmpty = (val) => isNil(val) || isEmpty(val);
 
 const importFormulas = curry(async (formulas, options) => {
@@ -35,9 +36,9 @@ const importFormulas = curry(async (formulas, options) => {
         formulaNames.forEach((formulaName) => {
           const formulaToImport = find((formula) => toLower(formula.name) === toLower(formulaName))(formulas);
           if (isNilOrEmpty(formulaToImport)) {
-            console.log(`The doctor was unable to find the formula ${formulaName}.`);
+            logDebug(`The doctor was unable to find the formula ${formulaName}.`);
           } else if (any((step) => step.type === 'formula')(formulaToImport.steps)) {
-            console.log(`You are trying to import a formula (${formulaName}) that has a sub formula. Please make sure to import all formulas.`);
+            logDebug(`You are trying to import a formula (${formulaName}) that has a sub formula. Please make sure to import all formulas.`);
             formulasToImport.push(formulaToImport);
           } else {
             formulasToImport.push(formulaToImport);
@@ -73,7 +74,7 @@ module.exports = (options) => {
       ],
     ])(options);
   } catch (error) {
-    console.log('Failed to complete formula operation: ', error.message);
+    logDebug(`Failed to complete formula operation: ${error.message}`);
     throw error;
   }
-};
+}

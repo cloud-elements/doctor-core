@@ -4,6 +4,7 @@ const update = require('../../../util/update');
 const {emitter, EventTopic} = require('../../../events/emitter');
 const {isJobCancelled} = require('../../../events/cancelled-job');
 const {Assets, ArtifactStatus} = require('../../../constants/artifact');
+const { logDebug } = require('../../../util/logger');
 
 module.exports = async (vdrs, jobId, processId) => {
   const uploadPromises = mapObjIndexed(async (vdr, vdrName) => {
@@ -19,9 +20,9 @@ module.exports = async (vdrs, jobId, processId) => {
         });
         return null;
       }
-      console.log(`Uploading VDR for VDR name - ${vdrName}`);
+      logDebug(`Uploading VDR for VDR name - ${vdrName}`);
       await update('vdrs/import', vdr);
-      console.log(`Uploaded VDR for VDR name - ${vdrName}`);
+      logDebug(`Uploaded VDR for VDR name - ${vdrName}`);
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.VDRS,

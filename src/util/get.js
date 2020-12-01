@@ -9,7 +9,7 @@ module.exports = curry(async (path,qs) => {
   let options = {
     json: true,
     headers: {
-        Authorization: authHeader(),
+      Authorization: authHeader(),
     },
     url: baseUrl(path),
     method: "GET",

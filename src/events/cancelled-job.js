@@ -1,4 +1,3 @@
-require('log-prefix')(() => `[${new Date().toISOString()}] Doctor-core: %s`);
 let set;
 
 const getIdSet = () => {
