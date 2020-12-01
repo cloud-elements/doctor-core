@@ -5,16 +5,17 @@ const {Assets, ArtifactStatus} = require('../constants/artifact');
 const {isEmpty} = require('ramda');
 const remove = require('../util/remove');
 const getFormulas = require('../util/getFormulas');
+const { logDebug } = require('../util/logger');
 const makePath = (id) => `formulas/${id}`;
 
 module.exports = async (options) => {
   const {name, jobId, processId} = options;
   const formulas = await getFormulas(name);
   if (isEmpty(formulas)) {
-    console.log(`The doctor was unable to find the formula ${name}.`);
+    logDebug(`The doctor was unable to find the formula ${name}.`);
     return;
   }
-  console.log(`Initiating the delete process for formulas`);
+  logDebug('Initiating the delete process for formulas');
   const removePromises = await formulas.map(async (formula) => {
     try {
       if (isJobCancelled(jobId)) {
@@ -28,9 +29,9 @@ module.exports = async (options) => {
         });
         return null;
       }
-      console.log(`Deleting formula for formula name - ${formula.name}`);
+      logDebug(`Deleting formula for formula name - ${formula.name}`);
       await remove(makePath(formula.name));
-      console.log(`Deleted formula for formula name - ${formula.name}`);
+      logDebug(`Deleted formula for formula name - ${formula.name}`);
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.FORMULAS,

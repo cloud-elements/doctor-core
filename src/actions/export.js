@@ -1,16 +1,16 @@
 'use strict';
-require('log-prefix')(() => `[${new Date().toISOString()}] Doctor-core: %s`);
 const loadAccount = require('../util/loadAccount');
-const {startSpinner, stopSpinner} = require('../util/spinner');
+const { startSpinner, stopSpinner } = require('../util/spinner');
 const eventListener = require('../events/event-listener');
-const {removeCancelledJobId} = require('../events/cancelled-job');
+const { removeCancelledJobId } = require('../events/cancelled-job');
+const { logDebug } = require('../util/logger');
 const clearCancelledJobId = (jobId) => jobId && removeCancelledJobId(jobId);
 
 const functions = {
-  vdrs: require('./vdrs/upload/uploadMultipleVdrs'),
-  formulas: require('../core/importFormulas'),
-  elements: require('../core/importElements'),
-  all: require('../core/importBackup'),
+  vdrs: require('../core/vdrs/download/downloadVdrs'),
+  formulas: require('../core/saveFormulas'),
+  elements: require('../core/elements/saveElements'),
+  all: require('../core/saveAll'),
 };
 
 module.exports = async (object, account, options) => {
@@ -18,14 +18,14 @@ module.exports = async (object, account, options) => {
     await startSpinner();
     await loadAccount(account);
     if (!options.file && !options.dir) {
-      console.log('Please specify a file or directory to save with -f / -d');
+      logDebug('Please specify a file to save with -f or a directory to save with -d');
       process.exit(1);
     } else if (!functions[object]) {
-      console.log('Command not found: %o', object);
+      logDebug(`Command not found: ${object}`);
       process.exit(1);
     }
     eventListener.addListener();
-    await functions[object](options);
+    await functions[object]({ object, options });
     clearCancelledJobId(options.jobId)
     await stopSpinner();
   } catch (err) {

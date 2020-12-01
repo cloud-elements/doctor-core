@@ -27,6 +27,7 @@ const {
 const {writeFileSync} = require('fs');
 const {htmlFormulaTemplate} = require('./mermaidTemplate');
 const align = require('./stringAlign');
+const { logDebug } = require('./logger');
 
 const sortSteps = (trigger, steps) => {
   try {
@@ -347,7 +348,7 @@ const buildTable = (headers, values) => {
 
 module.exports = async (formula, formulaDirName) => {
   try {
-    console.log(`Generating FlowChart for Formula: ${formula.name}`);
+    logDebug(`Generating FlowChart for Formula: ${formula.name}`);
     const sortedSteps = sortSteps(formula.triggers[0], formula.steps);
     let parsedSteps = concat([parseTrigger(formula.triggers[0])], chain(parseStep, sortedSteps));
 

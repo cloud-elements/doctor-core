@@ -18,7 +18,8 @@ const {
 } = require('ramda');
 const readFile = require('../util/readFile');
 const buildElementsFromDir = require('../util/buildElementsFromDir');
-const createElements = require('../util/createElements');
+const createElements = require('./elements/createElements');
+const { logDebug } = require('../util/logger');
 const isNilOrEmpty = (val) => isNil(val) || isEmpty(val);
 
 const importElements = curry(async (elements, options) => {
@@ -42,14 +43,14 @@ const importElements = curry(async (elements, options) => {
                 : false,
             )(elements);
             if (isNilOrEmpty(elementToImport)) {
-              console.log(`The doctor was unable to find the element ${key}.`);
+              logDebug(`The doctor was unable to find the element ${key}.`);
             } else {
               elementsToImport.push(elementToImport);
             }
           } else {
             const elementToImport = find((element) => equals(toLower(element.key), toLower(elementKey)))(elements);
             if (isNilOrEmpty(elementToImport)) {
-              console.log(`The doctor was unable to find the element ${elementKey}.`);
+              logDebug(`The doctor was unable to find the element ${elementKey}.`);
             } else {
               elementsToImport.push(elementToImport);
             }
@@ -82,7 +83,7 @@ module.exports = (options) => {
       [pipe(prop('dir'), isNil, not), pipeP(useWith(buildElementsFromDir, [prop('dir')]), importElements(__, options))],
     ])(options);
   } catch (error) {
-    console.log('Failed to complete element operation: ', error.message);
+    logDebug(`Failed to complete element operation: ${error.message}`);
     throw error;
   }
-};
+}

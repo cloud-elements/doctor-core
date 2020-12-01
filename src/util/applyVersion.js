@@ -1,7 +1,8 @@
 'use strict'
 
 const { curry } = require('ramda')
-var util = require('util')
+var util = require('util');
+const { logDebug } = require('./logger');
 
 module.exports = curry((params, data) => {
     if (!data.hasOwnProperty('options.rawArgs')) {
@@ -68,7 +69,7 @@ module.exports = curry((params, data) => {
         }
         else {
             if (!data.options.rawArgs.includes('-d')){
-                console.log('operation failed: -n flag required to use -v on `doctor download`')
+                logDebug('operation failed: -n flag required to use -v on `doctor download`')
                 process.exit(1)
             }
             else{

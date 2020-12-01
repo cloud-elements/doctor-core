@@ -1,20 +1,21 @@
 'use strict';
-const {emitter, EventTopic} = require('../events/emitter');
-const {isJobCancelled} = require('../events/cancelled-job');
-const {Assets, ArtifactStatus} = require('../constants/artifact');
-const getPrivateElements = require('../util/getPrivateElements');
-const remove = require('../util/remove');
-const {isEmpty} = require('ramda');
+const { isEmpty } = require('ramda');
+const { Assets, ArtifactStatus } = require('../../constants/artifact');
+const { emitter, EventTopic } = require('../../events/emitter');
+const { isJobCancelled } = require('../../events/cancelled-job');
+const getPrivateElements = require('../../util/elements/getPrivateElements');
+const http = require('../../util/http');
+const { logDebug } = require('../../util/logger');
 const makePath = (id) => `elements/${id}`;
 
 module.exports = async (options) => {
-  const {name, jobId, processId} = options;
+  const { name, jobId, processId } = options;
   const elements = await getPrivateElements(name);
   if (isEmpty(elements)) {
-    console.log(`The doctor was unable to find the element ${name}.`);
+    logDebug(`The doctor was unable to find the element ${name}.`);
     return;
   }
-  console.log(`Initiating the delete process for elements`);
+  logDebug('Initiating the delete process for elements');
   const removePromises = await elements.map(async (element) => {
     try {
       if (isJobCancelled(jobId)) {
@@ -28,9 +29,9 @@ module.exports = async (options) => {
         });
         return null;
       }
-      console.log(`Deleting element for element key - ${element.key}`);
-      await remove(makePath(element.id));
-      console.log(`Deleted element for element key - ${element.key}.`);
+      logDebug(`Deleting element for element key - ${element.key}`);
+      await http.delete(makePath(element.id));
+      logDebug(`Deleted element for element key - ${element.key}.`);
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.ELEMENTS,

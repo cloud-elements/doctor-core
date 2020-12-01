@@ -1,0 +1,27 @@
+name: pr-ci
+on: [pull_request]
+
+env:
+  NODE_VERSION: "12.x"
+
+jobs:
+  test_app:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - name: install dependencies
+      run: npm install
+      working-directory: .
+    - name: run unit tests
+      run: npm test
+      working-directory: .
+    - name: cache api npm
+      uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-api-${{ hashFiles('package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-api-
