@@ -12,7 +12,15 @@ const ArtifactStatus = {
   FAILED: 'failed'
 };
 
+const JobType = {
+  EXPORT: 'export',
+  IMPORT: 'import',
+  PROMOTE_EXPORT: 'promote_export',
+  PROMOTE_IMPORT: 'promote_import'
+};
+
 module.exports = {
   Assets,
-  ArtifactStatus
+  ArtifactStatus,
+  JobType
 };

@@ -3,7 +3,7 @@ const getVdrNames = require('./getVdrNames');
 const exportVdrs = require('./exportVdrs');
 const applyQuotes = require('../../../util/quoteString');
 
-module.exports = async (vdrName, jobId, processId) => {
+module.exports = async (vdrName, jobId, processId, jobType) => {
   try {
     // From CLI - User can pass comma seperated string of vdrs name
     // From Service - It will be in Array of objects containing vdr name
@@ -17,7 +17,7 @@ module.exports = async (vdrName, jobId, processId) => {
       param = {where: 'objectName in (' + applyQuotes(join(',', vdrNames)) + ')'};
     }
     vdrNames = await getVdrNames(param);
-    const exportData = await exportVdrs(vdrNames, vdrName, jobId, processId);
+    const exportData = await exportVdrs(vdrNames, vdrName, jobId, processId, jobType);
     return exportData;
   } catch (error) {
     throw error;

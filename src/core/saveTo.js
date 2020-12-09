@@ -1,5 +1,5 @@
 'use strict';
-const { converge, pipe, pipeP, prop, cond, isNil, not } = require('ramda');
+const {converge, pipe, pipeP, prop, cond, isNil, not} = require('ramda');
 const saveTo = (getData, save, property) =>
   converge(save, [
     pipe(prop('options'), prop(property)),
@@ -8,6 +8,7 @@ const saveTo = (getData, save, property) =>
         pipe(prop('options'), prop('name')),
         pipe(prop('options'), prop('jobId')),
         pipe(prop('options'), prop('processId')),
+        pipe(prop('options'), prop('jobType')),
       ]),
     ),
   ]);
