@@ -39,7 +39,6 @@ const downloadElements = async (elements, query, jobId, processId, isPrivate, jo
         assetName: element.key,
         assetStatus: equals(jobType, JobType.PROMOTE_EXPORT) ? ArtifactStatus.INPROGRESS : ArtifactStatus.COMPLETED,
         metadata: elementMetadata,
-        jobType
       });
 
       return !isNilOrEmpty(exportedElement) ? exportedElement : {};

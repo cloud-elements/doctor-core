@@ -1,14 +1,14 @@
 'use strict';
-const {isNil, pipe, reject, isEmpty, indexBy, prop} = require('ramda');
+const {equals, indexBy, isEmpty, isNil, pipe, reject, prop} = require('ramda');
 const get = require('../../../util/get');
 const {emitter, EventTopic} = require('../../../events/emitter');
 const {isJobCancelled} = require('../../../events/cancelled-job');
-const {Assets, ArtifactStatus} = require('../../../constants/artifact');
-const { logDebug } = require('../../../util/logger');
+const {Assets, ArtifactStatus, JobType} = require('../../../constants/artifact');
+const {logDebug} = require('../../../util/logger');
 const isNilOrEmpty = (val) => isNil(val) || isEmpty(val);
 const transduceVdrs = (vdrs) => (!isNilOrEmpty(vdrs) ? pipe(reject(isNil), indexBy(prop('vdrName')))(vdrs) : {});
 
-const downloadVdrs = async (vdrNames, jobId, processId) => {
+const downloadVdrs = async (vdrNames, jobId, processId, jobType) => {
   logDebug('Initiating the download process for VDRs');
   const downloadPromise = await vdrNames.map(async (vdrName) => {
     try {
@@ -23,14 +23,16 @@ const downloadVdrs = async (vdrNames, jobId, processId) => {
         });
         return null;
       }
+
       logDebug(`Downloading VDR for VDR name - ${vdrName}`);
       const exportedVdr = await get(`/vdrs/${vdrName}/export`, '');
       logDebug(`Downloaded VDR for VDR name - ${vdrName}`);
+
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.VDRS,
         assetName: vdrName,
-        assetStatus: ArtifactStatus.COMPLETED,
+        assetStatus: equals(jobType, JobType.PROMOTE_EXPORT) ? ArtifactStatus.INPROGRESS : ArtifactStatus.COMPLETED,
         metadata: '',
       });
       return !isNilOrEmpty(exportedVdr) ? exportedVdr : {};
@@ -50,10 +52,11 @@ const downloadVdrs = async (vdrNames, jobId, processId) => {
   return transduceVdrs(vdrsExport);
 };
 
-module.exports = async (vdrNames, inputVdrs, jobId, processId) => {
-  const vdrs = await downloadVdrs(vdrNames, jobId, processId);
-  const newlyCreated =
-    inputVdrs && Array.isArray(inputVdrs) ? inputVdrs.filter((vdr) => !vdrNames.includes(vdr.name)) : [];
+module.exports = async (vdrNames, inputVdrs, jobId, processId, jobType) => {
+  const vdrs = await downloadVdrs(vdrNames, jobId, processId, jobType);
+  const newlyCreated = inputVdrs && Array.isArray(inputVdrs)
+    ? inputVdrs.filter((vdr) => !vdrNames.includes(vdr.name))
+    : [];
   newlyCreated.forEach((vdr) =>
     emitter.emit(EventTopic.ASSET_STATUS, {
       processId,

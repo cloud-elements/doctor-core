@@ -1,15 +1,16 @@
 'use strict';
-const {type, join} = require('ramda');
+const {equals, join, type} = require('ramda');
 const {emitter, EventTopic} = require('../events/emitter');
 const {isJobCancelled} = require('../events/cancelled-job');
-const {Assets, ArtifactStatus} = require('../constants/artifact');
+const {Assets, ArtifactStatus, JobType} = require('../constants/artifact');
 const get = require('./get');
 const applyQuotes = require('./quoteString');
-const { logDebug } = require('./logger');
+const {logDebug} = require('./logger');
 
-module.exports = async (formulaKeys, jobId, processId) => {
+module.exports = async (formulaKeys, jobId, processId, jobType) => {
   let param = '';
   let formulaNames = [];
+
   if (type(formulaKeys) === 'String') {
     formulaNames = formulaKeys.split(',');
     param = {where: 'name in (' + applyQuotes(join(',', formulaNames)) + ')'};
@@ -19,6 +20,7 @@ module.exports = async (formulaKeys, jobId, processId) => {
   } else {
     return get('formulas', param);
   }
+
   try {
     logDebug('Initiating the download process for formulas');
     if (isJobCancelled(jobId)) {
@@ -34,22 +36,26 @@ module.exports = async (formulaKeys, jobId, processId) => {
       );
       return [];
     }
+
     logDebug('Downloading formulas');
     const exportedFormulas = await get('formulas', param);
     logDebug('Downloaded formulas');
+
     formulaNames.forEach((formulaName) =>
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.FORMULAS,
         assetName: formulaName,
-        assetStatus: ArtifactStatus.COMPLETED,
+        assetStatus: equals(jobType, JobType.PROMOTE_EXPORT) ? ArtifactStatus.INPROGRESS : ArtifactStatus.COMPLETED,
         metadata: '',
       }),
     );
+
     const newlyCreatedFormulas =
       formulaKeys && Array.isArray(formulaKeys)
         ? formulaKeys.filter((key) => !exportedFormulas.some((formula) => formula.name == key.name))
         : [];
+
     newlyCreatedFormulas.forEach((formula) =>
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
