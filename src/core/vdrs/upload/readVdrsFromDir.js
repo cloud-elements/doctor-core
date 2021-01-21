@@ -9,7 +9,7 @@ const buildVdrV2FromDir = async (dirName, vdrname) => {
   let vdrs = {};
   const vdrNames = vdrname ? [vdrname] : await promisify(readdir)(dirName);
   for (const vdrName of vdrNames) {
-    if (vdrName.startsWith('backup-') || vdrName.startsWith('.DS_Store')) {
+    if (vdrName.startsWith('backup-') || vdrName.startsWith('.DS_Store') || vdrName.startsWith('dependencies')) {
       continue;
     }
 
