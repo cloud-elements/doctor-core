@@ -1,9 +1,11 @@
-'use strict';
-
+const exportOperation = require('./src/actions/export');
+const importOperation = require('./src/actions/import');
+const deleteOpearion = require('./src/actions/delete');
+const serviceEventEmitter = require('./src/events/emitter');
 // Export the import and export functionality for doctor service
 module.exports = {
-    exportAsset: require('./src/actions/export'),
-    importAsset: require('./src/actions/import'),
-    deleteAsset: require('./src/actions/delete'),
-    eventHandler: require('./src/events/emitter')
+  exportAsset: exportOperation,
+  importAsset: importOperation,
+  deleteAsset: deleteOpearion,
+  eventHandler: serviceEventEmitter,
 };

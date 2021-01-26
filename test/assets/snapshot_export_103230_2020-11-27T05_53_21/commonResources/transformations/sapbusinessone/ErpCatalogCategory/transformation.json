@@ -1,0 +1,78 @@
+{
+    "configuration": [
+        {
+            "level": "organization",
+            "type": "addToDocumentation"
+        },
+        {
+            "level": "organization",
+            "properties": {
+                "toVendor": null
+            },
+            "type": "applyJSOnQueryFieldValue"
+        },
+        {
+            "level": "organization",
+            "type": "inherit"
+        },
+        {
+            "level": "organization",
+            "properties": {
+                "fromVendor": false,
+                "toVendor": false
+            },
+            "type": "passThrough"
+        }
+    ],
+    "elementKey": "sapbusinessone",
+    "fields": [
+        {
+            "configuration": [
+                {
+                    "properties": {
+                        "fromVendor": true,
+                        "toVendor": false
+                    },
+                    "type": "passThrough"
+                }
+            ],
+            "level": "organization",
+            "path": "created_at",
+            "type": "string",
+            "vendorPath": "createdDateUTC",
+            "vendorType": "date"
+        },
+        {
+            "configuration": [
+                {
+                    "properties": {
+                        "fromVendor": true,
+                        "toVendor": false
+                    },
+                    "type": "passThrough"
+                }
+            ],
+            "level": "organization",
+            "path": "updated_at",
+            "type": "string",
+            "vendorPath": "updatedDateUTC",
+            "vendorType": "date"
+        }
+    ],
+    "isLegacy": false,
+    "objectName": "ErpCatalogCategory",
+    "script": {
+        "filterEmptyResponse": false,
+        "level": "organization",
+        "mimeType": "application/javascript"
+    },
+    "scripts": [
+        {
+            "body": "const m = require('moment')\nif (isWhere) {\n  transformedObject.where.forEach(item => {\n    switch (item.attribute) {\n      case 'createdDateUTC':\n      case 'updatedDateUTC':\n        item.value = m(item.value, m.ISO_8601).format('DD/MM/YYYY HH:mm:ss')\n        break\n      default:\n    }\n  })\n} else if (fromVendor) {\n  // All the objects that are returned by this VDR are of type CATEGORY.\n  transformedObject.type = 'CATEGORY'\n  transformedObject.is_active = true\n\n  // other static values\n  transformedObject.present_at_all_locations = true\n\n  const concatSquareProps = (name, id) => {\n    return `${name} (${id})`\n  }\n\n  if (!transformedObject.category_data) { transformedObject.category_data = {} }\n\n  if (originalObject.GroupName && originalObject.Number) {\n    transformedObject.category_data.name = concatSquareProps(originalObject.GroupName, originalObject.Number)\n  }\n  if (originalObject.createdDateUTC) {\n    transformedObject.created_at = m(originalObject.createdDateUTC, 'DD/MM/YYYY HH:mm:ss').toISOString()\n  }\n  if (originalObject.updatedDateUTC) {\n    transformedObject.updated_at = m(originalObject.updatedDateUTC, 'DD/MM/YYYY HH:mm:ss').toISOString()\n  }\n}\n\ndone(transformedObject)\n",
+            "filterEmptyResponse": false,
+            "level": "organization",
+            "mimeType": "application/javascript"
+        }
+    ],
+    "vendorName": "itemgroup"
+}

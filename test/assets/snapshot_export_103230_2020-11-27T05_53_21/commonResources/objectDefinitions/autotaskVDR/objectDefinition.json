@@ -1,0 +1,14 @@
+{
+    "createdDate": "2020-11-20 09:38:43.675231",
+    "fields": [
+        {
+            "displayName": "",
+            "level": "organization",
+            "path": "add",
+            "type": "string"
+        }
+    ],
+    "objectName": "autotaskVDR",
+    "vdrShared": true,
+    "vdrShareLevel": "organization"
+}

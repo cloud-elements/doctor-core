@@ -1,0 +1,32 @@
+{
+    "configuration": [
+        {
+            "level": "organization",
+            "type": "addToDocumentation"
+        },
+        {
+            "level": "organization",
+            "type": "inherit"
+        },
+        {
+            "level": "organization",
+            "properties": {
+                "fromVendor": false,
+                "toVendor": false
+            },
+            "type": "passThrough"
+        }
+    ],
+    "elementKey": "autotaskcrm",
+    "fields": [
+        {
+            "level": "organization",
+            "path": "add",
+            "type": "string",
+            "vendorPath": "allocationCodeID"
+        }
+    ],
+    "isLegacy": false,
+    "objectName": "autotaskVDR",
+    "vendorName": "Task"
+}

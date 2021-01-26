@@ -1,16 +1,20 @@
-'use strict';
-const loadAccount = require('../util/loadAccount');
-const { startSpinner, stopSpinner } = require('../util/spinner');
+const loadAccount = require('../core/accounts/loadAccount');
+const {startSpinner, stopSpinner} = require('../utils/spinner');
 const eventListener = require('../events/event-listener');
-const { removeCancelledJobId } = require('../events/cancelled-job');
-const { logDebug } = require('../util/logger');
-const clearCancelledJobId = (jobId) => jobId && removeCancelledJobId(jobId);
+const {removeCancelledJobId} = require('../events/cancelled-job');
+const {logDebug} = require('../utils/logger');
+const exportVdrs = require('../core/vdrs/downloadVdrs');
+const exportFormulas = require('../core/formulas/saveFormulas');
+const exportElements = require('../core/elements/saveElements');
+const exportAll = require('../utils/saveAll');
 
-const functions = {
-  vdrs: require('../core/vdrs/download/downloadVdrs'),
-  formulas: require('../core/saveFormulas'),
-  elements: require('../core/elements/saveElements'),
-  all: require('../core/saveAll'),
+const clearCancelledJobId = jobId => jobId && removeCancelledJobId(jobId);
+
+const exportOperationsObject = {
+  vdrs: exportVdrs,
+  formulas: exportFormulas,
+  elements: exportElements,
+  all: exportAll,
 };
 
 module.exports = async (object, account, options) => {
@@ -19,17 +23,17 @@ module.exports = async (object, account, options) => {
     await loadAccount(account);
     if (!options.file && !options.dir) {
       logDebug('Please specify a file to save with -f or a directory to save with -d');
-      process.exit(1);
-    } else if (!functions[object]) {
+      throw new Error('Please specify a file to save with -f or a directory to save with -d');
+    } else if (!exportOperationsObject[object]) {
       logDebug(`Command not found: ${object}`);
-      process.exit(1);
+      throw new Error(`Command not found: ${object}`);
     }
     eventListener.addListener();
-    await functions[object]({ object, options });
-    clearCancelledJobId(options.jobId)
+    await exportOperationsObject[object]({object, options});
+    clearCancelledJobId(options.jobId);
     await stopSpinner();
   } catch (err) {
-    clearCancelledJobId(options.jobId)
+    clearCancelledJobId(options.jobId);
     await stopSpinner();
     throw err;
   }

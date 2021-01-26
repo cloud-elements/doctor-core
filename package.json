@@ -4,8 +4,10 @@
   "description": "The Core functionality of Doctor - The Cloud Elements Asset Management Tool",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "test:coverage": "jest --coverage"
+    "test:unit": "npm run prettify && npx eslint src --fix && jest --silent",
+    "test:unit:coverage": "npm run prettify && npx eslint src --fix && jest --coverage --silent && npm run jest:threshold:bumper",
+    "jest:threshold:bumper": "jest-coverage-thresholds-bumper --coverage-summary-path=\"./coverage/coverage-summary.json\"",
+    "prettify": "./node_modules/.bin/prettier --write --print-width=120 --tab-width=2 --single-quote=true --trailing-comma=all --bracket-spacing=false src/**/**/* test/**/*"
   },
   "repository": {
     "type": "git",
@@ -16,18 +18,32 @@
   "bugs": {
     "url": "https://github.com/cloud-elements/doctor-core/issues"
   },
+  "engines": {
+    "node": ">=12.18.3",
+    "npm": ">=6.14.6"
+  },
   "homepage": "https://github.com/cloud-elements/doctor-core#readme",
   "dependencies": {
     "cli-spinner": "^0.2.10",
     "console.table": "^0.10.0",
     "deep-sort-object": "^1.0.2",
+    "fs-extra": "9.1.0",
     "ramda": "^0.25.0",
     "replaceall": "^0.1.6",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
   },
   "devDependencies": {
-    "eslint": "7.7.0",
-    "jest": "^26.6.3"
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-config-node": "^4.0.0",
+    "eslint-config-prettier": "^6.8.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "jest": "^26.6.3",
+    "jest-coverage-thresholds-bumper": "0.0.3",
+    "mockshot": "0.2.8",
+    "prettier": "^1.19.1"
   }
 }

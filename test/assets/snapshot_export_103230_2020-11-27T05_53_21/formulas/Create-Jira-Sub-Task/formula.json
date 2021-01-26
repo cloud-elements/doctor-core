@@ -1,0 +1,279 @@
+{
+    "active": true,
+    "configuration": [
+        {
+            "key": "originInstance",
+            "name": "originInstance",
+            "required": true,
+            "type": "elementInstance"
+        },
+        {
+            "key": "subtaskLabels",
+            "name": "subtaskLabels",
+            "required": true,
+            "type": "value"
+        },
+        {
+            "key": "subtaskSummary",
+            "name": "subtaskSummary",
+            "required": true,
+            "type": "value"
+        }
+    ],
+    "debugLoggingEnabled": false,
+    "debugLoggingExpires": "2020-05-05T20:09:20Z",
+    "engine": "v3",
+    "id": 111610,
+    "name": "Create Jira Sub Task",
+    "singleThreaded": false,
+    "steps": [
+        {
+            "name": "isCreated",
+            "onFailure": [
+                "isUpdated"
+            ],
+            "onSuccess": [
+                "getFormulaInstanceExecutions"
+            ],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "getFormulaInstanceExecutions",
+            "onFailure": [],
+            "onSuccess": [
+                "getPendingExecutions"
+            ],
+            "properties": {
+                "api": "/formulas/${info.formulaId}/instances/${info.formulaInstanceId}/executions",
+                "method": "GET"
+            },
+            "type": "request"
+        },
+        {
+            "name": "getPendingExecutions",
+            "onFailure": [],
+            "onSuccess": [
+                "getFirstExecutionId"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "getFirstExecutionId",
+            "onFailure": [],
+            "onSuccess": [
+                "isFirstExecutionID"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "isFirstExecutionID",
+            "onFailure": [
+                "getFirstExeEventId"
+            ],
+            "onSuccess": [
+                "getCreatedIssueDetails"
+            ],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "getCreatedIssueDetails",
+            "onFailure": [],
+            "onSuccess": [
+                "isStoryOrBug"
+            ],
+            "properties": {
+                "api": "/incidents/${trigger.event.objectId}",
+                "elementInstanceId": "${config.originInstance}",
+                "method": "GET",
+                "path": "",
+                "query": ""
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "isStoryOrBug",
+            "onFailure": [],
+            "onSuccess": [
+                "isSubtaskAlreadyCreated"
+            ],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "isSubtaskAlreadyCreated",
+            "onFailure": [],
+            "onSuccess": [
+                "subTaskPayload"
+            ],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "subTaskPayload",
+            "onFailure": [],
+            "onSuccess": [
+                "createSubtask"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "createSubtask",
+            "onFailure": [],
+            "onSuccess": [
+                "printCreatedSubtaskId"
+            ],
+            "properties": {
+                "api": "/incidents",
+                "body": "${steps.subTaskPayload}",
+                "elementInstanceId": "${config.originInstance}",
+                "method": "POST"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "printCreatedSubtaskId",
+            "onFailure": [],
+            "onSuccess": [
+                "sub-formula"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "description": "sub-formula",
+            "name": "sub-formula",
+            "onFailure": [],
+            "onSuccess": [],
+            "properties": {
+                "formulaId": "154451"
+            },
+            "type": "formula"
+        },
+        {
+            "name": "getFirstExeEventId",
+            "onFailure": [],
+            "onSuccess": [
+                "getEventIdDetails"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "getEventIdDetails",
+            "onFailure": [],
+            "onSuccess": [
+                "compareTriggerObjectIds"
+            ],
+            "properties": {
+                "api": "/instances/${trigger.instanceId}/events/${steps.getFirstExeEventId}",
+                "method": "GET"
+            },
+            "type": "request"
+        },
+        {
+            "name": "compareTriggerObjectIds",
+            "onFailure": [
+                "getCreatedIssueDetails"
+            ],
+            "onSuccess": [],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "isUpdated",
+            "onFailure": [],
+            "onSuccess": [],
+            "properties": {},
+            "type": "filter"
+        }
+    ],
+    "subFormulas": [
+        {
+            "active": true,
+            "api": "GET /v1FaaR",
+            "configuration": [
+                {
+                    "key": "closeio",
+                    "name": "closeio",
+                    "required": false,
+                    "type": "elementInstance"
+                }
+            ],
+            "debugLoggingEnabled": true,
+            "engine": "v1",
+            "id": 154451,
+            "method": "GET",
+            "name": "churros-snp-formulac5guofgj9e",
+            "singleThreaded": false,
+            "steps": [
+                {
+                    "name": "closeio",
+                    "onFailure": [],
+                    "onSuccess": [],
+                    "properties": {
+                        "api": "/contacts",
+                        "elementInstanceId": "${config.closeio}",
+                        "method": "GET"
+                    },
+                    "type": "elementRequest"
+                },
+                {
+                    "name": "closeio-accounts",
+                    "onFailure": [],
+                    "onSuccess": [],
+                    "properties": {
+                        "api": "/accounts",
+                        "elementInstanceId": "${config.closeio}",
+                        "method": "GET"
+                    },
+                    "type": "elementRequest"
+                },
+                {
+                    "name": "trueFalse",
+                    "onFailure": [
+                        "closeio"
+                    ],
+                    "onSuccess": [
+                        "closeio-accounts"
+                    ],
+                    "properties": {
+                        "body": "let a = Math.random()\n\nlet b = Math.random()\n\ndone(a>b)"
+                    },
+                    "type": "filter"
+                }
+            ],
+            "triggers": [
+                {
+                    "async": true,
+                    "name": "trigger",
+                    "onFailure": [],
+                    "onSuccess": [
+                        "trueFalse"
+                    ],
+                    "properties": {},
+                    "type": "manual"
+                }
+            ],
+            "uri": "/v1FaaR"
+        }
+    ],
+    "triggers": [
+        {
+            "async": true,
+            "name": "trigger",
+            "onFailure": [],
+            "onSuccess": [
+                "isCreated"
+            ],
+            "properties": {
+                "elementInstanceId": "${config.originInstance}"
+            },
+            "type": "event"
+        }
+    ]
+}

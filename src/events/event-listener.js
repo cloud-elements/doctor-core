@@ -1,4 +1,4 @@
-const { logDebug } = require('../util/logger');
+const {logDebug} = require('../utils/logger');
 const {addCancelledJobId} = require('./cancelled-job');
 const {emitter, EventTopic} = require('./emitter');
 
