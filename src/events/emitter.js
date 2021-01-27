@@ -2,6 +2,7 @@ const EventEmitter = require('events');
 
 let emitter;
 
+/* istanbul ignore next */
 const singleton = () => {
   if (!emitter) {
     emitter = new EventEmitter();

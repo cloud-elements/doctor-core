@@ -1,0 +1,20 @@
+{
+    "extends": ["airbnb-base", "prettier", "plugin:node/recommended"],
+    "plugins": ["prettier"],
+    "rules": {
+      "func-names": "off",
+      "no-console": "off",
+      "no-shadow": "off",
+      "no-plusplus": "off",
+      "no-await-in-loop": "off",
+      "no-return-await": "off",
+      "no-use-before-define": "off",
+      "no-param-reassign": "off",
+      "node/no-unsupported-features/es-syntax": "off",
+      "node/no-unpublished-require": "off",
+      "no-async-promise-executor": "off",
+      "no-unused-vars": "off",
+      "semi": [2, "always"]
+    }
+  }
+  

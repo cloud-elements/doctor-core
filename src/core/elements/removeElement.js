@@ -1,22 +1,23 @@
-'use strict';
-const { isEmpty } = require('ramda');
-const { Assets, ArtifactStatus } = require('../../constants/artifact');
-const { emitter, EventTopic } = require('../../events/emitter');
-const { isJobCancelled } = require('../../events/cancelled-job');
-const getPrivateElements = require('../../util/elements/getPrivateElements');
-const http = require('../../util/http');
-const { logDebug } = require('../../util/logger');
-const makePath = (id) => `elements/${id}`;
+const {isEmpty} = require('ramda');
+const {Assets, ArtifactStatus} = require('../../constants/artifact');
+const {emitter, EventTopic} = require('../../events/emitter');
+const {isJobCancelled} = require('../../events/cancelled-job');
+const getPrivateElements = require('./getPrivateElements');
+const http = require('../../utils/http');
+const {logDebug, logError} = require('../../utils/logger');
 
-module.exports = async (options) => {
-  const { name, jobId, processId } = options;
+const makePath = id => `elements/${id}`;
+
+module.exports = async options => {
+  const {name, jobId, processId} = options;
   const elements = await getPrivateElements(name);
   if (isEmpty(elements)) {
     logDebug(`The doctor was unable to find the element ${name}.`);
     return;
   }
   logDebug('Initiating the delete process for elements');
-  const removePromises = await elements.map(async (element) => {
+  // eslint-disable-next-line consistent-return
+  const removePromises = await elements.map(async element => {
     try {
       if (isJobCancelled(jobId)) {
         emitter.emit(EventTopic.ASSET_STATUS, {
@@ -48,6 +49,7 @@ module.exports = async (options) => {
         error: error.toString(),
         metadata: '',
       });
+      logError(`Failed to delete elements: ${error.message}`);
       throw error;
     }
   });

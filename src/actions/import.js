@@ -1,16 +1,20 @@
-'use strict';
-const loadAccount = require('../util/loadAccount');
-const {startSpinner, stopSpinner} = require('../util/spinner');
+const loadAccount = require('../core/accounts/loadAccount');
+const {startSpinner, stopSpinner} = require('../utils/spinner');
 const eventListener = require('../events/event-listener');
 const {removeCancelledJobId} = require('../events/cancelled-job');
-const { logDebug } = require('../util/logger');
-const clearCancelledJobId = (jobId) => jobId && removeCancelledJobId(jobId);
+const {logDebug} = require('../utils/logger');
+const importVdrs = require('../core/vdrs/uploadMultipleVdrs');
+const importFormulas = require('../core/formulas/importFormulas');
+const importElements = require('../core/elements/importElements');
+const importAll = require('../utils/importBackup');
 
-const functions = {
-  vdrs: require('../core/vdrs/upload/uploadMultipleVdrs'),
-  formulas: require('../core/importFormulas'),
-  elements: require('../core/importElements'),
-  all: require('../core/importBackup'),
+const clearCancelledJobId = jobId => jobId && removeCancelledJobId(jobId);
+
+const importOperationsObject = {
+  vdrs: importVdrs,
+  formulas: importFormulas,
+  elements: importElements,
+  all: importAll,
 };
 
 module.exports = async (object, account, options) => {
@@ -19,17 +23,17 @@ module.exports = async (object, account, options) => {
     await loadAccount(account);
     if (!options.file && !options.dir) {
       logDebug('Please specify a file or directory to save with -f / -d');
-      process.exit(1);
-    } else if (!functions[object]) {
+      throw new Error(`Command not found: ${object}`);
+    } else if (!importOperationsObject[object]) {
       logDebug(`Command not found: ${object}`);
-      process.exit(1);
+      throw new Error(`Command not found: ${object}`);
     }
     eventListener.addListener();
-    await functions[object](options);
-    clearCancelledJobId(options.jobId)
+    await importOperationsObject[object](options);
+    clearCancelledJobId(options.jobId);
     await stopSpinner();
   } catch (err) {
-    clearCancelledJobId(options.jobId)
+    clearCancelledJobId(options.jobId);
     await stopSpinner();
     throw err;
   }

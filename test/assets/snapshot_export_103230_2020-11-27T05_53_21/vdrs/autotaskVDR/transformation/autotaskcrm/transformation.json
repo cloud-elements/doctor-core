@@ -1,0 +1,39 @@
+{
+    "configuration": [
+        {
+            "level": "account",
+            "type": "addToDocumentation"
+        },
+        {
+            "level": "account",
+            "type": "inherit"
+        },
+        {
+            "level": "account",
+            "properties": {
+                "fromVendor": false,
+                "toVendor": false
+            },
+            "type": "passThrough"
+        }
+    ],
+    "elementKey": "autotaskcrm",
+    "fields": [
+        {
+            "level": "organization",
+            "path": "add",
+            "type": "string",
+            "vendorPath": "allocationCodeID",
+            "vendorType": "string"
+        }
+    ],
+    "isLegacy": false,
+    "objectName": "autotaskVDR",
+    "script": {
+        "body": "done();",
+        "filterEmptyResponse": false,
+        "level": "organization",
+        "mimeType": "application/javascript"
+    },
+    "vendorName": "Task"
+}

@@ -1,31 +1,41 @@
-'use strict';
-const { type } = require('ramda');
-const loadAccount = require('../util/loadAccount');
-const { startSpinner, stopSpinner } = require('../util/spinner');
-const { removeCancelledJobId } = require('../events/cancelled-job');
-const { logDebug } = require('../util/logger');
-const clearCancelledJobId = (jobId) => jobId && removeCancelledJobId(jobId);
+const {type} = require('ramda');
+const loadAccount = require('../core/accounts/loadAccount');
+const {startSpinner, stopSpinner} = require('../utils/spinner');
+const {removeCancelledJobId} = require('../events/cancelled-job');
+const {logDebug} = require('../utils/logger');
+const deleteCommonResources = require('../core/commonResources/removeCommonResources');
+const deleteVdrs = require('../core/commonResources/removeCommonResources');
+const deleteFormulaInstances = require('../core/formulaInstances/removeFormulaInstances');
+const deleteInstances = require('../core/elementInstances/removeInstances');
+const deleteElements = require('../core/elements/removeElements');
+const deleteFormulas = require('../core/formulas/removeFormulas');
+const deleteSpecificElement = require('../core/elements/removeElement');
+const deleteSpecificFormula = require('../core/formulas/removeFormula');
+const deleteSpecificVdr = require('../core/commonResources/removeCommonResource');
+const deleteSpecificCommonResource = require('../core/commonResources/removeCommonResource');
 
-const functions = {
-  commonResources: require('../core/removeCommonResources'),
-  vdrs: require('../core/removeCommonResources'),
-  formulaInstances: require('../core/removeFormulaInstances'),
-  instances: require('../core/removeInstances'),
-  elements: require('../core/elements/removeElements'),
-  formulas: require('../core/removeFormulas'),
+const clearCancelledJobId = jobId => jobId && removeCancelledJobId(jobId);
+
+const deleteOperationsObject = {
+  commonResources: deleteCommonResources,
+  vdrs: deleteVdrs,
+  formulaInstances: deleteFormulaInstances,
+  instances: deleteInstances,
+  elements: deleteElements,
+  formulas: deleteFormulas,
 };
 
-const specificFunctions = {
-  elements: require('../core/elements/removeElement'),
-  formulas: require('../core/removeFormula'),
-  vdrs: require('../core/removeCommonResource'),
-  commonResources: require('../core/removeCommonResource'),
+const deleteSpecificOperationsObject = {
+  elements: deleteSpecificElement,
+  formulas: deleteSpecificFormula,
+  vdrs: deleteSpecificVdr,
+  commonResources: deleteSpecificCommonResource,
 };
 
-const validateObject = (object, functions) => {
-  if (!functions[object]) {
+const validateObject = (object, deleteOperationsObject) => {
+  if (!deleteOperationsObject[object]) {
     logDebug(`Command not found: ${object}`);
-    process.exit(1);
+    throw new Error(`Command not found: ${object}`);
   }
 };
 
@@ -34,16 +44,16 @@ module.exports = async (object, account, options) => {
   try {
     await startSpinner();
     if (options.name !== undefined && type(options.name) !== 'Function') {
-      validateObject(object, specificFunctions);
-      await specificFunctions[object](options);
+      validateObject(object, deleteSpecificOperationsObject);
+      await deleteSpecificOperationsObject[object](options);
     } else {
-      validateObject(object, functions);
-      await functions[object]();
+      validateObject(object, deleteOperationsObject);
+      await deleteOperationsObject[object]();
     }
-    clearCancelledJobId(options.jobId)
+    clearCancelledJobId(options.jobId);
     await stopSpinner();
   } catch (err) {
-    clearCancelledJobId(options.jobId)
+    clearCancelledJobId(options.jobId);
     await stopSpinner();
     throw err;
   }

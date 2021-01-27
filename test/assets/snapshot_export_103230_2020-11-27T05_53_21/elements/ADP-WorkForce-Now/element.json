@@ -1,0 +1,1592 @@
+{
+    "active": true,
+    "authentication": {
+        "type": "custom"
+    },
+    "beta": false,
+    "bulkDownloadEnabled": false,
+    "bulkUploadEnabled": false,
+    "childTransformationsEnabled": true,
+    "cloneable": false,
+    "configuration": [
+        {
+            "active": true,
+            "companyConfig": false,
+            "description": "authentication.time",
+            "displayOrder": 1,
+            "groupControl": false,
+            "hideFromConsole": true,
+            "internal": true,
+            "isPrivate": false,
+            "key": "authentication.time",
+            "name": "authentication.time",
+            "required": false,
+            "resellerConfig": false,
+            "type": "TEXTFIELD_32"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "defaultValue": "https://accounts.adp.com",
+            "description": "ADPoo Base Url",
+            "displayOrder": 1,
+            "groupControl": false,
+            "hideFromConsole": true,
+            "internal": false,
+            "isPrivate": false,
+            "key": "base.url",
+            "name": "Base Url",
+            "required": true,
+            "resellerConfig": false,
+            "type": "TEXTFIELD_1000"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "description": "ADPoo Base64 encoded JKS file. Please see our TLS documentation for additional information including sample code",
+            "displayOrder": 101,
+            "groupControl": false,
+            "hideFromConsole": false,
+            "internal": false,
+            "isPrivate": false,
+            "key": "base64.encoded.jks",
+            "name": "Base64 Encoded JKS",
+            "required": true,
+            "resellerConfig": false,
+            "type": "TEXTFIELD_128"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "description": "Generic map used to specify default fields for bulk download and GET /all requests. Each key should be the canonical objectName and values may be specified as a comma-delimited string or a list of strings",
+            "displayOrder": 98,
+            "groupControl": false,
+            "hideFromConsole": false,
+            "internal": false,
+            "isPrivate": false,
+            "key": "default.select.fields.map",
+            "name": "Default select fields",
+            "required": false,
+            "resellerConfig": false,
+            "type": "TEXTAREA"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "description": "ADP WorkForce Now Event Notification Basic Password",
+            "displayOrder": 13,
+            "groupControl": false,
+            "hideFromConsole": false,
+            "internal": false,
+            "isPrivate": false,
+            "key": "event.notification.basic.password",
+            "name": "Event Notification Basic Password",
+            "required": false,
+            "resellerConfig": false,
+            "type": "PASSWORD"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "description": "ADP WorkForce Now Event Notification Basic User Name",
+            "displayOrder": 12,
+            "groupControl": false,
+            "hideFromConsole": false,
+            "internal": false,
+            "isPrivate": false,
+            "key": "event.notification.basic.username",
+            "name": "Event Notification Basic User Name",
+            "required": false,
+            "resellerConfig": false,
+            "type": "TEXTFIELD_128"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "description": "ADP WorkForce Now Event Notification Callback Headers",
+            "displayOrder": 12,
+            "groupControl": false,
+            "hideFromConsole": false,
+            "internal": false,
+            "isPrivate": false,
+            "key": "event.notification.callback.headers",
+            "name": "Event Notification Callback Headers",
+            "required": false,
+            "resellerConfig": false,
+            "type": "TEXTFIELD_128"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "description": "ADPoo Event Notification Signature Key",
+            "displayOrder": 11,
+            "groupControl": false,
+            "hideFromConsole": true,
+            "internal": false,
+            "isPrivate": false,
+            "key": "event.notification.signature.key",
+            "name": "Event Notification Signature Key",
+            "required": false,
+            "resellerConfig": false,
+            "type": "TEXTFIELD_128"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "defaultValue": "60",
+            "description": "expires_in",
+            "displayOrder": 1,
+            "groupControl": false,
+            "hideFromConsole": true,
+            "internal": false,
+            "isPrivate": false,
+            "key": "expires_in",
+            "name": "expires_in",
+            "required": false,
+            "resellerConfig": false,
+            "type": "TEXTFIELD_128"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "defaultValue": "true",
+            "description": "Used to enable/disable filtering of null values from the responses",
+            "displayOrder": 99,
+            "groupControl": false,
+            "hideFromConsole": true,
+            "internal": false,
+            "isPrivate": false,
+            "key": "filter.response.nulls",
+            "name": "Filter null values from the response",
+            "required": false,
+            "resellerConfig": false,
+            "type": "BOOLEAN"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "description": "Instance Variables",
+            "displayOrder": 100,
+            "groupControl": false,
+            "hideFromConsole": false,
+            "internal": false,
+            "isPrivate": false,
+            "key": "instance.variables",
+            "name": "Instance Variables",
+            "required": false,
+            "resellerConfig": false,
+            "type": "CODE_EDITOR"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "description": "ADPoo Password for the provided keystore",
+            "displayOrder": 102,
+            "groupControl": false,
+            "hideFromConsole": false,
+            "internal": false,
+            "isPrivate": false,
+            "key": "jks.password",
+            "name": "JKS Password",
+            "required": true,
+            "resellerConfig": false,
+            "type": "PASSWORD"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "defaultValue": "config",
+            "description": "mynew",
+            "displayOrder": 1,
+            "groupControl": false,
+            "hideFromConsole": false,
+            "internal": false,
+            "isPrivate": false,
+            "key": "mynew",
+            "name": "mynew",
+            "required": false,
+            "resellerConfig": false,
+            "type": "PASSWORD"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "defaultValue": "true",
+            "description": "new",
+            "displayOrder": 1,
+            "groupControl": false,
+            "hideFromConsole": false,
+            "internal": false,
+            "isPrivate": false,
+            "key": "new",
+            "name": "new",
+            "required": false,
+            "resellerConfig": false,
+            "type": "BOOLEAN"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "description": "Oauth API Key",
+            "displayOrder": 1,
+            "groupControl": false,
+            "hideFromConsole": false,
+            "internal": false,
+            "isPrivate": false,
+            "key": "oauth.api.key",
+            "name": "Oauth API Key",
+            "required": true,
+            "resellerConfig": false,
+            "type": "TEXTFIELD_128"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "description": "Oauth API Secret",
+            "displayOrder": 1,
+            "groupControl": false,
+            "hideFromConsole": false,
+            "internal": false,
+            "isPrivate": false,
+            "key": "oauth.api.secret",
+            "name": "Oauth API Secret",
+            "required": true,
+            "resellerConfig": false,
+            "type": "TEXTFIELD_128"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "description": "Oauth Token",
+            "displayOrder": 1,
+            "groupControl": false,
+            "hideFromConsole": true,
+            "internal": false,
+            "isPrivate": false,
+            "key": "oauth.token",
+            "name": "Oauth Token",
+            "required": false,
+            "resellerConfig": false,
+            "type": "TEXTFIELD_128"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "description": "Oauth User Token",
+            "displayOrder": 1,
+            "groupControl": false,
+            "hideFromConsole": false,
+            "internal": true,
+            "isPrivate": false,
+            "key": "oauth.user.token",
+            "name": "Oauth User Token",
+            "required": false,
+            "resellerConfig": false,
+            "type": "TEXTFIELD_32"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "defaultValue": "100",
+            "description": "ADPoo Max Page Size (or limit)",
+            "displayOrder": 1,
+            "groupControl": false,
+            "hideFromConsole": true,
+            "internal": false,
+            "isPrivate": false,
+            "key": "pagination.max",
+            "name": "Max Page Size (or limit)",
+            "required": false,
+            "resellerConfig": false,
+            "type": "TEXTFIELD_32"
+        },
+        {
+            "active": true,
+            "companyConfig": false,
+            "description": "ADPoo Pagination Type",
+            "displayOrder": 1,
+            "groupControl": false,
+            "hideFromConsole": true,
+            "internal": false,
+            "isPrivate": false,
+            "key": "pagination.type",
+            "name": "Pagination Type",
+            "required": false,
+            "resellerConfig": false,
+            "type": "TEXTFIELD_32"
+        }
+    ],
+    "deleted": false,
+    "description": "ADP Element for WorkForce Now",
+    "extendable": true,
+    "extended": false,
+    "hooks": [
+        {
+            "contextParams": "request_vendor_headers,configuration",
+            "isLegacy": false,
+            "mimeType": "application/javascript",
+            "type": "preRequest"
+        }
+    ],
+    "hub": "general",
+    "image": "elements/custom-element-default-logo.png",
+    "key": "adpwfnSDF",
+    "logo": "adpoo",
+    "modelType": "basic",
+    "name": "ADP WorkForce Now",
+    "objects": [],
+    "paginatorVersion": "V2",
+    "parameters": [
+        {
+            "name": "application/json",
+            "required": false,
+            "source": "request",
+            "type": "value",
+            "vendorName": "Accept",
+            "vendorType": "header"
+        },
+        {
+            "name": "application/json",
+            "required": false,
+            "source": "request",
+            "type": "value",
+            "vendorName": "Content-Type",
+            "vendorType": "header"
+        }
+    ],
+    "private": true,
+    "protocolType": "http",
+    "resources": [
+        {
+            "description": "Create a(n) /",
+            "hooks": [
+                {
+                    "contextParams": "request_vendor_headers,configuration",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                },
+                {
+                    "contextParams": "configuration,response_body,response_iserror",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "postRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "POST",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "The object body",
+                    "name": "client_credentials",
+                    "required": true,
+                    "source": "request",
+                    "type": "value",
+                    "vendorDataType": "string",
+                    "vendorName": "grant_type",
+                    "vendorType": "form"
+                },
+                {
+                    "dataType": "string",
+                    "description": "token expire time",
+                    "name": "expires_in",
+                    "required": false,
+                    "source": "request",
+                    "type": "configuration",
+                    "vendorDataType": "string",
+                    "vendorName": "expires_in",
+                    "vendorType": "bodyField"
+                },
+                {
+                    "dataType": "string",
+                    "description": "oauth token",
+                    "name": "oauth.user.token",
+                    "required": false,
+                    "source": "request",
+                    "type": "configuration",
+                    "vendorDataType": "string",
+                    "vendorName": "access_token",
+                    "vendorType": "bodyField"
+                }
+            ],
+            "path": "/hubs/general/authenticate",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "tryitoutDisable": false,
+            "type": "provisionAuthValidation",
+            "vendorMethod": "POST",
+            "vendorPath": "https://accounts.adp.com/auth/oauth/v2/token"
+        },
+        {
+            "description": "Create a(n) /",
+            "hooks": [
+                {
+                    "contextParams": "request_vendor_headers,configuration",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                },
+                {
+                    "contextParams": "configuration,response_body,response_iserror",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "postRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "POST",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "The object body",
+                    "name": "client_credentials",
+                    "required": true,
+                    "source": "request",
+                    "type": "value",
+                    "vendorDataType": "string",
+                    "vendorName": "grant_type",
+                    "vendorType": "form"
+                },
+                {
+                    "dataType": "string",
+                    "description": "token expire time",
+                    "name": "expires_in",
+                    "required": false,
+                    "source": "request",
+                    "type": "configuration",
+                    "vendorDataType": "string",
+                    "vendorName": "expires_in",
+                    "vendorType": "bodyField"
+                },
+                {
+                    "dataType": "string",
+                    "description": "oauth token",
+                    "name": "oauth.user.token",
+                    "required": false,
+                    "source": "request",
+                    "type": "configuration",
+                    "vendorDataType": "string",
+                    "vendorName": "access_token",
+                    "vendorType": "bodyField"
+                }
+            ],
+            "path": "/hubs/general/authenticate-refresh",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "tryitoutDisable": false,
+            "type": "onRefresh",
+            "vendorMethod": "POST",
+            "vendorPath": "https://accounts.adp.com/auth/oauth/v2/token"
+        },
+        {
+            "description": "Create a new employee (worker)",
+            "hooks": [
+                {
+                    "contextParams": "request_body,request_vendor_body",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "POST",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "The object body",
+                    "name": "{   \"events\": [     {       \"serviceCategoryCode\": {         \"codeValue\": \"hr\"       },       \"eventNameCode\": {         \"codeValue\": \"worker.hire\"       },       \"data\": {         \"transform\": {           \"eventReasonCode\": {             \"shortName\": \"NEW - Position\",             \"codeValue\": \"NEW\"           },           \"eventStatusCode\": {             \"codeValue\": \"submit\"           },           \"worker\": {worker}         }       }     }   ] }",
+                    "required": true,
+                    "source": "request",
+                    "type": "value",
+                    "vendorDataType": "string",
+                    "vendorName": "body",
+                    "vendorType": "body"
+                },
+                {
+                    "dataType": "employee",
+                    "description": "The object body",
+                    "name": "worker",
+                    "required": true,
+                    "source": "request",
+                    "type": "body",
+                    "vendorDataType": "employee",
+                    "vendorName": "worker",
+                    "vendorType": "no-op"
+                }
+            ],
+            "path": "/hubs/general/employees",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "rootKey": "events[0].data.output.worker",
+            "tryitoutDisable": false,
+            "type": "api",
+            "vendorMethod": "POST",
+            "vendorPath": "/events/hr/v1/worker.hire"
+        },
+        {
+            "description": "Retrieve a list of contacts for an employee (worker)",
+            "hooks": [
+                {
+                    "contextParams": "request_vendor_headers",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "GET",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "The employeeId ID",
+                    "name": "employeeId",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "employeeId",
+                    "vendorType": "path"
+                }
+            ],
+            "path": "/hubs/general/employees/{employeeId}/contacts",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "rootKey": "personalContacts[*]",
+            "tryitoutDisable": false,
+            "type": "api",
+            "vendorMethod": "GET",
+            "vendorPath": "/hr/v2/associates/{employeeId}/personal-contacts"
+        },
+        {
+            "description": "Add a contact for  an employee (worker)",
+            "hooks": [
+                {
+                    "contextParams": "request_body,request_vendor_body,request_path_variables",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "POST",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "The object body",
+                    "name": "{   \"events\": [     {       \"serviceCategoryCode\": {         \"codeValue\": \"hr\"       },       \"eventNameCode\": {         \"codeValue\": \"worker.personalContact.add\"       },       \"data\": {         \"eventContext\": {           \"worker\": {             \"associateOID\": \"{id}\"           }         },         \"transform\": {contact}     }   }] }",
+                    "required": true,
+                    "source": "request",
+                    "type": "value",
+                    "vendorDataType": "string",
+                    "vendorName": "vendorBody",
+                    "vendorType": "body"
+                },
+                {
+                    "dataType": "employeeContacts",
+                    "description": "The object body",
+                    "name": "contact",
+                    "required": false,
+                    "source": "request",
+                    "type": "body",
+                    "vendorDataType": "employeeContacts",
+                    "vendorName": "contact",
+                    "vendorType": "no-op"
+                },
+                {
+                    "dataType": "string",
+                    "description": "The associate OID of the employee",
+                    "name": "employeeId",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "employeeId",
+                    "vendorType": "path"
+                }
+            ],
+            "path": "/hubs/general/employees/{employeeId}/contacts",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "rootKey": "events[0].data.output.personalContact",
+            "tryitoutDisable": false,
+            "type": "api",
+            "vendorMethod": "POST",
+            "vendorPath": "/events/hr/v1/worker.personal-contact.add"
+        },
+        {
+            "description": "Remove a personal contact for an employee (worker)",
+            "hooks": [
+                {
+                    "contextParams": "request_vendor_body,request_path_variables",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "DELETE",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "The object body",
+                    "name": "{   \"events\": [     {       \"serviceCategoryCode\": {         \"codeValue\": \"hr\"       },       \"eventNameCode\": {         \"codeValue\": \"worker.personalContact.remove\"       },       \"data\": {         \"eventContext\": {           \"worker\": {             \"associateOID\": \"{employeeId}\"           },           \"personalContact\": {             \"itemID\": \"{contactId}\"           }         }       }     }   ] }",
+                    "required": true,
+                    "source": "request",
+                    "type": "value",
+                    "vendorDataType": "string",
+                    "vendorName": "body",
+                    "vendorType": "body"
+                },
+                {
+                    "dataType": "string",
+                    "description": "The Object ID",
+                    "name": "contactId",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "contactId",
+                    "vendorType": "path"
+                },
+                {
+                    "dataType": "string",
+                    "description": "The Object ID",
+                    "name": "employeeId",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "itemID",
+                    "vendorType": "path"
+                }
+            ],
+            "path": "/hubs/general/employees/{employeeId}/contacts/{contactId}",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "tryitoutDisable": false,
+            "type": "api",
+            "vendorMethod": "POST",
+            "vendorPath": "/events/hr/v1/worker.personal-contact.remove"
+        },
+        {
+            "description": "Update a personal  contact for an employee (worker)",
+            "hooks": [
+                {
+                    "contextParams": "request_body,request_vendor_body,request_path_variables",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "PATCH",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "The vendor Body",
+                    "name": "{   \"events\": [     {       \"serviceCategoryCode\": {         \"codeValue\": \"hr\"       },       \"eventNameCode\": {         \"codeValue\": \"worker.personalContact.change\"       },       \"data\": {         \"eventContext\": {           \"worker\": {             \"associateOID\": \"{employeeId}\"           },           \"personalContact\": {             \"itemID\": \"{contactId}\"           }         },         \"transform\": {contact}     } }   ] }",
+                    "required": true,
+                    "source": "request",
+                    "type": "value",
+                    "vendorDataType": "string",
+                    "vendorName": "vendorBody",
+                    "vendorType": "body"
+                },
+                {
+                    "dataType": "employeeContacts",
+                    "description": "The contact body",
+                    "name": "contact",
+                    "required": false,
+                    "source": "request",
+                    "type": "body",
+                    "vendorDataType": "employeeContacts",
+                    "vendorName": "contact",
+                    "vendorType": "no-op"
+                },
+                {
+                    "dataType": "string",
+                    "description": "The Object ID",
+                    "name": "contactId",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "contactId",
+                    "vendorType": "path"
+                },
+                {
+                    "dataType": "string",
+                    "description": "The Object ID",
+                    "name": "employeeId",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "employeeId",
+                    "vendorType": "path"
+                }
+            ],
+            "path": "/hubs/general/employees/{employeeId}/contacts/{contactId}",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "tryitoutDisable": false,
+            "type": "api",
+            "vendorMethod": "POST",
+            "vendorPath": "/events/hr/v1/worker.personal-contact.change"
+        },
+        {
+            "description": "Update the legal address for an employee (worker)",
+            "hooks": [
+                {
+                    "contextParams": "request_body,request_vendor_body,request_path_variables",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "PATCH",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "The object body",
+                    "name": "{   \"events\": [     {       \"serviceCategoryCode\": {         \"codeValue\": \"hr\"       },       \"eventNameCode\": {         \"codeValue\": \"worker.legalAddress.add\"       },       \"data\": {         \"eventContext\": {           \"worker\": {             \"associateOID\": \"{employeeId}\"           }         },         \"transform\": {           \"effectiveDateTime\": \"2014-01-01T00:00:00Z\",           \"worker\": {             \"person\": {               \"legalAddress\": {address}             }           }         }       }     }   ] }",
+                    "required": true,
+                    "source": "request",
+                    "type": "value",
+                    "vendorDataType": "string",
+                    "vendorName": "vendorBody",
+                    "vendorType": "body"
+                },
+                {
+                    "dataType": "employeesAddress",
+                    "description": "The object body",
+                    "name": "address",
+                    "required": true,
+                    "source": "request",
+                    "type": "body",
+                    "vendorDataType": "employeesAddress",
+                    "vendorName": "address",
+                    "vendorType": "no-op"
+                },
+                {
+                    "dataType": "string",
+                    "description": "The employeeId ID",
+                    "name": "employeeId",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "employeeId",
+                    "vendorType": "path"
+                }
+            ],
+            "path": "/hubs/general/employees/{employeeId}/legal-address",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "rootKey": ".events[*]",
+            "tryitoutDisable": false,
+            "type": "api",
+            "vendorMethod": "POST",
+            "vendorPath": "/events/hr/v1/worker.legal-address.change"
+        },
+        {
+            "description": "Update the legal address for an employee (worker)",
+            "hooks": [
+                {
+                    "contextParams": "request_body,request_vendor_body,request_path_variables",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "POST",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "The object body",
+                    "name": "{   \"events\": [     {       \"serviceCategoryCode\": {         \"codeValue\": \"hr\"       },       \"eventNameCode\": {         \"codeValue\": \"worker.legalAddress.add\"       },       \"data\": {         \"eventContext\": {           \"worker\": {             \"associateOID\": \"{employeeId}\"           }         },         \"transform\": {           \"effectiveDateTime\": \"2014-01-01T00:00:00Z\",           \"worker\": {             \"person\": {               \"legalAddress\": {address}             }           }         }       }     }   ] }",
+                    "required": true,
+                    "source": "request",
+                    "type": "value",
+                    "vendorDataType": "string",
+                    "vendorName": "vendorBody",
+                    "vendorType": "body"
+                },
+                {
+                    "dataType": "employeesAddress",
+                    "description": "The object body",
+                    "name": "address",
+                    "required": true,
+                    "source": "request",
+                    "type": "body",
+                    "vendorDataType": "employeesAddress",
+                    "vendorName": "address",
+                    "vendorType": "no-op"
+                },
+                {
+                    "dataType": "string",
+                    "description": "The employeeId ID",
+                    "name": "employeeId",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "employeeId",
+                    "vendorType": "path"
+                }
+            ],
+            "path": "/hubs/general/employees/{employeeId}/legal-address",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "rootKey": ".events[*]",
+            "tryitoutDisable": false,
+            "type": "api",
+            "vendorMethod": "POST",
+            "vendorPath": "/events/hr/v1/worker.legal-address.add"
+        },
+        {
+            "description": "Update the legal address for an employee (worker)",
+            "hooks": [
+                {
+                    "contextParams": "request_body,request_vendor_body,request_path_variables",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "PATCH",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "The object body",
+                    "name": "{   \"events\": [     {       \"serviceCategoryCode\": {         \"codeValue\": \"hr\"       },       \"eventNameCode\": {         \"codeValue\": \"worker.legalAddress.add\"       },       \"data\": {         \"eventContext\": {           \"worker\": {             \"associateOID\": \"{employeeId}\"           }         },         \"transform\": {           \"effectiveDateTime\": \"2014-01-01T00:00:00Z\",           \"worker\": {             \"person\": {               \"legalAddress\": {address}             }           }         }       }     }   ] }",
+                    "required": true,
+                    "source": "request",
+                    "type": "value",
+                    "vendorDataType": "string",
+                    "vendorName": "vendorBody",
+                    "vendorType": "body"
+                },
+                {
+                    "dataType": "employeesAddress",
+                    "description": "The object body",
+                    "name": "address",
+                    "required": true,
+                    "source": "request",
+                    "type": "body",
+                    "vendorDataType": "employeesAddress",
+                    "vendorName": "address",
+                    "vendorType": "no-op"
+                },
+                {
+                    "dataType": "string",
+                    "description": "The employeeId ID",
+                    "name": "employeeId",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "employeeId",
+                    "vendorType": "path"
+                }
+            ],
+            "path": "/hubs/general/employees/{employeeId}/legal-address_copy/{employeeId}/legal-address",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "rootKey": ".events[*]",
+            "tryitoutDisable": false,
+            "type": "api",
+            "vendorMethod": "POST",
+            "vendorPath": "/events/hr/v1/worker.legal-address.add/hr/v1/worker.legal-address.change"
+        },
+        {
+            "description": "Update the legal address for an employee (worker)",
+            "hooks": [
+                {
+                    "contextParams": "request_body,request_vendor_body,request_path_variables",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "POST",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "The object body",
+                    "name": "{   \"events\": [     {       \"serviceCategoryCode\": {         \"codeValue\": \"hr\"       },       \"eventNameCode\": {         \"codeValue\": \"worker.legalAddress.add\"       },       \"data\": {         \"eventContext\": {           \"worker\": {             \"associateOID\": \"{employeeId}\"           }         },         \"transform\": {           \"effectiveDateTime\": \"2014-01-01T00:00:00Z\",           \"worker\": {             \"person\": {               \"legalAddress\": {address}             }           }         }       }     }   ] }",
+                    "required": true,
+                    "source": "request",
+                    "type": "value",
+                    "vendorDataType": "string",
+                    "vendorName": "vendorBody",
+                    "vendorType": "body"
+                },
+                {
+                    "dataType": "employeesAddress",
+                    "description": "The object body",
+                    "name": "address",
+                    "required": true,
+                    "source": "request",
+                    "type": "body",
+                    "vendorDataType": "employeesAddress",
+                    "vendorName": "address",
+                    "vendorType": "no-op"
+                },
+                {
+                    "dataType": "string",
+                    "description": "The employeeId ID",
+                    "name": "employeeId",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "employeeId",
+                    "vendorType": "path"
+                }
+            ],
+            "path": "/hubs/general/employees/{employeeId}/legal-address_copy/{employeeId}/legal-address",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "rootKey": ".events[*]",
+            "tryitoutDisable": false,
+            "type": "api",
+            "vendorMethod": "POST",
+            "vendorPath": "/events/hr/v1/worker.legal-address.add/hr/v1/worker.legal-address.add"
+        },
+        {
+            "description": "Retrieve the current pay distributions for an employee",
+            "hooks": [
+                {
+                    "contextParams": "request_vendor_headers",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "GET",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "The employeeId ID",
+                    "name": "employeeId",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "employeeId",
+                    "vendorType": "path"
+                }
+            ],
+            "path": "/hubs/general/employees/{employeeId}/pay-distributions",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "rootKey": "payDistributions[*]",
+            "tryitoutDisable": false,
+            "type": "api",
+            "vendorMethod": "GET",
+            "vendorPath": "/payroll/v2/workers/{employeeId}/pay-distributions"
+        },
+        {
+            "description": "Add or update the pay for an employee (worker)",
+            "hooks": [
+                {
+                    "contextParams": "request_body,request_vendor_body,request_path_variables,request_parameters",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "POST",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "The object body",
+                    "name": "{   \"events\": [{     \"serviceCategoryCode\": {       \"codeValue\": \"payroll\"     },     \"eventNameCode\": {       \"codeValue\": \"worker.payDistribution.change\"     },     \"data\": {       \"transform\": {payDistribution},       \"eventContext\": {         \"worker\": {           \"associateOID\": \"{employeeId}\"         },         \"payrollFileNumber\": \"{payrollFileId}\",         \"payDistribution\": {           \"itemID\": \"{payItemId}\",           \"payrollGroupCode\": {             \"codeValue\": \"BOQ\",             \"shortName\": \"BOQ\"           }         }       }     }   }] }",
+                    "required": true,
+                    "source": "request",
+                    "type": "value",
+                    "vendorDataType": "string",
+                    "vendorName": "body",
+                    "vendorType": "body"
+                },
+                {
+                    "dataType": "string",
+                    "description": "The Object ID",
+                    "name": "employeeId",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "employeeId",
+                    "vendorType": "path"
+                },
+                {
+                    "dataType": "employeesPayDistributions",
+                    "description": "The object body",
+                    "name": "payDistribution",
+                    "required": true,
+                    "source": "request",
+                    "type": "body",
+                    "vendorDataType": "employeesPayDistributions",
+                    "vendorName": "payDistribution",
+                    "vendorType": "no-op"
+                },
+                {
+                    "dataType": "string",
+                    "description": "The Object ID",
+                    "name": "payItemId",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "payItemId",
+                    "vendorType": "path"
+                },
+                {
+                    "dataType": "string",
+                    "description": "The Object ID",
+                    "name": "payrollFileId",
+                    "required": true,
+                    "source": "request",
+                    "type": "query",
+                    "vendorDataType": "string",
+                    "vendorName": "payrollFileId",
+                    "vendorType": "query"
+                }
+            ],
+            "path": "/hubs/general/employees/{employeeId}/pay-distributions/{payItemId}",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "tryitoutDisable": false,
+            "type": "api",
+            "vendorMethod": "POST",
+            "vendorPath": "/events/payroll/v1/worker.pay-distribution.change"
+        },
+        {
+            "description": "Add a personal address for an employee (worker)",
+            "hooks": [
+                {
+                    "contextParams": "request_body,request_vendor_body,request_path_variables",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "POST",
+            "parameters": [
+                {
+                    "dataType": "employeesPersonalAddressRequest",
+                    "description": "The object body",
+                    "name": "{   \"events\": [     {       \"serviceCategoryCode\": {         \"codeValue\": \"hr\"       },       \"eventNameCode\": {         \"codeValue\": \"worker.personalAddress.change\"       },       \"data\": {         \"eventContext\": {           \"worker\": {             \"associateOID\": \"{employeeId}\"           }         },         \"transform\": {           \"effectiveDateTime\": \"2014-01-01T00:00:00Z\",           \"worker\": {             \"person\": {               \"personalAddress\": {personalAddress}             }           }         }       }     }   ] }",
+                    "required": true,
+                    "source": "request",
+                    "type": "body",
+                    "vendorDataType": "employeesPersonalAddressRequest",
+                    "vendorName": "body",
+                    "vendorType": "body"
+                },
+                {
+                    "dataType": "string",
+                    "description": "The employeeId ID",
+                    "name": "employeeId",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "employeeId",
+                    "vendorType": "path"
+                }
+            ],
+            "path": "/hubs/general/employees/{employeeId}/personal-address",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "tryitoutDisable": false,
+            "type": "api",
+            "vendorMethod": "POST",
+            "vendorPath": "/events/hr/v1/worker.personal-address.add"
+        },
+        {
+            "description": "Terminate an employee (worker) ",
+            "hooks": [
+                {
+                    "contextParams": "request_vendor_body,request_path_variables",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "DELETE",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "The body",
+                    "name": "{   \"events\": [{     \"serviceCategoryCode\": {       \"codeValue\": \"hr\"     },     \"eventNameCode\": {       \"codeValue\": \"worker.terminate\"     },     \"data\": {       \"eventContext\": {         \"worker\": {           \"associateOID\": \"{id}\"         }       },       \"transform\": {         \"eventReasonCode\": {           \"shortName\": \"Terminate\",           \"codeValue\": \"A\"         },         \"worker\": {           \"workerDates\": {             \"terminationDate\": \"{timestamp}\"           }         }       }     }   }] }",
+                    "required": false,
+                    "source": "request",
+                    "type": "value",
+                    "vendorDataType": "string",
+                    "vendorName": "body",
+                    "vendorType": "body"
+                },
+                {
+                    "dataType": "string",
+                    "description": "The Object ID",
+                    "name": "id",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "id",
+                    "vendorType": "path"
+                }
+            ],
+            "path": "/hubs/general/employees/{id}",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "tryitoutDisable": false,
+            "type": "api",
+            "vendorMethod": "POST",
+            "vendorPath": "/events/hr/v1/worker.terminate"
+        },
+        {
+            "description": "Retrieve a given employee",
+            "hooks": [
+                {
+                    "contextParams": "request_vendor_headers",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "GET",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "The id ID",
+                    "name": "id",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "id",
+                    "vendorType": "path"
+                }
+            ],
+            "path": "/hubs/general/employees/{id}",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "rootKey": ".workers[*]",
+            "tryitoutDisable": false,
+            "type": "api",
+            "vendorMethod": "GET",
+            "vendorPath": "/hr/v2/workers/{id}"
+        },
+        {
+            "description": "Rehire an employee (worker)",
+            "hooks": [
+                {
+                    "contextParams": "request_vendor_body,request_path_variables",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "PATCH",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "The object body",
+                    "name": "{ \t\"events\": [{ \t\t\"serviceCategoryCode\": { \t\t\t\"codeValue\": \"hr\" \t\t}, \t\t\"eventNameCode\": { \t\t\t\"codeValue\": \"worker.rehire\" \t\t}, \t\t\"data\": { \t\t\t\"transform\": { \t\t\t\t\"worker\": \"{worker}\" \t\t\t} \t\t} \t}] }",
+                    "required": false,
+                    "source": "request",
+                    "type": "value",
+                    "vendorDataType": "string",
+                    "vendorName": "body",
+                    "vendorType": "body"
+                },
+                {
+                    "dataType": "string",
+                    "description": "The Object ID",
+                    "name": "id",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "id",
+                    "vendorType": "path"
+                },
+                {
+                    "dataType": "employee",
+                    "description": "The object body",
+                    "name": "worker",
+                    "required": false,
+                    "source": "request",
+                    "type": "body",
+                    "vendorDataType": "employee",
+                    "vendorName": "worker",
+                    "vendorType": "no-op"
+                }
+            ],
+            "path": "/hubs/general/employees/{id}",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "tryitoutDisable": false,
+            "type": "api",
+            "vendorMethod": "POST",
+            "vendorPath": "/events/hr/v1/worker.rehire"
+        },
+        {
+            "description": "Search for /hubs/general/objects/{objectName}/metadatas",
+            "hooks": [
+                {
+                    "contextParams": "request_path_variables,request_vendor_path,request_vendor_headers",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                },
+                {
+                    "contextParams": "request_path_variables,response_body",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "postRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "GET",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "The objectName ID",
+                    "name": "objectName",
+                    "required": true,
+                    "source": "request",
+                    "type": "path",
+                    "vendorDataType": "string",
+                    "vendorName": "objectName",
+                    "vendorType": "path"
+                }
+            ],
+            "path": "/hubs/general/objects/{objectName}/metadata",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "tryitoutDisable": false,
+            "type": "api",
+            "vendorMethod": "GET",
+            "vendorPath": "/"
+        },
+        {
+            "description": "Search for serviceTest",
+            "hooks": [
+                {
+                    "contextParams": "request_parameters,request_vendor_path,request_vendor_headers",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "GET",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "path",
+                    "name": "path",
+                    "required": false,
+                    "source": "request",
+                    "type": "query",
+                    "vendorDataType": "string",
+                    "vendorName": "path",
+                    "vendorType": "no-op"
+                },
+                {
+                    "converter": "toQueryParameters",
+                    "dataType": "string",
+                    "description": "The CEQL search expression",
+                    "name": "where",
+                    "required": false,
+                    "source": "request",
+                    "type": "query",
+                    "vendorDataType": "string",
+                    "vendorName": "converter:toQueryParameters",
+                    "vendorType": "query"
+                }
+            ],
+            "path": "/hubs/general/serviceTest",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "tryitoutDisable": false,
+            "type": "api",
+            "vendorMethod": "GET",
+            "vendorPath": "/"
+        },
+        {
+            "description": "Retrieve the metadata to modify a personal contact for a given employee",
+            "hooks": [
+                {
+                    "contextParams": "request_vendor_headers",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "GET",
+            "parameters": [
+                {
+                    "converter": "toQueryParameters",
+                    "dataType": "string",
+                    "description": "The CEQL search expression",
+                    "name": "where",
+                    "required": false,
+                    "source": "request",
+                    "type": "query",
+                    "vendorDataType": "string",
+                    "vendorName": "converter:toQueryParameters",
+                    "vendorType": "query"
+                }
+            ],
+            "path": "/hubs/general/TEMP/meta/change-personalContact-employee",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "tryitoutDisable": false,
+            "type": "apiNoDocumentation",
+            "vendorMethod": "GET",
+            "vendorPath": "/events/hr/v1/worker.personal-contact.change/meta"
+        },
+        {
+            "description": "Retrieve the metadata to terminate an employee",
+            "hooks": [
+                {
+                    "contextParams": "request_vendor_headers",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "GET",
+            "parameters": [
+                {
+                    "dataType": "string",
+                    "description": "roleCode",
+                    "name": "employee",
+                    "required": false,
+                    "source": "request",
+                    "type": "value",
+                    "vendorDataType": "string",
+                    "vendorName": "roleCode",
+                    "vendorType": "header"
+                }
+            ],
+            "path": "/hubs/general/TEMP/meta/delete-employee",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "tryitoutDisable": false,
+            "type": "apiNoDocumentation",
+            "vendorMethod": "GET",
+            "vendorPath": "/events/hr/v1/worker.terminate/meta"
+        },
+        {
+            "description": "Retrieve the metadata to add a pay distribution change to an employee",
+            "hooks": [
+                {
+                    "contextParams": "request_vendor_headers",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "GET",
+            "parameters": [
+                {
+                    "converter": "toQueryParameters",
+                    "dataType": "string",
+                    "description": "The CEQL search expression",
+                    "name": "where",
+                    "required": false,
+                    "source": "request",
+                    "type": "query",
+                    "vendorDataType": "string",
+                    "vendorName": "converter:toQueryParameters",
+                    "vendorType": "query"
+                }
+            ],
+            "path": "/hubs/general/TEMP/meta/payDistribution-employee",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "tryitoutDisable": false,
+            "type": "apiNoDocumentation",
+            "vendorMethod": "GET",
+            "vendorPath": "/events/payroll/v1/worker.pay-distribution.change/meta"
+        },
+        {
+            "description": "Retrieve the metadata to create a personal contact for a worker",
+            "hooks": [
+                {
+                    "contextParams": "request_vendor_headers",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "GET",
+            "parameters": [
+                {
+                    "converter": "toQueryParameters",
+                    "dataType": "string",
+                    "description": "The CEQL search expression",
+                    "name": "where",
+                    "required": false,
+                    "source": "request",
+                    "type": "query",
+                    "vendorDataType": "string",
+                    "vendorName": "converter:toQueryParameters",
+                    "vendorType": "query"
+                }
+            ],
+            "path": "/hubs/general/TEMP/meta/personalContact-employee",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "tryitoutDisable": false,
+            "type": "apiNoDocumentation",
+            "vendorMethod": "GET",
+            "vendorPath": "/events/hr/v1/worker.personal-contact.add/meta"
+        },
+        {
+            "description": "Retrieve the metadata for creating a new employee record",
+            "hooks": [
+                {
+                    "contextParams": "request_vendor_headers",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "GET",
+            "parameters": [
+                {
+                    "converter": "toQueryParameters",
+                    "dataType": "string",
+                    "description": "The CEQL search expression",
+                    "name": "where",
+                    "required": false,
+                    "source": "request",
+                    "type": "query",
+                    "vendorDataType": "string",
+                    "vendorName": "converter:toQueryParameters",
+                    "vendorType": "query"
+                }
+            ],
+            "path": "/hubs/general/TEMP/meta/post-employee",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "tryitoutDisable": false,
+            "type": "apiNoDocumentation",
+            "vendorMethod": "GET",
+            "vendorPath": "/events/hr/v1/worker.hire/meta"
+        },
+        {
+            "description": "Retrieve metadata to rehire an existing employee record",
+            "hooks": [
+                {
+                    "contextParams": "request_vendor_headers",
+                    "isLegacy": false,
+                    "mimeType": "application/javascript",
+                    "type": "preRequest"
+                }
+            ],
+            "kind": "eb",
+            "method": "GET",
+            "parameters": [
+                {
+                    "converter": "toQueryParameters",
+                    "dataType": "string",
+                    "description": "The CEQL search expression",
+                    "name": "where",
+                    "required": false,
+                    "source": "request",
+                    "type": "query",
+                    "vendorDataType": "string",
+                    "vendorName": "converter:toQueryParameters",
+                    "vendorType": "query"
+                }
+            ],
+            "path": "/hubs/general/TEMP/meta/rehire-employee",
+            "response": {
+                "contentType": "application/json",
+                "contentTypeAsString": "application/json"
+            },
+            "tryitoutDisable": false,
+            "type": "apiNoDocumentation",
+            "vendorMethod": "GET",
+            "vendorPath": "/events/hr/v1/worker.rehire/meta"
+        }
+    ],
+    "transformationsEnabled": true,
+    "trialAccount": false,
+    "typeOauth": false,
+    "useModelsForMetadata": true
+}

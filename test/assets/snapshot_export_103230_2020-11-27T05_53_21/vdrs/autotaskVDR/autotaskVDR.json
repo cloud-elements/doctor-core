@@ -1,0 +1,67 @@
+{
+    "definition": {
+        "createdDate": "2021-01-15 08:45:21.121334",
+        "fields": [
+            {
+                "displayName": "",
+                "level": "organization",
+                "path": "add",
+                "type": "string"
+            }
+        ],
+        "objectName": "autotaskVDR",
+        "vdrShared": true,
+        "vdrShareLevel": "organization"
+    },
+    "transformation": {
+        "autotaskcrm": {
+            "configuration": [
+                {
+                    "level": "account",
+                    "type": "addToDocumentation"
+                },
+                {
+                    "level": "account",
+                    "type": "inherit"
+                },
+                {
+                    "level": "account",
+                    "properties": {
+                        "fromVendor": false,
+                        "toVendor": false
+                    },
+                    "type": "passThrough"
+                }
+            ],
+            "elementKey": "autotaskcrm",
+            "fields": [
+                {
+                    "level": "organization",
+                    "path": "add",
+                    "type": "string",
+                    "vendorPath": "allocationCodeID",
+                    "vendorType": "string"
+                }
+            ],
+            "isLegacy": false,
+            "objectName": "autotaskVDR",
+            "script": {
+                "body": "done();",
+                "filterEmptyResponse": false,
+                "level": "organization",
+                "mimeType": "application/javascript"
+            },
+            "scripts": [
+                {
+                    "body": "done();",
+                    "filterEmptyResponse": false,
+                    "level": "organization",
+                    "mimeType": "application/javascript"
+                }
+            ],
+            "vendorName": "Task"
+        }
+    },
+    "vdrName": "autotaskVDR",
+    "vdrVersion": "v2"
+}

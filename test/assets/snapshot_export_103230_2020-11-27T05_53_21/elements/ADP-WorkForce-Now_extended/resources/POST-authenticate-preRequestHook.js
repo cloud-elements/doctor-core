@@ -1,0 +1,2 @@
+let Authorization = `Basic ${CE.b64(configuration['oauth.api.key'] + ':' + configuration['oauth.api.secret'])}`;
+done({'request_vendor_headers': {Authorization, 'Content-Type': 'application/x-www-form-urlencoded'}})

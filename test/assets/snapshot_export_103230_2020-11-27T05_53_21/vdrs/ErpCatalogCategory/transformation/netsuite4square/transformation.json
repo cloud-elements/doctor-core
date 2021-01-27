@@ -1,0 +1,67 @@
+{
+    "configuration": [
+        {
+            "level": "account",
+            "type": "addToDocumentation"
+        },
+        {
+            "level": "account",
+            "type": "inherit"
+        },
+        {
+            "level": "account",
+            "properties": {
+                "fromVendor": false,
+                "toVendor": false
+            },
+            "type": "passThrough"
+        }
+    ],
+    "elementKey": "netsuite4square",
+    "fields": [
+        {
+            "level": "account",
+            "path": "is_active[*]",
+            "type": "boolean",
+            "vendorPath": "classTranslationList.classTranslation[*].language",
+            "vendorType": "boolean"
+        },
+        {
+            "level": "account",
+            "path": "updated_at",
+            "type": "string",
+            "vendorPath": "classTranslationList.replaceAll",
+            "vendorType": "string"
+        },
+        {
+            "level": "organization",
+            "path": "category_data.new[*]",
+            "type": "string",
+            "vendorPath": "classTranslationList.classTranslation[*].language",
+            "vendorType": "string"
+        },
+        {
+            "level": "organization",
+            "path": "created_at",
+            "type": "string",
+            "vendorPath": "classTranslationList.replaceAll",
+            "vendorType": "string"
+        }
+    ],
+    "isLegacy": false,
+    "objectName": "ErpCatalogCategory",
+    "script": {
+        "body": "if (fromVendor) {\n  transformedObject.type = 'CATEGORY'\n  transformedObject.present_at_all_locations = true\n  transformedObject.is_active = !originalObject.isInactive\n}\ndone(transformedObject)\n",
+        "filterEmptyResponse": false,
+        "level": "organization",
+        "mimeType": "application/javascript"
+    },
+    "scripts": [
+        {
+            "filterEmptyResponse": false,
+            "level": "organization",
+            "mimeType": "application/javascript"
+        }
+    ],
+    "vendorName": "Classification"
+}

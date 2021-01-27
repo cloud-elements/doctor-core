@@ -1,4 +1,6 @@
 /coverage
 /.github
 /test
+/test/.temp
 jest.config.js
+/.jest

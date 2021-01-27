@@ -1,20 +1,22 @@
-'use strict';
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-return-assign */
+/* eslint-disable no-nested-ternary */
 const {forEach, isNil, isEmpty, equals, pipe, reject} = require('ramda');
-const getExtendedElements = require('../../util/elements/getExtendedElements');
-const getPrivateElements = require('../../util/elements/getPrivateElements');
+const getExtendedElements = require('./getExtendedElements');
+const getPrivateElements = require('./getPrivateElements');
 const {emitter, EventTopic} = require('../../events/emitter');
 const {isJobCancelled} = require('../../events/cancelled-job');
 const {Assets, ArtifactStatus, JobType} = require('../../constants/artifact');
-const {logDebug} = require('../../util/logger');
-const http = require('../../util/http');
-const makePath = (element) => `elements/${element.id}/export`;
-const isNilOrEmpty = (val) => isNil(val) || isEmpty(val);
+const {logDebug, logError} = require('../../utils/logger');
+const http = require('../../utils/http');
+
+const makePath = element => `elements/${element.id}/export`;
+const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 const clearNull = pipe(reject(isNil));
 
 const downloadElements = async (elements, query, jobId, processId, isPrivate, jobType) => {
   logDebug('Initiating the download process for elements');
-
-  const downloadPromises = await elements.map(async (element) => {
+  const downloadPromises = await elements.map(async element => {
     const elementMetadata = JSON.stringify({private: isPrivate});
     try {
       if (isJobCancelled(jobId)) {
@@ -28,11 +30,9 @@ const downloadElements = async (elements, query, jobId, processId, isPrivate, jo
         });
         return null;
       }
-
       logDebug(`Downloading element for element key - ${element.key}`);
       const exportedElement = await http.get(makePath(element), query);
       logDebug(`Downloaded element for element key - ${element.key}`);
-
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.ELEMENTS,
@@ -40,7 +40,6 @@ const downloadElements = async (elements, query, jobId, processId, isPrivate, jo
         assetStatus: equals(jobType, JobType.PROMOTE_EXPORT) ? ArtifactStatus.INPROGRESS : ArtifactStatus.COMPLETED,
         metadata: elementMetadata,
       });
-
       return !isNilOrEmpty(exportedElement) ? exportedElement : {};
     } catch (error) {
       emitter.emit(EventTopic.ASSET_STATUS, {
@@ -65,13 +64,20 @@ module.exports = async (elementKeys, jobId, processId, jobType) => {
   try {
     const allExtendedElements = await getExtendedElements(elementKeys, jobId);
     const extendedElements = !isNilOrEmpty(allExtendedElements)
-      ? allExtendedElements.filter((element) => element.extended && !element.private)
+      ? allExtendedElements.filter(element => element.extended && !element.private)
       : [];
     const privateElements = await getPrivateElements(elementKeys, jobId);
     // Fetch all the private elements again to get all required/hydrated fields.
-    const privateElementsExport = await downloadElements(privateElements, {}, jobId, processId, /* isPrivate */ true, jobType);
+    const privateElementsExport = await downloadElements(
+      privateElements,
+      {},
+      jobId,
+      processId,
+      /* isPrivate */ true,
+      jobType,
+    );
     // For private elements, private flag won't get populated if we cloned any system element
-    !isNilOrEmpty(privateElementsExport) && forEach((element) => (element.private = true), privateElementsExport);
+    !isNilOrEmpty(privateElementsExport) && forEach(element => (element.private = true), privateElementsExport);
     // Fetch all the extended elements again to get all required/hydrated fields.
     const extendedElementsExport = await downloadElements(
       extendedElements,
@@ -79,23 +85,22 @@ module.exports = async (elementKeys, jobId, processId, jobType) => {
       jobId,
       processId,
       /* isPrivate */ false,
-      jobType
+      jobType,
     );
     const elements = isNilOrEmpty(privateElementsExport)
       ? isNilOrEmpty(extendedElementsExport)
         ? []
         : extendedElementsExport
       : isNilOrEmpty(extendedElementsExport)
-        ? privateElementsExport
-        : privateElementsExport.concat(extendedElementsExport);
+      ? privateElementsExport
+      : privateElementsExport.concat(extendedElementsExport);
     const newlyCreatedElements =
       !isNilOrEmpty(elementKeys) && Array.isArray(elementKeys)
         ? elementKeys.filter(
-          (elementKey) =>
-            elementKey.private && !privateElements.some((element) => equals(element.key, elementKey.key)),
-        )
+            elementKey => elementKey.private && !privateElements.some(element => equals(element.key, elementKey.key)),
+          )
         : [];
-    newlyCreatedElements.forEach((element) =>
+    newlyCreatedElements.forEach(element =>
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.ELEMENTS,
@@ -106,6 +111,7 @@ module.exports = async (elementKeys, jobId, processId, jobType) => {
     );
     return elements;
   } catch (error) {
+    logError('Error occured while retrieving elements');
     throw error;
   }
 };

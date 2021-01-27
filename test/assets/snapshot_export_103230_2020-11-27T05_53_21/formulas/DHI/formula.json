@@ -1,0 +1,864 @@
+{
+    "active": true,
+    "configuration": [
+        {
+            "key": "Bullhorninstance",
+            "name": "Bullhorn instance",
+            "required": false,
+            "type": "elementInstance"
+        },
+        {
+            "key": "Diceinstance",
+            "name": "Dice instance",
+            "required": false,
+            "type": "elementInstance"
+        },
+        {
+            "key": "epContract1099",
+            "name": "epContract1099",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "epContractCorpToCorp",
+            "name": "epContractCorpToCorp",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "epContractToHire1099",
+            "name": "epContractToHire1099",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "epContractToHireCorpToCorp",
+            "name": "epContractToHireCorpToCorp",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "epContractToHireW2",
+            "name": "epContractToHireW2",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "epContractW2",
+            "name": "epContractW2",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "epFullTime",
+            "name": "epFullTime",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "epPartTime",
+            "name": "epPartTime",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "etContract1099",
+            "name": "etContract1099",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "etContractCorpToCorp",
+            "name": "etContractCorpToCorp",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "etContractToHire1099",
+            "name": "etContractToHire1099",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "etContractToHireCorpToCorp",
+            "name": "etContractToHireCorpToCorp",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "etContractToHireW2",
+            "name": "etContractToHireW2",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "etContractW2",
+            "name": "etContractW2",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "etFullTime",
+            "name": "etFullTime",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "etPartTime",
+            "name": "etPartTime",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "excludeThirdParty",
+            "name": "excludeThirdParty",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "hasEmail",
+            "name": "hasEmail",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "hasPhoneNumber",
+            "name": "hasPhoneNumber",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "intelliSearchPageSize",
+            "name": "intelliSearchPageSize",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "maxCandidateSubmissions",
+            "name": "maxCandidateSubmissions",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "searchType",
+            "name": "searchType",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "sourceValue",
+            "name": "sourceValue",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "statusIdValue",
+            "name": "statusIdValue",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "tagIdField",
+            "name": "tagIdField",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "tagIdValue",
+            "name": "tagIdValue",
+            "required": false,
+            "type": "value"
+        },
+        {
+            "key": "toggleIdField",
+            "name": "toggleIdField",
+            "required": false,
+            "type": "value"
+        }
+    ],
+    "debugLoggingEnabled": false,
+    "debugLoggingExpires": "2020-08-28T11:46:07Z",
+    "engine": "v3",
+    "id": 83947,
+    "name": "DHI",
+    "singleThreaded": false,
+    "steps": [
+        {
+            "name": "filterValidateEventObjectAndType",
+            "onFailure": [
+                "gracefulExit"
+            ],
+            "onSuccess": [
+                "getJobOrderIdFromEvent"
+            ],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "getJobOrderIdFromEvent",
+            "onFailure": [],
+            "onSuccess": [
+                "isJobOrderIdPresent"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "isJobOrderIdPresent",
+            "onFailure": [
+                "gracefulExit"
+            ],
+            "onSuccess": [
+                "getJobOrderById"
+            ],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "getJobOrderById",
+            "onFailure": [],
+            "onSuccess": [
+                "getJobOrderByIdFromAPI"
+            ],
+            "properties": {
+                "api": "/intelliSearchVDR/${steps.getJobOrderIdFromEvent}",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "GET",
+                "path": "",
+                "query": ""
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "getJobOrderByIdFromAPI",
+            "onFailure": [],
+            "onSuccess": [
+                "jobIntegrationStatusFilter"
+            ],
+            "properties": {
+                "api": "/job-orders/${steps.getJobOrderIdFromEvent}",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "GET"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "jobIntegrationStatusFilter",
+            "onFailure": [
+                "gracefulExit"
+            ],
+            "onSuccess": [
+                "buildQueryForLiveWebResponseSubmissions"
+            ],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "buildQueryForLiveWebResponseSubmissions",
+            "onFailure": [],
+            "onSuccess": [
+                "getLiveWebResponseSubmissions"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "getLiveWebResponseSubmissions",
+            "onFailure": [],
+            "onSuccess": [
+                "submissionsRequiredFilter"
+            ],
+            "properties": {
+                "api": "/sourcingWorkflowVDR",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "GET",
+                "query": "${steps.buildQueryForLiveWebResponseSubmissions.query}"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "submissionsRequiredFilter",
+            "onFailure": [
+                "gracefulExit"
+            ],
+            "onSuccess": [
+                "buildQueryForGetHistoricalWebResponseSubmissions"
+            ],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "buildQueryForGetHistoricalWebResponseSubmissions",
+            "onFailure": [],
+            "onSuccess": [
+                "getHistoricalWebResponseSubmissions"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "getHistoricalWebResponseSubmissions",
+            "onFailure": [],
+            "onSuccess": [
+                "buildPayloadForDiceSearch"
+            ],
+            "properties": {
+                "api": "/sourcingWorkflowVDR",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "GET",
+                "query": "${steps.buildQueryForGetHistoricalWebResponseSubmissions.query}"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "buildPayloadForDiceSearch",
+            "onFailure": [],
+            "onSuccess": [
+                "postDiceSearch"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "postDiceSearch",
+            "onFailure": [],
+            "onSuccess": [
+                "loopCandidatesForBullhornSync"
+            ],
+            "properties": {
+                "api": "/intelliSearchVDR",
+                "body": "${steps.buildPayloadForDiceSearch}",
+                "elementInstanceId": "${config.Diceinstance}",
+                "method": "POST"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "loopCandidatesForBullhornSync",
+            "onFailure": [],
+            "onSuccess": [
+                "buildQueryForGetBullhornCandidateByExternalId"
+            ],
+            "properties": {
+                "list": "${steps.postDiceSearch.response.body}"
+            },
+            "type": "loop"
+        },
+        {
+            "name": "buildQueryForGetBullhornCandidateByExternalId",
+            "onFailure": [],
+            "onSuccess": [
+                "getBullhornCandidateByExternalId"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "getBullhornCandidateByExternalId",
+            "onFailure": [],
+            "onSuccess": [
+                "filterLinkedBullhornCandidateReturned"
+            ],
+            "properties": {
+                "api": "/candidatesVDR",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "GET",
+                "query": "${steps.buildQueryForGetBullhornCandidateByExternalId.query}"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "filterLinkedBullhornCandidateReturned",
+            "onFailure": [
+                "buildPayloadForGetUnlinkedDiceProfileById"
+            ],
+            "onSuccess": [
+                "filterLinkedBullhornCandidateUpdateRequired"
+            ],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "filterLinkedBullhornCandidateUpdateRequired",
+            "onFailure": [
+                "buildQueryForLinkedCandidateAlreadySubmitted"
+            ],
+            "onSuccess": [
+                "getLinkedDiceProfileById"
+            ],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "getLinkedDiceProfileById",
+            "onFailure": [],
+            "onSuccess": [
+                "buildPayloadForUpdateLinkedBullhornCandidate"
+            ],
+            "properties": {
+                "api": "/talentProfilesVDR/${steps.loopCandidatesForBullhornSync.entry.id}",
+                "elementInstanceId": "${config.Diceinstance}",
+                "method": "GET"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "buildPayloadForUpdateLinkedBullhornCandidate",
+            "onFailure": [],
+            "onSuccess": [
+                "updateLinkedBullhornCandidate"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "updateLinkedBullhornCandidate",
+            "onFailure": [],
+            "onSuccess": [
+                "buildQueryForLinkedCandidateAlreadySubmitted"
+            ],
+            "properties": {
+                "api": "/candidatesVDR/${steps.getBullhornCandidateByExternalId.response.body[0].externalId}",
+                "body": "${steps.buildPayloadForUpdateLinkedBullhornCandidate.diceProfileObj}",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "PATCH"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "buildQueryForLinkedCandidateAlreadySubmitted",
+            "onFailure": [],
+            "onSuccess": [
+                "getLinkedCandidateAlreadySubmitted"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "getLinkedCandidateAlreadySubmitted",
+            "onFailure": [],
+            "onSuccess": [
+                "filterLinkedCandidateAlreadySubmitted"
+            ],
+            "properties": {
+                "api": "/job-submissions",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "GET",
+                "query": "${steps.buildQueryForLinkedCandidateAlreadySubmitted.query}"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "filterLinkedCandidateAlreadySubmitted",
+            "onFailure": [
+                "buildPayloadForPostLinkedCandidateSubmission"
+            ],
+            "onSuccess": [
+                "loopCandidatesForBullhornSync"
+            ],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "buildPayloadForPostLinkedCandidateSubmission",
+            "onFailure": [],
+            "onSuccess": [
+                "postLinkedCandidateSubmission"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "postLinkedCandidateSubmission",
+            "onFailure": [],
+            "onSuccess": [
+                "buildQueryForGetTotalWebResponseSubmissions"
+            ],
+            "properties": {
+                "api": "/sourcingWorkflowVDR",
+                "body": "${steps.buildPayloadForPostLinkedCandidateSubmission}",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "POST"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "buildQueryForGetTotalWebResponseSubmissions",
+            "onFailure": [],
+            "onSuccess": [
+                "getTotalWebResponseSubmissions"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "getTotalWebResponseSubmissions",
+            "onFailure": [],
+            "onSuccess": [
+                "filterAdditionalSubmissionsNeeded"
+            ],
+            "properties": {
+                "api": "/sourcingWorkflowVDR",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "GET",
+                "query": "${steps.buildQueryForGetTotalWebResponseSubmissions.query}"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "filterAdditionalSubmissionsNeeded",
+            "onFailure": [
+                "gracefulExit"
+            ],
+            "onSuccess": [
+                "loopCandidatesForBullhornSync"
+            ],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "gracefulExit",
+            "onFailure": [],
+            "onSuccess": [],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "buildPayloadForGetUnlinkedDiceProfileById",
+            "onFailure": [],
+            "onSuccess": [
+                "getUnlinkedDiceProfileById"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "getUnlinkedDiceProfileById",
+            "onFailure": [],
+            "onSuccess": [
+                "buildQueryForGetBullhornCandidateByLastName"
+            ],
+            "properties": {
+                "api": "/talentProfilesVDR/${steps.buildPayloadForGetUnlinkedDiceProfileById.id}",
+                "elementInstanceId": "${config.Diceinstance}",
+                "method": "GET"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "buildQueryForGetBullhornCandidateByLastName",
+            "onFailure": [],
+            "onSuccess": [
+                "getBullhornCandidateByLastName"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "getBullhornCandidateByLastName",
+            "onFailure": [],
+            "onSuccess": [
+                "filterBullhornLastNameMatched"
+            ],
+            "properties": {
+                "api": "/candidatesVDR",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "GET",
+                "query": "${steps.buildQueryForGetBullhornCandidateByLastName.query}"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "filterBullhornLastNameMatched",
+            "onFailure": [
+                "buildPayloadForPostNewBullhornCandidate"
+            ],
+            "onSuccess": [
+                "loopLastNameMatches"
+            ],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "loopLastNameMatches",
+            "onFailure": [
+                "buildPayloadForPostNewBullhornCandidate"
+            ],
+            "onSuccess": [
+                "filterTierOneMatch"
+            ],
+            "properties": {
+                "list": "${steps.getBullhornCandidateByLastName.response.body}"
+            },
+            "type": "loop"
+        },
+        {
+            "name": "filterTierOneMatch",
+            "onFailure": [
+                "filterTierTwoMatch"
+            ],
+            "onSuccess": [
+                "filterUnlinkedCandidateUpdateNeeded"
+            ],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "filterUnlinkedCandidateUpdateNeeded",
+            "onFailure": [
+                "buildPayloadForLinkBullhornCandidate"
+            ],
+            "onSuccess": [
+                "buildPayloadForUpdateUnlinkedBullhornCandidate"
+            ],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "buildPayloadForUpdateUnlinkedBullhornCandidate",
+            "onFailure": [],
+            "onSuccess": [
+                "updateUnlinkedBullhornCandidate"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "updateUnlinkedBullhornCandidate",
+            "onFailure": [],
+            "onSuccess": [
+                "filterUnlinkedCandidateAlreadySubmitted"
+            ],
+            "properties": {
+                "api": "/candidatesVDR/${steps.loopLastNameMatches.entry.externalId}",
+                "body": "${steps.buildPayloadForUpdateUnlinkedBullhornCandidate.diceProfileObj}",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "PATCH"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "filterUnlinkedCandidateAlreadySubmitted",
+            "onFailure": [
+                "buildPayloadForPostUnlinkedCandidateSubmission"
+            ],
+            "onSuccess": [
+                "loopCandidatesForBullhornSync"
+            ],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "buildPayloadForPostUnlinkedCandidateSubmission",
+            "onFailure": [],
+            "onSuccess": [
+                "postUnlinkedCandidateSubmission"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "postUnlinkedCandidateSubmission",
+            "onFailure": [],
+            "onSuccess": [
+                "buildQueryForGetTotalWebResponseSubmissions"
+            ],
+            "properties": {
+                "api": "/sourcingWorkflowVDR",
+                "body": "${steps.buildPayloadForPostUnlinkedCandidateSubmission}",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "POST"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "buildPayloadForLinkBullhornCandidate",
+            "onFailure": [],
+            "onSuccess": [
+                "linkBullhornCandidate"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "linkBullhornCandidate",
+            "onFailure": [],
+            "onSuccess": [
+                "buildQueryForUnlinkedCandidateAlreadySubmitted"
+            ],
+            "properties": {
+                "api": "/candidatesVDR/${steps.loopLastNameMatches.entry.externalId}",
+                "body": "${steps.buildPayloadForLinkBullhornCandidate.updateObj}",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "PATCH"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "buildQueryForUnlinkedCandidateAlreadySubmitted",
+            "onFailure": [],
+            "onSuccess": [
+                "getUnlinkedCandidateAlreadySubmitted"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "getUnlinkedCandidateAlreadySubmitted",
+            "onFailure": [],
+            "onSuccess": [
+                "filterUnlinkedCandidateAlreadySubmitted"
+            ],
+            "properties": {
+                "api": "/job-submissions",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "GET",
+                "query": "${steps.buildQueryForUnlinkedCandidateAlreadySubmitted.query}"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "filterTierTwoMatch",
+            "onFailure": [
+                "loopLastNameMatches"
+            ],
+            "onSuccess": [
+                "filterUnlinkedCandidateUpdateNeeded"
+            ],
+            "properties": {},
+            "type": "filter"
+        },
+        {
+            "name": "buildPayloadForPostNewBullhornCandidate",
+            "onFailure": [],
+            "onSuccess": [
+                "postNewBullhornCandidate"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "postNewBullhornCandidate",
+            "onFailure": [],
+            "onSuccess": [
+                "loopOverDiceCandidateWorkHistory"
+            ],
+            "properties": {
+                "api": "/candidatesVDR",
+                "body": "${steps.buildPayloadForPostNewBullhornCandidate.diceProfileObj}",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "POST"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "loopOverDiceCandidateWorkHistory",
+            "onFailure": [
+                "loopOverDiceCandidateEducation"
+            ],
+            "onSuccess": [
+                "buildPayloadForPostCandidateWorkHistory"
+            ],
+            "properties": {
+                "list": "${steps.buildPayloadForPostNewBullhornCandidate.diceProfileObj.experience.history}"
+            },
+            "type": "loop"
+        },
+        {
+            "name": "buildPayloadForPostCandidateWorkHistory",
+            "onFailure": [],
+            "onSuccess": [
+                "postCandidateWorkHistory"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "postCandidateWorkHistory",
+            "onFailure": [],
+            "onSuccess": [
+                "loopOverDiceCandidateWorkHistory"
+            ],
+            "properties": {
+                "api": "/candidateWorkHistoryVDR",
+                "body": "${steps.buildPayloadForPostCandidateWorkHistory.workHistoryObj}",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "POST"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "loopOverDiceCandidateEducation",
+            "onFailure": [
+                "buildPayloadForPostNewCandidateSubmission"
+            ],
+            "onSuccess": [
+                "buildPayloadForPostCandidateEducation"
+            ],
+            "properties": {
+                "list": "${steps.buildPayloadForPostNewBullhornCandidate.diceProfileObj.education}"
+            },
+            "type": "loop"
+        },
+        {
+            "name": "buildPayloadForPostCandidateEducation",
+            "onFailure": [],
+            "onSuccess": [
+                "postCandidateEducation"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "postCandidateEducation",
+            "onFailure": [],
+            "onSuccess": [
+                "loopOverDiceCandidateEducation"
+            ],
+            "properties": {
+                "api": "/candidateEducationVDR",
+                "body": "${steps.buildPayloadForPostCandidateEducation.educationObj}",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "POST"
+            },
+            "type": "elementRequest"
+        },
+        {
+            "name": "buildPayloadForPostNewCandidateSubmission",
+            "onFailure": [],
+            "onSuccess": [
+                "postNewCandidateSubmission"
+            ],
+            "properties": {},
+            "type": "script"
+        },
+        {
+            "name": "postNewCandidateSubmission",
+            "onFailure": [],
+            "onSuccess": [
+                "buildQueryForGetTotalWebResponseSubmissions"
+            ],
+            "properties": {
+                "api": "/sourcingWorkflowVDR",
+                "body": "${steps.buildPayloadForPostNewCandidateSubmission}",
+                "elementInstanceId": "${config.Bullhorninstance}",
+                "method": "POST"
+            },
+            "type": "elementRequest"
+        }
+    ],
+    "triggers": [
+        {
+            "async": true,
+            "name": "trigger",
+            "onFailure": [],
+            "onSuccess": [
+                "filterValidateEventObjectAndType"
+            ],
+            "properties": {
+                "elementInstanceId": "${config.Bullhorninstance}"
+            },
+            "type": "event"
+        }
+    ]
+}

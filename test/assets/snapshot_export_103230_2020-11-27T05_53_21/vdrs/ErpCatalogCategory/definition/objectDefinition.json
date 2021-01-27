@@ -1,0 +1,38 @@
+{
+    "createdDate": "2020-11-20 09:38:43.675231",
+    "fields": [
+        {
+            "displayName": "",
+            "level": "organization",
+            "path": "category_data.new[*]",
+            "type": "string"
+        },
+        {
+            "displayName": "",
+            "level": "organization",
+            "path": "created_at",
+            "type": "string"
+        },
+        {
+            "displayName": "",
+            "level": "account",
+            "path": "is_active[*]",
+            "type": "boolean"
+        },
+        {
+            "displayName": "",
+            "level": "account",
+            "path": "updated_at",
+            "type": "string"
+        },
+        {
+            "displayName": "",
+            "level": "organization",
+            "path": "updated_at",
+            "type": "string"
+        }
+    ],
+    "objectName": "ErpCatalogCategory",
+    "vdrShared": true,
+    "vdrShareLevel": "organization"
+}
