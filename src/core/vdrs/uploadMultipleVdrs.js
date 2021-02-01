@@ -8,7 +8,6 @@ const {
   not,
   useWith,
   __,
-  isEmpty,
   propOr,
   has,
   equals,
@@ -24,8 +23,7 @@ const upsertVdrs = require('./upsertVdrs');
 const createObjectDefinitions = require('../commonResources/createObjectDefinitions');
 const createTransformations = require('../commonResources/createTransformations');
 const {logDebug, logError} = require('../../utils/logger');
-
-const isNilOrEmpty = val => isNil(val) || isEmpty(val);
+const {isNilOrEmpty} = require('../../utils/common');
 
 const importVdrsV1 = async (commonResources, options) => {
   try {

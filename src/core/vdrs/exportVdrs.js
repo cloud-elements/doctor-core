@@ -1,11 +1,11 @@
-const {equals, indexBy, isEmpty, isNil, pipe, reject, prop} = require('ramda');
+const {equals, indexBy, isNil, pipe, prop, reject} = require('ramda');
 const http = require('../../utils/http');
 const {emitter, EventTopic} = require('../../events/emitter');
 const {isJobCancelled} = require('../../events/cancelled-job');
 const {Assets, ArtifactStatus, JobType} = require('../../constants/artifact');
 const {logDebug} = require('../../utils/logger');
+const {isNilOrEmpty} = require('../../utils/common');
 
-const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 const transduceVdrs = vdrs => (!isNilOrEmpty(vdrs) ? pipe(reject(isNil), indexBy(prop('vdrName')))(vdrs) : {});
 
 const downloadVdrs = async (vdrNames, jobId, processId, jobType) => {

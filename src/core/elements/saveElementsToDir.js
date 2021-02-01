@@ -1,12 +1,11 @@
 /* istanbul ignore file */
 const {existsSync} = require('fs');
 const fsExtra = require('fs-extra');
-const {forEach, dissoc, map, omit, pipe, tap, gt, propOr, pluck, countBy, identity, isNil, isEmpty} = require('ramda');
+const {forEach, dissoc, map, omit, pipe, tap, gt, propOr, pluck, countBy, identity} = require('ramda');
 const sortobject = require('deep-sort-object');
 const {toDirectoryName} = require('../../utils/regex');
 const getResourceName = require('../../utils/getResourceName');
-
-const isNilOrEmpty = val => isNil(val) || isEmpty(val);
+const {isNilOrEmpty} = require('../../utils/common');
 
 module.exports = async (dir, data) => {
   const elements = await data;

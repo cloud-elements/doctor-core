@@ -7,8 +7,10 @@ const LOG_LEVEL = {
   CRITICAL: 'critical',
 };
 
+const EMPTY_STRING = '';
+
 const logMessage = (message, logLevel = LOG_LEVEL.INFO) => {
-  message = `[${new Date().toISOString()}] Doctor-core: ${logLevel}: ${message}`;
+  message = `[${new Date().toISOString()}] Doctor_core_${logLevel}_${process.env.DOCTOR_JOB_ID || EMPTY_STRING}: ${message}`;
   switch (logLevel) {
     case LOG_LEVEL.DEBUG:
     case LOG_LEVEL.WARN:
@@ -26,7 +28,7 @@ const logMessage = (message, logLevel = LOG_LEVEL.INFO) => {
 /**
  * Logs debug message only if ENABLE_DEBUG_LOG environment variable is set to true
  * It is set either from doctor-cli (by default true) or doctor-service
- * @param {} message
+ * @param {String} message
  */
 const logDebug = message => {
   if (process.env.ENABLE_DEBUG_LOG && process.env.ENABLE_DEBUG_LOG === 'true') {

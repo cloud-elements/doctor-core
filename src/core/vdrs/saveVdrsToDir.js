@@ -3,13 +3,13 @@
 /* eslint-disable no-useless-catch */
 const {existsSync, renameSync, readdir, lstatSync} = require('fs');
 const fsExtra = require('fs-extra');
-const {forEachObjIndexed, dissoc, isNil, isEmpty} = require('ramda');
+const {forEachObjIndexed, dissoc} = require('ramda');
 const sortobject = require('deep-sort-object');
 const {join} = require('path');
 const {promisify} = require('util');
 const {replaceall} = require('replaceall');
+const {isNilOrEmpty} = require('../../utils/common');
 
-const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 const toDirectoryName = name =>
   name
     .replace(/[?>-]|(\|)|(\/)/g, ' ')

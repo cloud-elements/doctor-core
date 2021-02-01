@@ -1,11 +1,10 @@
 /* eslint-disable no-nested-ternary */
-const {join, map, isNil, isEmpty, flatten, pipe, filter, type} = require('ramda');
+const {join, map, flatten, pipe, filter, type} = require('ramda');
 const {Assets} = require('../../constants/artifact');
 const http = require('../../utils/http');
 const applyQuotes = require('../../utils/quoteString');
 const {logError} = require('../../utils/logger');
-
-const isNilOrEmpty = val => isNil(val) || isEmpty(val);
+const {isNilOrEmpty} = require('../../utils/common');
 
 module.exports = async (keys, jobId) => {
   // From CLI - User can pass comma seperated string of elements key

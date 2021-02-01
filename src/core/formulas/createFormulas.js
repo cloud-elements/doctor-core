@@ -1,13 +1,13 @@
 /* eslint-disable no-useless-catch */
-const {map, find, propEq, mergeAll, curry, equals, assocPath, isNil, isEmpty} = require('ramda');
+const {map, find, propEq, mergeAll, curry, equals, assocPath} = require('ramda');
 const {emitter, EventTopic} = require('../../events/emitter');
 const {isJobCancelled} = require('../../events/cancelled-job');
 const {Assets, ArtifactStatus} = require('../../constants/artifact');
 const http = require('../../utils/http');
 const {logDebug} = require('../../utils/logger');
+const {isNilOrEmpty} = require('../../utils/common');
 
 const makePath = formula => `formulas/${formula.id}`;
-const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 
 const createFormula = curry(async (endpointFormulas, jobId, processId, formula) => {
   try {

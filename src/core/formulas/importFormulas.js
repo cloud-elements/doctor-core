@@ -10,7 +10,6 @@ const {
   type,
   equals,
   __,
-  isEmpty,
   toLower,
   find,
   any,
@@ -21,8 +20,7 @@ const applyVersion = require('../../utils/applyVersion');
 const buildFormulasFromDir = require('./buildFormulasFromDir');
 const createFormulas = require('./createFormulas');
 const {logDebug, logError} = require('../../utils/logger');
-
-const isNilOrEmpty = val => isNil(val) || isEmpty(val);
+const {isNilOrEmpty} = require('../../utils/common');
 
 const importFormulas = curry(async (formulas, options) => {
   try {

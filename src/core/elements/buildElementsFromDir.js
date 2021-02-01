@@ -1,12 +1,12 @@
 const {readFileSync, lstatSync, readdir, existsSync} = require('fs');
 const {join} = require('path');
 const {promisify} = require('util');
-const {pipe, map, filter, isNil, isEmpty} = require('ramda');
+const {pipe, map, filter} = require('ramda');
 const readFile = require('../../utils/readFile');
 const getResourceName = require('../../utils/getResourceName');
 const {toDirectoryName} = require('../../utils/regex');
+const {isNilOrEmpty} = require('../../utils/common');
 
-const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 const isDirectory = source => lstatSync(source).isDirectory();
 
 const getDirectories = async source => {

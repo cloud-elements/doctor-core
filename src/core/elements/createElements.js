@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-const {isNil, isEmpty, equals, concat, find, filter, propOr, pipe, pluck, uniq, join, has, toLower} = require('ramda');
+const {equals, concat, find, filter, propOr, pipe, pluck, uniq, join, has, toLower} = require('ramda');
 const {emitter, EventTopic} = require('../../events/emitter');
 const {isJobCancelled} = require('../../events/cancelled-job');
 const {Assets, ArtifactStatus} = require('../../constants/artifact');
@@ -10,8 +10,7 @@ const getPrivateElements = require('./getPrivateElements');
 const makePath = element => `elements/${element.key}`;
 const http = require('../../utils/http');
 const {logDebug, logError} = require('../../utils/logger');
-
-const isNilOrEmpty = val => isNil(val) || isEmpty(val);
+const {isNilOrEmpty} = require('../../utils/common');
 
 const fetchAllElements = async elementsToImport => {
   const elementsKeyString = !isNilOrEmpty(elementsToImport)

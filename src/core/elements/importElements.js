@@ -10,7 +10,6 @@ const {
   useWith,
   type,
   equals,
-  isEmpty,
   find,
   toLower,
   __,
@@ -21,8 +20,7 @@ const readFile = require('../../utils/readFile');
 const buildElementsFromDir = require('./buildElementsFromDir');
 const createElements = require('./createElements');
 const {logDebug, logError} = require('../../utils/logger');
-
-const isNilOrEmpty = val => isNil(val) || isEmpty(val);
+const {isNilOrEmpty} = require('../../utils/common');
 
 const importElements = curry(async (elements, options) => {
   try {

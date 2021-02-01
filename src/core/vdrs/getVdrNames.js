@@ -1,8 +1,6 @@
-const {isNil, isEmpty} = require('ramda');
+const {isNilOrEmpty} = require('../../utils/common');
 const http = require('../../utils/http');
 const {logError} = require('../../utils/logger');
-
-const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 
 module.exports = async (params = '') => {
   try {
