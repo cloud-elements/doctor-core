@@ -1,3 +1,2 @@
-const remove = require('../../utils/remove');
-
-module.exports = async () => await remove('organizations/objects/definitions');
+const http = require('../../utils/http');
+module.exports = async () => await http.delete('organizations/objects/definitions');

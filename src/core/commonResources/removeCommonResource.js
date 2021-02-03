@@ -2,9 +2,9 @@ const {forEachObjIndexed, isEmpty} = require('ramda');
 const {emitter, EventTopic} = require('../../events/emitter');
 const {isJobCancelled} = require('../../events/cancelled-job');
 const {Assets, ArtifactStatus} = require('../../constants/artifact');
-const remove = require('../../utils/remove');
 const getVdrs = require('../vdrs/getVdrs');
 const {logDebug} = require('../../utils/logger');
+const http = require('../../utils/http');
 
 const makePath = vdrname => `common-resources/${vdrname}`;
 
@@ -30,9 +30,11 @@ module.exports = async options => {
         });
         return null;
       }
+
       logDebug(`Deleting VDR for VDR name - ${vdr.vdrName}`);
-      await remove(makePath(vdr.vdrName), {force: true});
+      await http.delete(makePath(vdr.vdrName), {force: true});
       logDebug(`Deleted VDR for VDR name - ${vdr.vdrName}`);
+
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.VDRS,

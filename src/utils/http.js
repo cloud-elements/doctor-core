@@ -56,7 +56,7 @@ module.exports = {
       throw err;
     }
   }),
-  delete: async (path, qs) => {
+  delete: async (path, qs = {}) => {
     const options = {
       method: 'DELETE',
       headers: {Authorization: authHeader()},

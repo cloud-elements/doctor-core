@@ -1,6 +1,6 @@
 const {identity, useWith} = require('ramda');
-const get = require('../../utils/get');
+const http = require('../../utils/http');
 const save = require('../../utils/saveToFile');
 
 // (parms, env)
-module.exports = useWith(save, [identity, get('organizations/objects/definitions', '')]);
+module.exports = useWith(save, [identity, http.get('organizations/objects/definitions')]);

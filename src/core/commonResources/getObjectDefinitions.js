@@ -1,3 +1,2 @@
-const get = require('../../utils/get');
-
-module.exports = () => get(`organizations/objects/definitions`, '');
+const http = require('../../utils/http');
+module.exports = () => http.get(`organizations/objects/definitions`);
