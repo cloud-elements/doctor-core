@@ -88,7 +88,7 @@ module.exports = (account, options) => {
         pipe(prop('dir'), isNil, not),
         pipeP(
           useWith(buildElementsFromDir, [prop('dir')]),
-          importElements(__, options),
+          importElements(__, account, options),
         ),
       ],
     ])(options);

@@ -17,8 +17,8 @@ const fetchAllElements = async (elementsToImport, account) => {
   const elementsKeyString = !isNilOrEmpty(elementsToImport)
     ? pipe(pluck('key'), uniq, join(','))(elementsToImport)
     : '';
-  const privateElements = await getPrivateElements(elementsKeyString, _, account);
-  const extendedElements = await getExtendedElements(elementsKeyString, _, account);
+  const privateElements = await getPrivateElements(elementsKeyString, null, account);
+  const extendedElements = await getExtendedElements(elementsKeyString, null, account);
   return concat(privateElements, extendedElements);
 };
 

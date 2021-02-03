@@ -9,7 +9,7 @@ const filePath = path.normalize(`${homeDir}/.doctor/config.json`);
 /**
  * Applicable only for CLI. For doctor-service, account details
  * are directly passed to and accessed via function arguments
-*/
+ */
 module.exports = async account => {
   if (typeof account !== 'object') {
     const accounts = await readFile(filePath);

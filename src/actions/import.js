@@ -29,7 +29,7 @@ module.exports = async (assetType, account, options) => {
       throw new Error(`Command not found: ${assetType}`);
     }
     eventListener.addListener();
-    await importByAssetType[assetType](options);
+    await importByAssetType[assetType](account, options);
     clearCancelledJobId(options.jobId);
     await stopSpinner();
   } catch (err) {
