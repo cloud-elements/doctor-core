@@ -7,7 +7,7 @@ const {logError} = require('../../utils/logger');
 
 const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 
-module.exports = async (keys, jobId) => {
+module.exports = async (keys, jobId, account) => {
   // From CLI - User can pass comma seperated string of elements key
   // From Doctor-service - It will be in Array of objects containing elementKey and private flag structure
   const extendedElementsKey = !isNilOrEmpty(keys)
@@ -19,8 +19,8 @@ module.exports = async (keys, jobId) => {
           join(','),
         )(keys)
       : type(keys) === 'String'
-      ? keys
-      : []
+        ? keys
+        : []
     : [];
 
   // For CLI, if elements keys are empty then default the qs to true
@@ -32,7 +32,7 @@ module.exports = async (keys, jobId) => {
     : {where: `extended='true' AND key in (${applyQuotes(extendedElementsKey)})`};
 
   try {
-    const allExtendedElements = !isNilOrEmpty(extendedQuery) ? await http.get(Assets.ELEMENTS, extendedQuery) : [];
+    const allExtendedElements = !isNilOrEmpty(extendedQuery) ? await http.get(Assets.ELEMENTS, extendedQuery, account) : [];
     return !isNilOrEmpty(allExtendedElements)
       ? allExtendedElements.filter(element => element.extended && !element.private)
       : [];

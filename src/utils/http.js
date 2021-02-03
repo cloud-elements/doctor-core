@@ -1,16 +1,15 @@
 const rp = require('request-promise');
 const {curry, test} = require('ramda');
-const authHeader = require('./authHeader');
-const baseUrl = require('./baseUrl');
 const {logError} = require('./logger');
+const buildURL = (baseUrl, endpoint) => `${baseUrl}/elements/api-v2/${endpoint}`;
 
 // TODO: Will be replacing request-promise with axios soon
 module.exports = {
-  get: curry(async (path, qs = {}) => {
+  get: curry(async (endpoint, qs = {}, account) => {
     const options = {
       method: 'GET',
-      headers: {Authorization: authHeader()},
-      url: baseUrl(path),
+      headers: {Authorization: account.authorization},
+      url: buildURL(account.baseUrl, endpoint),
       qs,
       json: true,
       strictSSL: false,
@@ -24,11 +23,11 @@ module.exports = {
       throw err;
     }
   }),
-  post: curry(async (path, body) => {
+  post: curry(async (endpoint, body, account) => {
     const options = {
       method: 'POST',
-      headers: {Authorization: authHeader()},
-      url: baseUrl(path),
+      headers: {Authorization: account.authorization},
+      url: buildURL(account.baseUrl, endpoint),
       body,
       json: true,
       strictSSL: false,
@@ -40,11 +39,11 @@ module.exports = {
       throw err;
     }
   }),
-  update: curry(async (path, body) => {
+  update: curry(async (endpoint, body, account) => {
     const options = {
       method: 'PUT',
-      headers: {Authorization: authHeader()},
-      url: baseUrl(path),
+      headers: {Authorization: account.authorization},
+      url: buildURL(account.baseUrl, endpoint),
       body,
       json: true,
       strictSSL: false,
@@ -56,11 +55,11 @@ module.exports = {
       throw err;
     }
   }),
-  delete: async (path, qs = {}) => {
+  delete: async (endpoint, qs = {}, account) => {
     const options = {
       method: 'DELETE',
-      headers: {Authorization: authHeader()},
-      url: baseUrl(path),
+      headers: {Authorization: account.authorization},
+      url: buildURL(account.baseUrl, endpoint),
       qs,
       json: true,
       strictSSL: false,

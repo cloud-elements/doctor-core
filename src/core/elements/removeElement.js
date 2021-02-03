@@ -8,13 +8,14 @@ const {logDebug, logError} = require('../../utils/logger');
 
 const makePath = id => `elements/${id}`;
 
-module.exports = async options => {
+module.exports = async (account, options) => {
   const {name, jobId, processId} = options;
-  const elements = await getPrivateElements(name);
+  const elements = await getPrivateElements(name, _, account);
   if (isEmpty(elements)) {
     logDebug(`The doctor was unable to find the element ${name}.`);
     return;
   }
+  
   logDebug('Initiating the delete process for elements');
   // eslint-disable-next-line consistent-return
   const removePromises = await elements.map(async element => {
@@ -30,9 +31,11 @@ module.exports = async options => {
         });
         return null;
       }
+      
       logDebug(`Deleting element for element key - ${element.key}`);
-      await http.delete(makePath(element.id));
-      logDebug(`Deleted element for element key - ${element.key}.`);
+      await http.delete(makePath(element.id), {}, account);
+      logDebug(`Deleted element for element key - ${element.key}`);
+      
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.ELEMENTS,

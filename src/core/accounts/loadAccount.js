@@ -6,11 +6,12 @@ const {logDebug} = require('../../utils/logger');
 const homeDir = process.platform === 'win32' ? process.env.HOMEPATH : process.env.HOME;
 const filePath = path.normalize(`${homeDir}/.doctor/config.json`);
 
+/**
+ * Applicable only for CLI. For doctor-service, account details
+ * are directly passed to and accessed via function arguments
+*/
 module.exports = async account => {
-  if (typeof account === 'object') {
-    process.env.AUTHENTICATION = account.authorization;
-    process.env.BASE_URL = account.baseUrl;
-  } else {
+  if (typeof account !== 'object') {
     const accounts = await readFile(filePath);
     const props = find(propEq('name', account))(accounts);
     if (!props) {
