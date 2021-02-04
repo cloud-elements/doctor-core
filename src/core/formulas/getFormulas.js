@@ -6,7 +6,7 @@ const http = require('../../utils/http');
 const applyQuotes = require('../../utils/quoteString');
 const {logDebug} = require('../../utils/logger');
 
-module.exports = async (formulaKeys, jobId, processId, jobType) => {
+module.exports = async (account, formulaKeys, jobId, processId, jobType) => {
   let param = '';
   let formulaNames = [];
 
@@ -17,7 +17,7 @@ module.exports = async (formulaKeys, jobId, processId, jobType) => {
     formulaNames = formulaKeys.map(formula => formula.name);
     param = {where: `name in (${applyQuotes(join(',', formulaNames))})`};
   } else {
-    return http.get('formulas', param);
+    return http.get('formulas', param, account);
   }
 
   try {
@@ -37,7 +37,7 @@ module.exports = async (formulaKeys, jobId, processId, jobType) => {
     }
 
     logDebug('Downloading formulas');
-    const exportedFormulas = await http.get('formulas', param);
+    const exportedFormulas = await http.get('formulas', param, account);
     logDebug('Downloaded formulas');
 
     formulaNames.forEach(formulaName =>
@@ -50,10 +50,9 @@ module.exports = async (formulaKeys, jobId, processId, jobType) => {
       }),
     );
 
-    const newlyCreatedFormulas =
-      formulaKeys && Array.isArray(formulaKeys)
-        ? formulaKeys.filter(key => !exportedFormulas.some(formula => formula.name === key.name))
-        : [];
+    const newlyCreatedFormulas = formulaKeys && Array.isArray(formulaKeys)
+      ? formulaKeys.filter(key => !exportedFormulas.some(formula => formula.name === key.name))
+      : [];
 
     newlyCreatedFormulas.forEach(formula =>
       emitter.emit(EventTopic.ASSET_STATUS, {

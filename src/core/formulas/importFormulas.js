@@ -24,7 +24,7 @@ const {logDebug, logError} = require('../../utils/logger');
 
 const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 
-const importFormulas = curry(async (formulas, options) => {
+const importFormulas = curry(async (formulas, account, options) => {
   try {
     // From CLI - User can pass comma seperated string of formula name
     // From Service - It will be in Array of objects containing formula name
@@ -33,8 +33,7 @@ const importFormulas = curry(async (formulas, options) => {
       const formulaNames = Array.isArray(options.name)
         ? options.name.map(formulaName => formulaName.name)
         : options.name.split(',');
-      formulaNames &&
-        formulaNames.forEach(formulaName => {
+      formulaNames && formulaNames.forEach(formulaName => {
           const formulaToImport = find(formula => toLower(formula.name) === toLower(formulaName))(formulas);
           if (isNilOrEmpty(formulaToImport)) {
             logDebug(`The doctor was unable to find the formula ${formulaName}.`);
@@ -49,14 +48,14 @@ const importFormulas = curry(async (formulas, options) => {
         });
     }
     formulasToImport = isNilOrEmpty(formulasToImport) ? formulas : formulasToImport;
-    await createFormulas(formulasToImport, options.jobId, options.processId);
+    await createFormulas(formulasToImport, options.jobId, options.processId, account);
   } catch (error) {
     logError('Failed to import formulas');
     throw error;
   }
 });
 
-module.exports = options => {
+module.exports = (account, options) => {
   try {
     return cond([
       [
@@ -66,15 +65,15 @@ module.exports = options => {
           cond([
             [
               pipe(type, equals('Object')) && pipe(prop('formulas'), isNil, not),
-              pipe(prop('formulas'), importFormulas(__, options)),
+              pipe(prop('formulas'), importFormulas(__, account, options)),
             ],
-            [pipe(type, equals('Array')), importFormulas(__, options)],
+            [pipe(type, equals('Array')), importFormulas(__, account, options)],
           ]),
         ),
       ],
       [
         pipe(prop('dir'), isNil, not),
-        pipeP(useWith(buildFormulasFromDir, [prop('dir')]), applyVersion(__, options), importFormulas(__, options)),
+        pipeP(useWith(buildFormulasFromDir, [prop('dir')]), applyVersion(__, options), importFormulas(__, account, options)),
       ],
     ])(options);
   } catch (error) {
