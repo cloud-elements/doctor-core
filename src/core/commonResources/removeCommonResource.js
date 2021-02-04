@@ -10,7 +10,7 @@ const makePath = vdrname => `common-resources/${vdrname}`;
 
 module.exports = async (account, options) => {
   const {name, jobId, processId} = options;
-  const vdrs = await getVdrs(name, null, null, null, account);
+  const vdrs = await getVdrs(account, name);
   if (isEmpty(vdrs)) {
     logDebug(`The doctor was unable to find the vdrs ${name}.`);
     return;

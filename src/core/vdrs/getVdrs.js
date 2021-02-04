@@ -4,7 +4,7 @@ const exportVdrs = require('./exportVdrs');
 const applyQuotes = require('../../utils/quoteString');
 const {logError} = require('../../utils/logger');
 
-module.exports = async (vdrName, jobId, processId, jobType, account) => {
+module.exports = async (account, vdrName, jobId, processId, jobType) => {
   try {
     // From CLI - User can pass comma seperated string of vdrs name
     // From Service - It will be in Array of objects containing vdr name

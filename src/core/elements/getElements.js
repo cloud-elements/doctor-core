@@ -60,7 +60,7 @@ const downloadElements = async (elements, query, jobId, processId, isPrivate, jo
   return clearNull(elementsExport);
 };
 
-module.exports = async (elementKeys, jobId, processId, jobType, account) => {
+module.exports = async (account, elementKeys, jobId, processId, jobType) => {
   // From CLI - User can pass comma seperated string of elementKeys
   // From Doctor-service - elementKeys will be in Array of objects containing key and private flag
   try {

@@ -5,11 +5,11 @@ const saveTo = (getData, save, property) =>
     pipe(prop('options'), prop(property)),
     pipeP(
       converge(getData, [
+        pipe(prop('account')),
         pipe(prop('options'), prop('name')),
         pipe(prop('options'), prop('jobId')),
         pipe(prop('options'), prop('processId')),
         pipe(prop('options'), prop('jobType')),
-        pipe(prop('account')),
       ]),
     ),
   ]);
