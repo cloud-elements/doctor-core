@@ -8,10 +8,10 @@ const {logDebug} = require('../../utils/logger');
 
 module.exports = params => {
   try {
-    const saveToFolder = Object.prototype.hasOwnProperty.call(params.options, 'useNew')
+    const saveToFolder = Object.hasOwnProperty(params.options, 'useNew')
       ? saveVdrsToDirNew
       : saveVdrsToDirOld;
-    if (Object.prototype.hasOwnProperty.call(params.options, 'version')) {
+    if (Object.hasOwnProperty(params.options, 'version')) {
       params.options.name = `${params.options.name}_${params.options.version}`;
     }
     return saveTo(pipeP(getData, applyVersion(__, params)), saveToFile, saveToFolder)(params);

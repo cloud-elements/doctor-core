@@ -8,7 +8,7 @@ const {logDebug} = require('../../utils/logger');
 const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 const transduceVdrs = vdrs => (!isNilOrEmpty(vdrs) ? pipe(reject(isNil), indexBy(prop('vdrName')))(vdrs) : {});
 
-const downloadVdrs = async (vdrNames, jobId, processId, jobType) => {
+const downloadVdrs = async (vdrNames, jobId, processId, jobType, account) => {
   logDebug('Initiating the download process for VDRs');
   const downloadPromise = await vdrNames.map(async vdrName => {
     try {
@@ -23,9 +23,11 @@ const downloadVdrs = async (vdrNames, jobId, processId, jobType) => {
         });
         return null;
       }
+
       logDebug(`Downloading VDR for VDR name - ${vdrName}`);
-      const exportedVdr = await http.get(`/vdrs/${vdrName}/export`, '');
+      const exportedVdr = await http.get(`/vdrs/${vdrName}/export`, {}, account);
       logDebug(`Downloaded VDR for VDR name - ${vdrName}`);
+      
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.VDRS,
@@ -50,8 +52,8 @@ const downloadVdrs = async (vdrNames, jobId, processId, jobType) => {
   return transduceVdrs(vdrsExport);
 };
 
-module.exports = async (vdrNames, inputVdrs, jobId, processId, jobType) => {
-  const vdrs = await downloadVdrs(vdrNames, jobId, processId, jobType);
+module.exports = async (vdrNames, inputVdrs, jobId, processId, jobType, account) => {
+  const vdrs = await downloadVdrs(vdrNames, jobId, processId, jobType, account);
   const newlyCreated =
     inputVdrs && Array.isArray(inputVdrs) ? inputVdrs.filter(vdr => !vdrNames.includes(vdr.name)) : [];
   newlyCreated.forEach(vdr =>

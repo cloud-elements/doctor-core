@@ -8,9 +8,9 @@ const http = require('../../utils/http');
 
 const makePath = vdrname => `common-resources/${vdrname}`;
 
-module.exports = async options => {
+module.exports = async (account, options) => {
   const {name, jobId, processId} = options;
-  const vdrs = await getVdrs(name);
+  const vdrs = await getVdrs(name, null, null, null, account);
   if (isEmpty(vdrs)) {
     logDebug(`The doctor was unable to find the vdrs ${name}.`);
     return;
@@ -32,7 +32,7 @@ module.exports = async options => {
       }
 
       logDebug(`Deleting VDR for VDR name - ${vdr.vdrName}`);
-      await http.delete(makePath(vdr.vdrName), {force: true});
+      await http.delete(makePath(vdr.vdrName), {force: true}, account);
       logDebug(`Deleted VDR for VDR name - ${vdr.vdrName}`);
 
       emitter.emit(EventTopic.ASSET_STATUS, {

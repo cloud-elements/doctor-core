@@ -5,7 +5,7 @@ const {isJobCancelled} = require('../../events/cancelled-job');
 const {Assets, ArtifactStatus} = require('../../constants/artifact');
 const {logDebug} = require('../../utils/logger');
 
-module.exports = async (vdrs, jobId, processId) => {
+module.exports = async (vdrs, jobId, processId, account) => {
   // eslint-disable-next-line consistent-return
   const uploadPromises = mapObjIndexed(async (vdr, vdrName) => {
     try {
@@ -20,9 +20,11 @@ module.exports = async (vdrs, jobId, processId) => {
         });
         return null;
       }
+      
       logDebug(`Uploading VDR for VDR name - ${vdrName}`);
-      await http.update('vdrs/import', vdr);
+      await http.update('vdrs/import', vdr, account);
       logDebug(`Uploaded VDR for VDR name - ${vdrName}`);
+      
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.VDRS,

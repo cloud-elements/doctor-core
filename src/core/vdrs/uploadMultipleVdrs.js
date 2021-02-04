@@ -27,7 +27,7 @@ const {logDebug, logError} = require('../../utils/logger');
 
 const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 
-const importVdrsV1 = async (commonResources, options) => {
+const importVdrsV1 = async (commonResources, account, options) => {
   try {
     // From CLI - User can pass comma seperated string of vdrs name
     // From Service - It will be in Array of objects containing vdr name
@@ -52,7 +52,8 @@ const importVdrsV1 = async (commonResources, options) => {
           }
         });
     }
-    await pipeP(createObjectDefinitions, createTransformations)(commonResources);
+    await createObjectDefinitions(commonResources, account);
+    await createTransformations(commonResources, account);
   } catch (error) {
     /* istanbul ignore next */
     logError('Failed to upload vdrs');
@@ -61,7 +62,7 @@ const importVdrsV1 = async (commonResources, options) => {
   }
 };
 
-const importVdrsV2 = async (vdrs, options) => {
+const importVdrsV2 = async (vdrs, account, options) => {
   try {
     // From CLI - User can pass comma seperated string of elements key
     // From Service - It will be in Array of objects containing elementKey and private flag structure
@@ -79,7 +80,7 @@ const importVdrsV2 = async (vdrs, options) => {
         });
     }
     vdrsToImport = isNilOrEmpty(vdrsToImport) ? vdrs : vdrsToImport;
-    await upsertVdrs(vdrsToImport, options.jobId, options.processId);
+    await upsertVdrs(vdrsToImport, options.jobId, options.processId, account);
   } catch (error) {
     /* istanbul ignore next */
     logError('Failed to upload vdrs');
@@ -88,12 +89,12 @@ const importVdrsV2 = async (vdrs, options) => {
   }
 };
 
-const importVdrs = curry(async (vdrs, options) => {
+const importVdrs = curry(async (vdrs, account, options) => {
   try {
     if (has('objectDefinitions', vdrs) && has('transformations', vdrs)) {
-      await importVdrsV1(vdrs, options);
+      await importVdrsV1(vdrs, account, options);
     } else {
-      await importVdrsV2(vdrs, options);
+      await importVdrsV2(vdrs, account, options);
     }
   } catch (error) {
     logError('Failed to upload vdrs');
@@ -101,16 +102,16 @@ const importVdrs = curry(async (vdrs, options) => {
   }
 });
 
-module.exports = async options => {
+module.exports = async (account, options) => {
   try {
     return cond([
       [
         pipe(prop('file'), isNil, not),
-        pipeP(useWith(readFile, [prop('file')]), applyVersion(__, options), importVdrs(__, options)),
+        pipeP(useWith(readFile, [prop('file')]), applyVersion(__, options), importVdrs(__, account, options)),
       ],
       [
         pipe(prop('dir'), isNil, not),
-        pipeP(useWith(buildVdrsFromDir, [prop('dir')]), applyVersion(__, options), importVdrs(__, options)),
+        pipeP(useWith(buildVdrsFromDir, [prop('dir')]), applyVersion(__, options), importVdrs(__, account, options)),
       ],
     ])(options);
   } catch (error) {

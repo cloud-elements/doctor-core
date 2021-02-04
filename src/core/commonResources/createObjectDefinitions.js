@@ -5,11 +5,11 @@ const {logDebug} = require('../../utils/logger');
 
 const makePath = objectName => `organizations/objects/${objectName}/definitions`;
 
-module.exports = async data => {
+module.exports = async (data, account) => {
   const {objectDefinitions} = data;
   let endpointObjects = [];
   try {
-    endpointObjects = await http.get('organizations/objects/definitions', '');
+    endpointObjects = await http.get('organizations/objects/definitions', {}, account);
   } catch (error) {
     /* ignore */
   }
@@ -18,10 +18,10 @@ module.exports = async data => {
   for (const objectName of objectNames) {
     const endpointObjectName = find(equals(objectName))(keys(endpointObjects));
     if (endpointObjectName) {
-      await http.update(makePath(endpointObjectName), objectDefinitions[endpointObjectName]);
+      await http.update(makePath(endpointObjectName), objectDefinitions[endpointObjectName], account);
       logDebug(`Updated Object: ${endpointObjectName}`);
     } else {
-      await http.post(makePath(objectName), objectDefinitions[objectName]);
+      await http.post(makePath(objectName), objectDefinitions[objectName], account);
       logDebug(`Created Object: ${objectName}`);
     }
   }

@@ -4,7 +4,7 @@ const exportVdrs = require('./exportVdrs');
 const applyQuotes = require('../../utils/quoteString');
 const {logError} = require('../../utils/logger');
 
-module.exports = async (vdrName, jobId, processId, jobType) => {
+module.exports = async (vdrName, jobId, processId, jobType, account) => {
   try {
     // From CLI - User can pass comma seperated string of vdrs name
     // From Service - It will be in Array of objects containing vdr name
@@ -17,8 +17,8 @@ module.exports = async (vdrName, jobId, processId, jobType) => {
       vdrNames = vdrName.map(vdr => vdr.name);
       param = {where: `objectName in (${applyQuotes(join(',', vdrNames))})`};
     }
-    vdrNames = await getVdrNames(param);
-    const exportData = await exportVdrs(vdrNames, vdrName, jobId, processId, jobType);
+    vdrNames = await getVdrNames(param, account);
+    const exportData = await exportVdrs(vdrNames, vdrName, jobId, processId, jobType, account);
     return exportData;
   } catch (error) {
     logError('Failed to retrieve vdrs');

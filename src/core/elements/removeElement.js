@@ -10,7 +10,7 @@ const makePath = id => `elements/${id}`;
 
 module.exports = async (account, options) => {
   const {name, jobId, processId} = options;
-  const elements = await getPrivateElements(name, _, account);
+  const elements = await getPrivateElements(name, null, account);
   if (isEmpty(elements)) {
     logDebug(`The doctor was unable to find the element ${name}.`);
     return;
