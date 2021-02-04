@@ -20,7 +20,7 @@ const exportByAssetType = {
 module.exports = async (assetType, account, options) => {
   try {
     await startSpinner();
-    await loadAccount(account);
+    account = await loadAccount(account);
     if (!options.file && !options.dir) {
       logDebug('Please specify a file to save with -f or a directory to save with -d');
       throw new Error('Please specify a file to save with -f or a directory to save with -d');

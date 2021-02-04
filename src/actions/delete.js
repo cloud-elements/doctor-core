@@ -42,7 +42,7 @@ const validateObject = (object, deleteOperationsObject) => {
 module.exports = async (assetType, account, options) => {
   try {
     await startSpinner();
-    await loadAccount(account);
+    account = await loadAccount(account);
     if (options.name !== undefined && type(options.name) !== 'Function') {
       validateObject(assetType, deleteSpecificOperationsObject);
       await deleteSpecificOperationsObject[assetType](account, options);

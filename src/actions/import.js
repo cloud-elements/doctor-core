@@ -20,7 +20,7 @@ const importByAssetType = {
 module.exports = async (assetType, account, options) => {
   try {
     await startSpinner();
-    await loadAccount(account);
+    account = await loadAccount(account);
     if (!options.file && !options.dir) {
       logDebug('Please specify a file or directory to save with -f / -d');
       throw new Error(`Command not found: ${assetType}`);
