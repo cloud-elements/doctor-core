@@ -34,21 +34,21 @@ const importFormulas = curry(async (formulas, account, options) => {
         ? options.name.map(formulaName => formulaName.name)
         : options.name.split(',');
       formulaNames && formulaNames.forEach(formulaName => {
-          const formulaToImport = find(formula => toLower(formula.name) === toLower(formulaName))(formulas);
-          if (isNilOrEmpty(formulaToImport)) {
-            logDebug(`The doctor was unable to find the formula ${formulaName}.`);
-          } else if (any(step => step.type === 'formula')(formulaToImport.steps)) {
-            logDebug(
-              `You are trying to import a formula (${formulaName}) that has a sub formula. Please make sure to import all formulas.`,
-            );
-            formulasToImport.push(formulaToImport);
-          } else {
-            formulasToImport.push(formulaToImport);
-          }
-        });
+        const formulaToImport = find(formula => toLower(formula.name) === toLower(formulaName))(formulas);
+        if (isNilOrEmpty(formulaToImport)) {
+          logDebug(`The doctor was unable to find the formula ${formulaName}.`);
+        } else if (any(step => step.type === 'formula')(formulaToImport.steps)) {
+          logDebug(
+            `You are trying to import a formula (${formulaName}) that has a sub formula. Please make sure to import all formulas.`,
+          );
+          formulasToImport.push(formulaToImport);
+        } else {
+          formulasToImport.push(formulaToImport);
+        }
+      });
     }
     formulasToImport = isNilOrEmpty(formulasToImport) ? formulas : formulasToImport;
-    await createFormulas(formulasToImport, options.jobId, options.processId, account);
+    await createFormulas(account, formulasToImport, options.jobId, options.processId);
   } catch (error) {
     logError('Failed to import formulas');
     throw error;

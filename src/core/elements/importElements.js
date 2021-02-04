@@ -44,7 +44,7 @@ const importElements = curry(async (elements, account, options) => {
                     : element.extended
                 : false,
             )(elements);
-            
+
             if (isNilOrEmpty(elementToImport)) {
               logDebug(`The doctor was unable to find the element ${key}.`);
             } else {
@@ -61,7 +61,7 @@ const importElements = curry(async (elements, account, options) => {
         });
     }
     elementsToImport = isNilOrEmpty(elementsToImport) ? elements : elementsToImport;
-    await createElements(elementsToImport, options.jobId, options.processId, account);
+    await createElements(account, elementsToImport, options.jobId, options.processId);
   } catch (error) {
     logError(`Failed to import elements: ${error.message}`);
     throw error;

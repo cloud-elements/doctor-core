@@ -41,10 +41,10 @@ const fetchExtendedAndPrivateResources = async (existingElementId, elementKey, a
   }
 };
 
-module.exports = async (elements, jobId, processId, account) => {
+module.exports = async (account, elements, jobId, processId) => {
   logDebug('Initiating the upload process for elements');
   const allElements = await fetchAllElements(elements, account);
-  
+
   // eslint-disable-next-line consistent-return
   const uploadPromise = await elements.map(async element => {
     // Here we need to identify whether the element is already present or not
@@ -59,8 +59,8 @@ module.exports = async (elements, jobId, processId, account) => {
     const elementMetadata = equals(element.private, true)
       ? JSON.stringify({private: true})
       : JSON.stringify({private: false});
-    
-      try {
+
+    try {
       if (await isJobCancelled(jobId)) {
         emitter.emit(EventTopic.ASSET_STATUS, {
           processId,
@@ -72,7 +72,7 @@ module.exports = async (elements, jobId, processId, account) => {
         });
         return null;
       }
-      
+
       logDebug(`Uploading element for element key - ${element.key}`);
       if (isNilOrEmpty(existingElement)) {
         // Element doesn't exists in the db for given account
@@ -90,7 +90,7 @@ module.exports = async (elements, jobId, processId, account) => {
           logDebug(`Created Element: ${element.key}`);
           return importedElement;
         }
-        
+
         const promisesList = {createdResources: [], updatedResources: []};
         if (!isNilOrEmpty(element.resources)) {
           // If we try to create resource based on element key then it will always
@@ -98,10 +98,10 @@ module.exports = async (elements, jobId, processId, account) => {
           const elementsForKey = await http.get(Assets.ELEMENTS, {where: `key = ${applyQuotes(element.key)}`}, account);
           const systemElementToExtend = !isNilOrEmpty(elementsForKey)
             ? find(searchElement =>
-                equals(element.key, searchElement.key) && has('private', searchElement)
-                  ? !searchElement.private
-                  : false,
-              )(elementsForKey)
+              equals(element.key, searchElement.key) && has('private', searchElement)
+                ? !searchElement.private
+                : false,
+            )(elementsForKey)
             : [];
           if (isNilOrEmpty(systemElementToExtend) || isNilOrEmpty(systemElementToExtend.id)) {
             element.resources.forEach(resource => {
@@ -115,7 +115,7 @@ module.exports = async (elements, jobId, processId, account) => {
             });
           }
         }
-        
+
         logDebug(`Uploaded element for element key - ${element.key}`);
         emitter.emit(EventTopic.ASSET_STATUS, {
           processId,
@@ -142,7 +142,7 @@ module.exports = async (elements, jobId, processId, account) => {
           });
           return importedElement;
         }
-        
+
         // Extend the element resources and element configurations (TODO)
         const promisesList = {createdResources: [], updatedResources: []};
         const extendedResources = await fetchExtendedAndPrivateResources(existingElement.id, element.key, account);
@@ -165,7 +165,7 @@ module.exports = async (elements, jobId, processId, account) => {
             }
           });
         }
-        
+
         logDebug(`Uploaded element for element key - ${element.key}`);
         emitter.emit(EventTopic.ASSET_STATUS, {
           processId,

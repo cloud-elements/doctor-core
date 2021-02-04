@@ -30,7 +30,7 @@ const createFormula = curry(async (account, endpointFormulas, jobId, processId, 
     logDebug(`Creating formula for formula name - ${formula.name}`);
     const result = await http.post('formulas', formula, account);
     logDebug(`Created formula for formula name - ${formula.name}`);
-    
+
     emitter.emit(EventTopic.ASSET_STATUS, {
       processId,
       assetType: Assets.FORMULAS,
@@ -70,7 +70,7 @@ const updateFormula = curry(async (account, jobId, processId, formula) => {
     logDebug(`Uploading formula for formula name - ${formula.name}`);
     await http.update(makePath(formula), formula, account);
     logDebug(`Uploaded formula for formula name - ${formula.name}`);
-    
+
     emitter.emit(EventTopic.ASSET_STATUS, {
       processId,
       assetType: Assets.FORMULAS,
@@ -91,7 +91,7 @@ const updateFormula = curry(async (account, jobId, processId, formula) => {
   }
 });
 
-module.exports = async (formulas, jobId, processId, account) => {
+module.exports = async (account, formulas, jobId, processId) => {
   try {
     const endpointFormulas = await http.get('formulas', {}, account);
     const formulaIds = mergeAll(await Promise.all(map(createFormula(account, endpointFormulas, jobId, processId))(formulas)));
