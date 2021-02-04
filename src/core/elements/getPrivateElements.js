@@ -19,8 +19,8 @@ module.exports = async (keys, jobId, account) => {
           join(','),
         )(keys)
       : type(keys) === 'String'
-        ? keys
-        : []
+      ? keys
+      : []
     : [];
 
   // For CLI, if elements keys are empty then default the qs to true

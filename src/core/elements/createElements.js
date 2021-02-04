@@ -98,10 +98,10 @@ module.exports = async (account, elements, jobId, processId) => {
           const elementsForKey = await http.get(Assets.ELEMENTS, {where: `key = ${applyQuotes(element.key)}`}, account);
           const systemElementToExtend = !isNilOrEmpty(elementsForKey)
             ? find(searchElement =>
-              equals(element.key, searchElement.key) && has('private', searchElement)
-                ? !searchElement.private
-                : false,
-            )(elementsForKey)
+                equals(element.key, searchElement.key) && has('private', searchElement)
+                  ? !searchElement.private
+                  : false,
+              )(elementsForKey)
             : [];
           if (isNilOrEmpty(systemElementToExtend) || isNilOrEmpty(systemElementToExtend.id)) {
             element.resources.forEach(resource => {
@@ -110,7 +110,9 @@ module.exports = async (account, elements, jobId, processId) => {
             });
           } else {
             element.resources.forEach(resource => {
-              promisesList.createdResources.push(http.post(`elements/${systemElementToExtend.id}/resources`, resource, account));
+              promisesList.createdResources.push(
+                http.post(`elements/${systemElementToExtend.id}/resources`, resource, account),
+              );
               logDebug(`Resource Created: ${resource.method} - ${resource.path}`);
             });
           }
@@ -155,7 +157,9 @@ module.exports = async (account, elements, jobId, processId) => {
                 equals(extendedResource.type, resource.type),
             )(extendedResources);
             if (isNilOrEmpty(existingResource)) {
-              promisesList.createdResources.push(http.post(`elements/${existingElement.id}/resources`, resource, account));
+              promisesList.createdResources.push(
+                http.post(`elements/${existingElement.id}/resources`, resource, account),
+              );
               logDebug(`Resource Created: ${resource.method} - ${resource.path}`);
             } else {
               promisesList.updatedResources.push(

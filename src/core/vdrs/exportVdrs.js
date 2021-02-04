@@ -27,7 +27,7 @@ const downloadVdrs = async (vdrNames, jobId, processId, jobType, account) => {
       logDebug(`Downloading VDR for VDR name - ${vdrName}`);
       const exportedVdr = await http.get(`/vdrs/${vdrName}/export`, {}, account);
       logDebug(`Downloaded VDR for VDR name - ${vdrName}`);
-      
+
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.VDRS,

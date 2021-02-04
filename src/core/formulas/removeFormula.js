@@ -13,7 +13,7 @@ module.exports = async (account, options) => {
     logDebug(`The doctor was unable to find the formula ${name}.`);
     return;
   }
-  
+
   logDebug('Initiating the delete process for formulas');
   // eslint-disable-next-line consistent-return
   const removePromises = await formulas.map(async formula => {
@@ -29,7 +29,7 @@ module.exports = async (account, options) => {
         });
         return null;
       }
-      
+
       logDebug(`Deleting formula for formula name - ${formula.name}`);
       await http.delete(`formulas/${formula.id}`, {}, account);
       logDebug(`Deleted formula for formula name - ${formula.name}`);

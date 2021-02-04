@@ -97,12 +97,14 @@ module.exports = async (account, elementKeys, jobId, processId, jobType) => {
         ? []
         : extendedElementsExport
       : isNilOrEmpty(extendedElementsExport)
-        ? privateElementsExport
-        : privateElementsExport.concat(extendedElementsExport);
+      ? privateElementsExport
+      : privateElementsExport.concat(extendedElementsExport);
 
     const newlyCreatedElements =
       !isNilOrEmpty(elementKeys) && Array.isArray(elementKeys)
-        ? elementKeys.filter(elementKey => elementKey.private && !privateElements.some(element => equals(element.key, elementKey.key)))
+        ? elementKeys.filter(
+            elementKey => elementKey.private && !privateElements.some(element => equals(element.key, elementKey.key)),
+          )
         : [];
 
     newlyCreatedElements.forEach(element =>
@@ -112,7 +114,7 @@ module.exports = async (account, elementKeys, jobId, processId, jobType) => {
         assetName: element.key,
         metadata: JSON.stringify({private: true}),
         isNew: true,
-      })
+      }),
     );
     return elements;
   } catch (error) {

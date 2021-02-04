@@ -1,6 +1,7 @@
 const rp = require('request-promise');
 const {curry, test} = require('ramda');
 const {logError} = require('./logger');
+
 const buildURL = (baseUrl, endpoint) => `${baseUrl}/elements/api-v2/${endpoint}`;
 
 // TODO: Will be replacing request-promise with axios soon

@@ -94,7 +94,9 @@ const updateFormula = curry(async (account, jobId, processId, formula) => {
 module.exports = async (account, formulas, jobId, processId) => {
   try {
     const endpointFormulas = await http.get('formulas', {}, account);
-    const formulaIds = mergeAll(await Promise.all(map(createFormula(account, endpointFormulas, jobId, processId))(formulas)));
+    const formulaIds = mergeAll(
+      await Promise.all(map(createFormula(account, endpointFormulas, jobId, processId))(formulas)),
+    );
     const fixSteps = map(step =>
       equals(step.type, 'formula')
         ? assocPath(['properties', 'formulaId'], formulaIds[step.properties.formulaId] || -1, step)

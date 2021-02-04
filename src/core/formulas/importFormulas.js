@@ -33,19 +33,20 @@ const importFormulas = curry(async (formulas, account, options) => {
       const formulaNames = Array.isArray(options.name)
         ? options.name.map(formulaName => formulaName.name)
         : options.name.split(',');
-      formulaNames && formulaNames.forEach(formulaName => {
-        const formulaToImport = find(formula => toLower(formula.name) === toLower(formulaName))(formulas);
-        if (isNilOrEmpty(formulaToImport)) {
-          logDebug(`The doctor was unable to find the formula ${formulaName}.`);
-        } else if (any(step => step.type === 'formula')(formulaToImport.steps)) {
-          logDebug(
-            `You are trying to import a formula (${formulaName}) that has a sub formula. Please make sure to import all formulas.`,
-          );
-          formulasToImport.push(formulaToImport);
-        } else {
-          formulasToImport.push(formulaToImport);
-        }
-      });
+      formulaNames &&
+        formulaNames.forEach(formulaName => {
+          const formulaToImport = find(formula => toLower(formula.name) === toLower(formulaName))(formulas);
+          if (isNilOrEmpty(formulaToImport)) {
+            logDebug(`The doctor was unable to find the formula ${formulaName}.`);
+          } else if (any(step => step.type === 'formula')(formulaToImport.steps)) {
+            logDebug(
+              `You are trying to import a formula (${formulaName}) that has a sub formula. Please make sure to import all formulas.`,
+            );
+            formulasToImport.push(formulaToImport);
+          } else {
+            formulasToImport.push(formulaToImport);
+          }
+        });
     }
     formulasToImport = isNilOrEmpty(formulasToImport) ? formulas : formulasToImport;
     await createFormulas(account, formulasToImport, options.jobId, options.processId);
@@ -73,7 +74,11 @@ module.exports = (account, options) => {
       ],
       [
         pipe(prop('dir'), isNil, not),
-        pipeP(useWith(buildFormulasFromDir, [prop('dir')]), applyVersion(__, options), importFormulas(__, account, options)),
+        pipeP(
+          useWith(buildFormulasFromDir, [prop('dir')]),
+          applyVersion(__, options),
+          importFormulas(__, account, options),
+        ),
       ],
     ])(options);
   } catch (error) {

@@ -15,7 +15,7 @@ module.exports = async (account, options) => {
     logDebug(`The doctor was unable to find the element ${name}.`);
     return;
   }
-  
+
   logDebug('Initiating the delete process for elements');
   // eslint-disable-next-line consistent-return
   const removePromises = await elements.map(async element => {
@@ -31,11 +31,11 @@ module.exports = async (account, options) => {
         });
         return null;
       }
-      
+
       logDebug(`Deleting element for element key - ${element.key}`);
       await http.delete(makePath(element.id), {}, account);
       logDebug(`Deleted element for element key - ${element.key}`);
-      
+
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.ELEMENTS,

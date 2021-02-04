@@ -19,8 +19,8 @@ module.exports = async (keys, jobId, account) => {
           join(','),
         )(keys)
       : type(keys) === 'String'
-        ? keys
-        : []
+      ? keys
+      : []
     : [];
 
   // For CLI, if elements keys are empty then default the qs to true
@@ -32,7 +32,9 @@ module.exports = async (keys, jobId, account) => {
     : {where: `extended='true' AND key in (${applyQuotes(extendedElementsKey)})`};
 
   try {
-    const allExtendedElements = !isNilOrEmpty(extendedQuery) ? await http.get(Assets.ELEMENTS, extendedQuery, account) : [];
+    const allExtendedElements = !isNilOrEmpty(extendedQuery)
+      ? await http.get(Assets.ELEMENTS, extendedQuery, account)
+      : [];
     return !isNilOrEmpty(allExtendedElements)
       ? allExtendedElements.filter(element => element.extended && !element.private)
       : [];

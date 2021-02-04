@@ -50,9 +50,10 @@ module.exports = async (account, formulaKeys, jobId, processId, jobType) => {
       }),
     );
 
-    const newlyCreatedFormulas = formulaKeys && Array.isArray(formulaKeys)
-      ? formulaKeys.filter(key => !exportedFormulas.some(formula => formula.name === key.name))
-      : [];
+    const newlyCreatedFormulas =
+      formulaKeys && Array.isArray(formulaKeys)
+        ? formulaKeys.filter(key => !exportedFormulas.some(formula => formula.name === key.name))
+        : [];
 
     newlyCreatedFormulas.forEach(formula =>
       emitter.emit(EventTopic.ASSET_STATUS, {
