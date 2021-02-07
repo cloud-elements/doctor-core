@@ -5,5 +5,4 @@ const getInstances = account => http.get('instances', {}, account);
 const deleteInstance = curry((path, account) => http.delete(path, {}, account));
 const makePath = id => `instances/${id}`;
 
-module.exports = account =>
-  pipeP(getInstances, map(pipe(prop('id'), makePath, deleteInstance(__, account))))(account);
+module.exports = account => pipeP(getInstances, map(pipe(prop('id'), makePath, deleteInstance(__, account))))(account);

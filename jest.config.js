@@ -1,8 +1,8 @@
 module.exports = {
   globals: {
     '__ACCOUNT__': {
-      baseUrl: 'Hello',
-      authorization: 'World'
+      baseUrl: 'https://snapshot.cloud-elements.com',
+      authorization: 'User pcRw+6BrX/w9f690tHM3JyNsA2Phc=, Organization bfd32a27122e5d0516d126f6271591af'
     }
   },
   clearMocks: true,

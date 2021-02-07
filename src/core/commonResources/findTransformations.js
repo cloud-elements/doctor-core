@@ -21,11 +21,4 @@ const createObject = curry(async (objectNames, account) => {
 });
 
 module.exports = account =>
-  pipeP(
-    getObjectNames,
-    map(makePathObjects),
-    mapP(getElementKeys),
-    flatten,
-    uniq,
-    createObject(__, account),
-  )(account);
+  pipeP(getObjectNames, map(makePathObjects), mapP(getElementKeys), flatten, uniq, createObject(__, account))(account);
