@@ -19,8 +19,8 @@ describe('removeFormulas', () => {
     expect(formulasData).not.toBeNull();
     formulasData = mapIndex((formula, index) => ({...formula, id: index}), formulasData);
     http.get.mockResolvedValue(formulasData);
-    http.delete.mockResolvedValue(true);
-    await removeFormulas(null, 1, 2, JobType.EXPORT);
+    await removeFormulas(__ACCOUNT__);
+    expect(http.delete).toHaveBeenCalledTimes(2);
   });
   it('should be able to handle invalid formula name', async () => {
     let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
@@ -28,7 +28,8 @@ describe('removeFormulas', () => {
     formulasData = mapIndex((formula, index) => ({...formula, id: index}), formulasData);
     http.get.mockResolvedValue(formulasData);
     http.delete.mockResolvedValue(true);
-    await removeFormulas('wow', 1, 2, JobType.EXPORT);
+    await removeFormulas(__ACCOUNT__, 'wow', 1, 2, JobType.EXPORT);
+    expect(http.delete).toHaveBeenCalledTimes(2);
   });
   it('should be able to handle string formula name', async () => {
     let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
@@ -36,7 +37,8 @@ describe('removeFormulas', () => {
     formulasData = mapIndex((formula, index) => ({...formula, id: index}), formulasData);
     http.get.mockResolvedValue(formulasData);
     http.delete.mockResolvedValue(true);
-    await removeFormulas(join(',', pluck('name', formulasData)), 1, 2, JobType.PROMOTE_EXPORT);
+    await removeFormulas(__ACCOUNT__, join(',', pluck('name', formulasData)), 1, 2, JobType.PROMOTE_EXPORT);
+    expect(http.delete).toHaveBeenCalledTimes(2);
   });
   it('should be able to handle array formula name ', async () => {
     let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
@@ -45,6 +47,7 @@ describe('removeFormulas', () => {
     http.get.mockResolvedValue(formulasData);
     http.delete.mockResolvedValue(true);
     await removeFormulas(
+      __ACCOUNT__,
       pluck('name', formulasData).map(formulaName => ({
         name: formulaName,
       })),
@@ -52,6 +55,7 @@ describe('removeFormulas', () => {
       2,
       JobType.PROMOTE_EXPORT,
     );
+    expect(http.delete).toHaveBeenCalledTimes(2);
   });
   it('should stop execution if job gets canceled', async () => {
     let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
@@ -61,6 +65,7 @@ describe('removeFormulas', () => {
     http.delete.mockResolvedValue(true);
     canceledJob.isJobCancelled.mockReturnValue(true);
     await removeFormulas(
+      __ACCOUNT__,
       pluck('name', formulasData).map(formulaName => ({
         name: formulaName,
       })),
@@ -73,8 +78,7 @@ describe('removeFormulas', () => {
     let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
     expect(formulasData).not.toBeNull();
     formulasData = mapIndex((formula, index) => ({...formula, id: index}), formulasData);
-    http.get.mockResolvedValue(formulasData);
-    http.delete.mockRejectedValue(new Error('Invalid'));
+    http.get.mockResolvedValue(new Error('Invalid'));
     canceledJob.isJobCancelled.mockReturnValue(false);
     const originalError = console.error;
     console.error = jest.fn();
@@ -87,10 +91,9 @@ describe('removeFormulas', () => {
         2,
         JobType.EXPORT,
       );
-    } catch (error) {
-      expect(http.get).toHaveBeenCalledTimes(1);
-      expect(http.delete).toHaveBeenCalledTimes(1);
-    }
+    } catch (error) {}
+    expect(http.get).toHaveBeenCalledTimes(1);
+    expect(http.delete).toHaveBeenCalledTimes(0);
     console.error = originalError;
   });
 });

@@ -48,7 +48,7 @@ module.exports = async (assetType, account, options) => {
       await deleteSpecificOperationsObject[assetType](account, options);
     } else {
       validateObject(assetType, deleteOperationsObject);
-      await deleteOperationsObject[assetType]();
+      await deleteOperationsObject[assetType](account, ...options);
     }
     clearCancelledJobId(options.jobId);
     await stopSpinner();

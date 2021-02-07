@@ -2,7 +2,7 @@
 const fs = require('fs');
 const fsExtra = require('fs-extra');
 const path = require('path');
-const {equals, pluck, addIndex, map, join} = require('ramda');
+const {addIndex, equals, find, join, map, pluck} = require('ramda');
 const canceledJob = require('../../src/events/cancelled-job');
 const saveElements = require('../../src/core/elements/saveElements');
 const buildElementsFromDir = require('../../src/core/elements/buildElementsFromDir');
@@ -24,7 +24,10 @@ describe('saveElements', () => {
     let elementsData = await buildElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (
         equals(url, 'elements') &&
         equals(qs, {
@@ -41,6 +44,20 @@ describe('saveElements', () => {
         })
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));
+      } else if (
+        equals(url, 'elements') &&
+        equals(qs, {
+          where: "extended='true' AND key in ('wow')",
+        })
+      ) {
+        return Promise.resolve([]);
+      } else if (
+        equals(url, 'elements') &&
+        equals(qs, {
+          where: "private='true' AND key in ('wow')",
+        })
+      ) {
+        return Promise.resolve([]);
       } else if (equals(url, 'elements/adpworkforcenow/resources')) {
         return Promise.resolve(
           head(
@@ -77,19 +94,23 @@ describe('saveElements', () => {
             ),
           ),
         );
-      } else if (equals(url, 'elements/1')) {
-        return Promise.resolve(elementsData.filter(element => equals(element.key, 'adpworkforcenow')));
-      } else if (equals(url, 'elements/2')) {
-        return Promise.resolve(elementsData.filter(element => equals(element.key, 'actessentials')));
-      } else if (equals(url, 'elements/3')) {
-        return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce')));
-      } else if (equals(url, 'elements/4')) {
-        return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
+      } else if (equals(url, 'elements/1/export')) {
+        return Promise.resolve(find(element => equals(element.key, 'adpworkforcenow'), elementsData));
+      } else if (equals(url, 'elements/2/export')) {
+        return Promise.resolve(find(element => equals(element.key, 'actessentials'), elementsData));
+      } else if (equals(url, 'elements/3/export')) {
+        return Promise.resolve(find(element => equals(element.key, 'bigcommerce'), elementsData));
+      } else if (equals(url, 'elements/4/export')) {
+        return Promise.resolve(find(element => equals(element.key, 'bigcommerce-clone'), elementsData));
       } else {
-        return Promise.reject(new Error('not found'));
+        console.log('url', url, qs);
+        return Promise.reject(new Error('Not found'));
       }
     });
-    http.update.mockImplementation(path => {
+    http.update.mockImplementation((url, body, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(path, 'elements/adpwfnSDF')) {
         return Promise.resolve(
           head(
@@ -101,7 +122,10 @@ describe('saveElements', () => {
         );
       }
     });
-    http.post.mockImplementation(path => {
+    http.post.mockImplementation((url, body, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(path, 'elements/bigcommerce')) {
         return Promise.resolve(
           head(
@@ -114,10 +138,13 @@ describe('saveElements', () => {
       }
     });
     await saveElements({
-      dir: mockPath,
-      name: null,
-      jobId: 1,
-      processId: 2,
+      account: __ACCOUNT__,
+      options: {
+        dir: mockPath,
+        name: null,
+        jobId: 1,
+        processId: 2,
+      },
     });
   });
   it('should be able to handle invalid element keys', async () => {
@@ -125,10 +152,13 @@ describe('saveElements', () => {
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     await saveElements({
-      dir: mockPath,
-      name: 'wow',
-      jobId: 1,
-      processId: 2,
+      account: __ACCOUNT__,
+      options: {
+        dir: mockPath,
+        name: 'wow',
+        jobId: 1,
+        processId: 2,
+      },
     });
   });
   it('should be able to handle string element keys', async () => {
@@ -136,51 +166,68 @@ describe('saveElements', () => {
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     await saveElements({
-      dir: mockPath,
-      name: join(',', pluck('key', elementsData)),
-      jobId: 1,
-      processId: 2,
+      account: __ACCOUNT__,
+      options: {
+        dir: mockPath,
+        name: join(',', pluck('key', elementsData)),
+        jobId: 1,
+        processId: 2,
+      },
     });
   });
   it('should be able to handle array element keys where no private elements present ', async () => {
     let elementsData = await buildElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "private='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          where: "private='true' AND key in ('bigcommerce-clone')",
         })
       ) {
         return Promise.resolve([]);
       } else if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "extended='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          where:
+            "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));
-      } else if (equals(url, 'elements/1')) {
-        return Promise.resolve(elementsData.filter(element => equals(element.key, 'adpworkforcenow')));
-      } else if (equals(url, 'elements/2')) {
-        return Promise.resolve(elementsData.filter(element => equals(element.key, 'actessentials')));
-      } else if (equals(url, 'elements/3')) {
-        return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce')));
-      } else if (equals(url, 'elements/4')) {
-        return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
+      } else if (
+        equals(url, 'elements') &&
+        equals(qs, {
+          where: "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce')",
+        })
+      ) {
+        return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));
+      } else if (equals(url, 'elements/1/export')) {
+        return Promise.resolve(find(element => equals(element.key, 'adpworkforcenow'), elementsData));
+      } else if (equals(url, 'elements/2/export')) {
+        return Promise.resolve(find(element => equals(element.key, 'actessentials'), elementsData));
+      } else if (equals(url, 'elements/3/export')) {
+        return Promise.resolve(find(element => equals(element.key, 'bigcommerce'), elementsData));
+      } else if (equals(url, 'elements/4/export')) {
+        return Promise.resolve(find(element => equals(element.key, 'bigcommerce-clone'), elementsData));
       } else {
-        return Promise.reject(new Error('not found'));
+        return Promise.reject(new Error('Not found'));
       }
     });
     await saveElements({
-      dir: mockPath,
-      name: pluck('key', elementsData).map(elementKey => ({
-        key: elementKey,
-        private: equals(elementKey, 'bigcommerce-clone'),
-      })),
-      jobId: 1,
-      processId: 2,
+      account: __ACCOUNT__,
+      options: {
+        dir: mockPath,
+        name: pluck('key', elementsData).map(elementKey => ({
+          key: elementKey,
+          private: equals(elementKey, 'bigcommerce-clone'),
+        })),
+        jobId: 1,
+        processId: 2,
+      },
     });
   });
   it('should be able to handle array element keys where no extended elements present ', async () => {
@@ -191,14 +238,14 @@ describe('saveElements', () => {
       if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "private='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          where: "private='true' AND key in ('bigcommerce-clone')",
         })
       ) {
         return Promise.resolve([]);
       } else if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "extended='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          where: "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce')",
         })
       ) {
         return Promise.resolve([]);
@@ -219,13 +266,16 @@ describe('saveElements', () => {
       }
     });
     await saveElements({
-      dir: mockPath,
-      name: pluck('key', elementsData).map(elementKey => ({
-        key: elementKey,
-        private: equals(elementKey, 'bigcommerce-clone'),
-      })),
-      jobId: 1,
-      processId: 2,
+      account: __ACCOUNT__,
+      options: {
+        dir: mockPath,
+        name: pluck('key', elementsData).map(elementKey => ({
+          key: elementKey,
+          private: equals(elementKey, 'bigcommerce-clone'),
+        })),
+        jobId: 1,
+        processId: 2,
+      },
     });
   });
   it('should stop execution if job gets canceled', async () => {
@@ -234,26 +284,8 @@ describe('saveElements', () => {
     expect(elementsData).not.toBeNull();
     canceledJob.isJobCancelled.mockResolvedValue(true);
     await saveElements({
-      dir: mockPath,
-      name: pluck('key', elementsData).map(elementKey => ({
-        key: elementKey,
-        private: equals(elementKey, 'bigcommerce-clone'),
-      })),
-      jobId: 1,
-      processId: 2,
-    });
-  });
-  it('should be to handle and throw exception incase of failure', async () => {
-    const elementsData = await buildElementsFromDir(elementsDirectoryPath);
-    expect(elementsData).not.toBeNull();
-    http.get.mockImplementation(() => new Error('Failed to retrieve resource'));
-    http.update.mockImplementation(() => new Error('Failed to retrieve resource'));
-    http.post.mockImplementation(() => new Error('Failed to retrieve resource'));
-    const originalError = console.error;
-    console.error = jest.fn();
-    canceledJob.isJobCancelled.mockImplementation(() => false);
-    try {
-      await saveElements({
+      account: __ACCOUNT__,
+      options: {
         dir: mockPath,
         name: pluck('key', elementsData).map(elementKey => ({
           key: elementKey,
@@ -261,9 +293,51 @@ describe('saveElements', () => {
         })),
         jobId: 1,
         processId: 2,
+      },
+    });
+    expect(http.get).toHaveBeenCalledTimes(2);
+    expect(http.post).toHaveBeenCalledTimes(0);
+    expect(http.update).toHaveBeenCalledTimes(0);
+  });
+  it('should be to handle and throw exception incase of failure', async () => {
+    const elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    expect(elementsData).not.toBeNull();
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
+      throw new Error('Failed to retrieve resource');
+    });
+    http.update.mockImplementation((url, body, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
+      throw new Error('Failed to retrieve resource');
+    });
+    http.post.mockImplementation((url, body, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
+      throw new Error('Failed to retrieve resource');
+    });
+    const originalError = console.error;
+    console.error = jest.fn();
+    canceledJob.isJobCancelled.mockImplementation(() => false);
+    try {
+      await saveElements({
+        account: __ACCOUNT__,
+        options: {
+          dir: mockPath,
+          name: pluck('key', elementsData).map(elementKey => ({
+            key: elementKey,
+            private: equals(elementKey, 'bigcommerce-clone'),
+          })),
+          jobId: 1,
+          processId: 2,
+        },
       });
     } catch (error) {
-      expect(http.get).toHaveBeenCalledTimes(5);
+      expect(http.get).toHaveBeenCalledTimes(1);
     }
     console.error = originalError;
   });

@@ -1,7 +1,9 @@
-const {pipeP, map, prop, pipe} = require('ramda');
+const {__, curry, map, pipeP, prop, pipe} = require('ramda');
 const http = require('../../utils/http');
 
-const getInstances = () => http.get('instances');
+const getInstances = account => http.get('instances', {}, account);
+const deleteInstance = curry((path, account) => http.delete(path, {}, account));
 const makePath = id => `instances/${id}`;
 
-module.exports = pipeP(getInstances, map(pipe(prop('id'), makePath, http.delete)));
+module.exports = account =>
+  pipeP(getInstances, map(pipe(prop('id'), makePath, deleteInstance(__, account))))(account);

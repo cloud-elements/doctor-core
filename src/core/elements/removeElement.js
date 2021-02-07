@@ -56,5 +56,5 @@ module.exports = async (account, options) => {
       throw error;
     }
   });
-  Promise.all(removePromises);
+  await Promise.all(removePromises);
 };

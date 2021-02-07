@@ -40,8 +40,8 @@ const importElements = curry(async (elements, account, options) => {
                 ? elementKey.private
                   ? has('private', element) && element.private
                   : has('private', element)
-                    ? !element.private && element.extended
-                    : element.extended
+                  ? !element.private && element.extended
+                  : element.extended
                 : false,
             )(elements);
 
@@ -86,10 +86,7 @@ module.exports = (account, options) => {
       ],
       [
         pipe(prop('dir'), isNil, not),
-        pipeP(
-          useWith(buildElementsFromDir, [prop('dir')]),
-          importElements(__, account, options),
-        ),
+        pipeP(useWith(buildElementsFromDir, [prop('dir')]), importElements(__, account, options)),
       ],
     ])(options);
   } catch (error) {

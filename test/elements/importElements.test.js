@@ -16,7 +16,10 @@ describe('importElements', () => {
     let elementsData = await buildElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (
         equals(url, 'elements') &&
         equals(qs, {
@@ -81,7 +84,10 @@ describe('importElements', () => {
         return Promise.reject(new Error('not found'));
       }
     });
-    http.update.mockImplementation(path => {
+    http.update.mockImplementation((path, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(path, 'elements/adpwfnSDF')) {
         return Promise.resolve(
           head(
@@ -93,7 +99,10 @@ describe('importElements', () => {
         );
       }
     });
-    http.post.mockImplementation(path => {
+    http.post.mockImplementation((path, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(path, 'elements/bigcommerce')) {
         return Promise.resolve(
           head(
@@ -105,18 +114,21 @@ describe('importElements', () => {
         );
       }
     });
-    await importElements({
+    await importElements(__ACCOUNT__, {
       dir: elementsDirectoryPath,
       name: null,
       jobId: 1,
       processId: 2,
     });
+    expect(http.get).toHaveBeenCalledTimes(5);
+    expect(http.post).toHaveBeenCalledTimes(38);
+    expect(http.update).toHaveBeenCalledTimes(1);
   });
   it('should be able to handle invalid element keys', async () => {
     let elementsData = await buildElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
-    await importElements({
+    await importElements(__ACCOUNT__, {
       dir: elementsDirectoryPath,
       name: 'wow',
       jobId: 1,
@@ -127,18 +139,21 @@ describe('importElements', () => {
     let elementsData = await buildElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
-    await importElements({
+    await importElements(__ACCOUNT__, {
       dir: elementsDirectoryPath,
       name: join(',', pluck('key', elementsData)),
       jobId: 1,
       processId: 2,
     });
   });
-  it('should be able to handle array element keys where no private elements present ', async () => {
+  it('should be able to handle array element keys where no private elements present', async () => {
     let elementsData = await buildElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (
         equals(url, 'elements') &&
         equals(qs, {
@@ -165,7 +180,7 @@ describe('importElements', () => {
         return Promise.reject(new Error('not found'));
       }
     });
-    await importElements({
+    await importElements(__ACCOUNT__, {
       dir: elementsDirectoryPath,
       name: pluck('key', elementsData).map(elementKey => ({
         key: elementKey,
@@ -175,11 +190,14 @@ describe('importElements', () => {
       processId: 2,
     });
   });
-  it('should be able to handle array element keys where no extended elements present ', async () => {
+  it('should be able to handle array element keys where no extended elements present', async () => {
     let elementsData = await buildElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (
         equals(url, 'elements') &&
         equals(qs, {
@@ -210,7 +228,7 @@ describe('importElements', () => {
         return Promise.reject(new Error('not found'));
       }
     });
-    await importElements({
+    await importElements(__ACCOUNT__, {
       dir: elementsDirectoryPath,
       name: pluck('key', elementsData).map(elementKey => ({
         key: elementKey,
@@ -225,7 +243,7 @@ describe('importElements', () => {
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     expect(elementsData).not.toBeNull();
     canceledJob.isJobCancelled.mockResolvedValue(true);
-    await importElements({
+    await importElements(__ACCOUNT__, {
       dir: elementsDirectoryPath,
       name: pluck('key', elementsData).map(elementKey => ({
         key: elementKey,
@@ -234,11 +252,17 @@ describe('importElements', () => {
       jobId: 1,
       processId: 2,
     });
+    expect(http.get).toHaveBeenCalledTimes(2);
+    expect(http.post).toHaveBeenCalledTimes(0);
+    expect(http.update).toHaveBeenCalledTimes(0);
   });
   it('should be to handle and throw exception incase of failure', async () => {
     const elementsData = await buildElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (
         equals(url, 'elements') &&
         equals(qs, {
@@ -257,13 +281,17 @@ describe('importElements', () => {
         return Promise.reject(new Error('Failed to retrieve resource'));
       }
     });
-    http.update.mockImplementation(() => new Error('Failed to retrieve resource'));
-    http.post.mockImplementation(() => new Error('Failed to retrieve resource'));
+    http.update.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
+      throw new Error('Failed to update resource');
+    });
     const originalError = console.error;
     console.error = jest.fn();
     canceledJob.isJobCancelled.mockImplementation(() => false);
     try {
-      await importElements({
+      await importElements(__ACCOUNT__, {
         dir: elementsDirectoryPath,
         name: pluck('key', elementsData).map(elementKey => ({
           key: elementKey,
@@ -274,7 +302,11 @@ describe('importElements', () => {
       });
     } catch (error) {
       expect(http.get).toHaveBeenCalledTimes(5);
+      expect(http.post).toHaveBeenCalledTimes(0);
+      expect(http.update).toHaveBeenCalledTimes(1);
+      expect(error.message).toEqual('Failed to update resource');
     }
+    expect.assertions(5);
     console.error = originalError;
   });
 });

@@ -39,7 +39,7 @@ module.exports = async (keys, jobId, account) => {
       ? allExtendedElements.filter(element => element.extended && !element.private)
       : [];
   } catch (error) {
-    logError('Failed to retrieve extened elements');
+    logError('Failed to retrieve extended elements');
     throw error;
   }
 };

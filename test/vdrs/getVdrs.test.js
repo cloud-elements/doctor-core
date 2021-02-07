@@ -14,7 +14,10 @@ describe('getVdrs', () => {
   it('should be able to handle empty vdr names', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
       } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
@@ -32,12 +35,15 @@ describe('getVdrs', () => {
         return Promise.reject(new Error('not found'));
       }
     });
-    await getVdrs('', 1, 2, JobType.EXPORT);
+    await getVdrs(__ACCOUNT__, '', 1, 2, JobType.EXPORT);
   });
   it('should be able to handle invalid vdr names', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
       } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
@@ -55,12 +61,15 @@ describe('getVdrs', () => {
         return Promise.resolve([]);
       }
     });
-    await getVdrs('wow', 1, 2, JobType.EXPORT);
+    await getVdrs(__ACCOUNT__, 'wow', 1, 2, JobType.EXPORT);
   });
   it('should be able to handle valid string vdr names', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
       } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
@@ -78,12 +87,15 @@ describe('getVdrs', () => {
         return Promise.reject(new Error('not found'));
       }
     });
-    await getVdrs(join(',', Object.keys(vdrsData)), 1, 2, JobType.PROMOTE_EXPORT);
+    await getVdrs(__ACCOUNT__, join(',', Object.keys(vdrsData)), 1, 2, JobType.PROMOTE_EXPORT);
   });
   it('should be able to handle valid array vdr names', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
       } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
@@ -102,6 +114,7 @@ describe('getVdrs', () => {
       }
     });
     await getVdrs(
+      __ACCOUNT__,
       Object.keys(vdrsData).map(vdrName => ({name: vdrName})),
       1,
       2,
@@ -111,7 +124,10 @@ describe('getVdrs', () => {
   it('should be to handle and throw exception incase of failure', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
       } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
@@ -132,6 +148,7 @@ describe('getVdrs', () => {
     console.error = jest.fn();
     try {
       await getVdrs(
+        __ACCOUNT__,
         Object.keys(vdrsData).map(vdrName => ({name: vdrName})),
         1,
         2,
@@ -139,7 +156,9 @@ describe('getVdrs', () => {
       );
     } catch (error) {
       expect(http.get).toHaveBeenCalledTimes(1);
+      expect(http.get).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
     }
+    expect.assertions(3);
     console.error = originalError;
   });
 });

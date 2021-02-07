@@ -1,4 +1,10 @@
 module.exports = {
+  globals: {
+    '__ACCOUNT__': {
+      baseUrl: 'Hello',
+      authorization: 'World'
+    }
+  },
   clearMocks: true,
   verbose: true,
   testTimeout: 5000,
