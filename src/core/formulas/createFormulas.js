@@ -118,7 +118,7 @@ module.exports = async (account, formulas, jobId, processId) => {
     logDebug('Initiating the upload process for formulas', jobId);
     return Promise.all(map(updateFormula(account, jobId, processId))(newFormulas));
   } catch (error) {
-    logError(`Failed to upload formulas: ${error}`, jobId)
+    logError(`Failed to upload formulas: ${error}`, jobId);
     throw error;
   }
 };

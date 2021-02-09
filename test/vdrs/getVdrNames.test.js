@@ -13,7 +13,10 @@ describe('getVdrNames', () => {
   it('should be able to handle empty params vdr names', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
       } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
@@ -26,12 +29,15 @@ describe('getVdrNames', () => {
         return Promise.reject(new Error('not found'));
       }
     });
-    await getVdrNames();
+    await getVdrNames(__ACCOUNT__);
   });
   it('should be able to handle invalid params vdr names', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
       } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
@@ -44,12 +50,15 @@ describe('getVdrNames', () => {
         return Promise.resolve([]);
       }
     });
-    await getVdrNames({where: "objectName in ('wow')"});
+    await getVdrNames(__ACCOUNT__, {where: "objectName in ('wow')"});
   });
   it('should be able to handle valid params vdr names', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
       } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
@@ -62,12 +71,15 @@ describe('getVdrNames', () => {
         return Promise.reject(new Error('not found'));
       }
     });
-    await getVdrNames({where: "objectName in ('ErpCatalogCategory')"});
+    await getVdrNames(__ACCOUNT__, {where: "objectName in ('ErpCatalogCategory')"});
   });
   it('should be to handle and throw exception incase of failure', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
         return Promise.reject(vdrsData['ErpCatalogCategory']);
       } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
@@ -83,10 +95,11 @@ describe('getVdrNames', () => {
     const originalError = console.error;
     console.error = jest.fn();
     try {
-      await getVdrNames({where: "objectName in ('ErpCatalogCategory')"});
+      await getVdrNames(__ACCOUNT__, {where: "objectName in ('ErpCatalogCategory')"});
     } catch (error) {
       expect(http.get).toHaveBeenCalledTimes(1);
     }
+    expect.assertions(2);
     console.error = originalError;
   });
 });

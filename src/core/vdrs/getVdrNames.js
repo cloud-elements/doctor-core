@@ -4,7 +4,7 @@ const {logError} = require('../../utils/logger');
 
 const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 
-module.exports = async (params = '', account) => {
+module.exports = async (account, params = '') => {
   try {
     const vdrs = await http.get('vdrs', params, account);
     return isNilOrEmpty(vdrs) ? [] : Array.from(vdrs, vdr => vdr.objectName);
