@@ -14,7 +14,10 @@ describe('downloadCommonResources', () => {
   it('should be able to handle empty common resources names', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
       } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
@@ -32,6 +35,7 @@ describe('downloadCommonResources', () => {
       }
     });
     await downloadVdrs({
+      account: __ACCOUNT__,
       object: Assets.VDRS,
       options: {
         dir: mockPath,
@@ -45,7 +49,10 @@ describe('downloadCommonResources', () => {
   it('should be able to handle invalid common resources names', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
       } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
@@ -64,6 +71,7 @@ describe('downloadCommonResources', () => {
       }
     });
     await downloadVdrs({
+      account: __ACCOUNT__,
       object: Assets.VDRS,
       options: {
         dir: mockPath,
@@ -78,7 +86,10 @@ describe('downloadCommonResources', () => {
   it('should be able to handle valid string common resources names', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
       } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
@@ -97,6 +108,7 @@ describe('downloadCommonResources', () => {
       }
     });
     await downloadVdrs({
+      account: __ACCOUNT__,
       object: Assets.VDRS,
       options: {
         dir: mockPath,
@@ -110,7 +122,10 @@ describe('downloadCommonResources', () => {
   it('should be able to handle valid array common resources names', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
       } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
@@ -129,6 +144,7 @@ describe('downloadCommonResources', () => {
       }
     });
     await downloadVdrs({
+      account: __ACCOUNT__,
       object: Assets.VDRS,
       options: {
         dir: mockPath,
@@ -147,6 +163,7 @@ describe('downloadCommonResources', () => {
     console.error = jest.fn();
     try {
       await downloadVdrs({
+        account: __ACCOUNT__,
         object: Assets.VDRS,
         options: {
           dir: mockPath,

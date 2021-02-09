@@ -25,14 +25,15 @@ const {logDebug, logError} = require('../../utils/logger');
 const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 
 const importFormulas = curry(async (formulas, account, options) => {
+  const {name, jobId, processId} = options;
   try {
     // From CLI - User can pass comma seperated string of formula name
     // From Service - It will be in Array of objects containing formula name
     let formulasToImport = [];
-    if (!isNilOrEmpty(options.name) && !equals(type(options.name), 'Function')) {
-      const formulaNames = Array.isArray(options.name)
-        ? options.name.map(formulaName => formulaName.name)
-        : options.name.split(',');
+    if (!isNilOrEmpty(name) && !equals(type(name), 'Function')) {
+      const formulaNames = Array.isArray(name)
+        ? name.map(formulaName => formulaName.name)
+        : name.split(',');
       formulaNames &&
         formulaNames.forEach(formulaName => {
           const formulaToImport = find(formula => toLower(formula.name) === toLower(formulaName))(formulas);
@@ -49,9 +50,9 @@ const importFormulas = curry(async (formulas, account, options) => {
         });
     }
     formulasToImport = isNilOrEmpty(formulasToImport) ? formulas : formulasToImport;
-    await createFormulas(account, formulasToImport, options.jobId, options.processId);
+    await createFormulas(account, formulasToImport, jobId, processId);
   } catch (error) {
-    logError('Failed to import formulas');
+    logError(`Failed to import formulas ${error}`, jobId);
     throw error;
   }
 });
@@ -83,7 +84,7 @@ module.exports = (account, options) => {
     ])(options);
   } catch (error) {
     /* istanbul ignore next */
-    logError(`Failed to complete formula operation: ${error.message}`);
+    logError(`Failed to complete formula operation: ${error.message}`, options && options.jobId);
     /* istanbul ignore next */
     throw error;
   }

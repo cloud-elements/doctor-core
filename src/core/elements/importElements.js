@@ -63,7 +63,7 @@ const importElements = curry(async (elements, account, options) => {
     elementsToImport = isNilOrEmpty(elementsToImport) ? elements : elementsToImport;
     await createElements(account, elementsToImport, options.jobId, options.processId);
   } catch (error) {
-    logError(`Failed to import elements: ${error.message}`);
+    logError(`Failed to import elements: ${error.message}`, options.jobId);
     throw error;
   }
 });

@@ -17,11 +17,11 @@ module.exports = async (account, vdrName, jobId, processId, jobType) => {
       vdrNames = vdrName.map(vdr => vdr.name);
       param = {where: `objectName in (${applyQuotes(join(',', vdrNames))})`};
     }
-    vdrNames = await getVdrNames(param, account);
+    vdrNames = await getVdrNames(account, param);
     const exportData = await exportVdrs(vdrNames, vdrName, jobId, processId, jobType, account);
     return exportData;
   } catch (error) {
-    logError('Failed to retrieve vdrs');
+    logError('Failed to retrieve vdrs', jobId);
     throw error;
   }
 };

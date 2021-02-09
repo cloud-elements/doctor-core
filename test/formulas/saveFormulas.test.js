@@ -23,6 +23,7 @@ describe('saveFormulas', () => {
     expect(formulasData).not.toBeNull();
     http.get.mockReturnValue(formulasData);
     await saveFormulas({
+      account: __ACCOUNT__,
       object: Assets.FORMULAS,
       options: {
         dir: mockPath,
@@ -38,6 +39,7 @@ describe('saveFormulas', () => {
     expect(formulasData).not.toBeNull();
     http.get.mockReturnValue(formulasData);
     await saveFormulas({
+      account: __ACCOUNT__,
       object: Assets.FORMULAS,
       options: {
         dir: mockPath,
@@ -54,6 +56,7 @@ describe('saveFormulas', () => {
     expect(formulasData).not.toBeNull();
     http.get.mockReturnValue(formulasData);
     await saveFormulas({
+      account: __ACCOUNT__,
       object: Assets.FORMULAS,
       options: {
         dir: mockPath,
@@ -69,6 +72,7 @@ describe('saveFormulas', () => {
     expect(formulasData).not.toBeNull();
     http.get.mockReturnValue(formulasData);
     await saveFormulas({
+      account: __ACCOUNT__,
       object: Assets.FORMULAS,
       options: {
         dir: mockPath,
@@ -87,6 +91,7 @@ describe('saveFormulas', () => {
     console.error = jest.fn();
     try {
       await saveFormulas({
+        account: __ACCOUNT__,
         object: Assets.FORMULAS,
         options: {
           dir: mockPath,
@@ -99,6 +104,7 @@ describe('saveFormulas', () => {
     } catch (error) {
       expect(http.get).toHaveBeenCalledTimes(1);
     }
+    expect.assertions(2);
     console.error = originalError;
   });
 });

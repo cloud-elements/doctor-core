@@ -15,7 +15,7 @@ const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 const clearNull = pipe(reject(isNil));
 
 const downloadElements = async (elements, query, jobId, processId, isPrivate, jobType, account) => {
-  logDebug('Initiating the download process for elements');
+  logDebug('Initiating the download process for elements', jobId);
   const downloadPromises = await elements.map(async element => {
     const elementMetadata = JSON.stringify({private: isPrivate});
     try {
@@ -31,9 +31,9 @@ const downloadElements = async (elements, query, jobId, processId, isPrivate, jo
         return null;
       }
 
-      logDebug(`Downloading element for element key - ${element.key}`);
+      logDebug(`Downloading element for element key - ${element.key}`, jobId);
       const exportedElement = await http.get(makePath(element), query, account);
-      logDebug(`Downloaded element for element key - ${element.key}`);
+      logDebug(`Downloaded element for element key - ${element.key}`, jobId);
 
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
@@ -118,7 +118,7 @@ module.exports = async (account, elementKeys, jobId, processId, jobType) => {
     );
     return elements;
   } catch (error) {
-    logError('Error occured while retrieving elements');
+    logError(`Error occured while retrieving elements: ${error}`, jobId);
     throw error;
   }
 };

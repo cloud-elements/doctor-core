@@ -4,7 +4,7 @@ const {emitter, EventTopic} = require('../../events/emitter');
 const {isJobCancelled} = require('../../events/cancelled-job');
 const {Assets, ArtifactStatus} = require('../../constants/artifact');
 const http = require('../../utils/http');
-const {logDebug} = require('../../utils/logger');
+const {logDebug, logError} = require('../../utils/logger');
 
 const makePath = formula => `formulas/${formula.id}`;
 const isNilOrEmpty = val => isNil(val) || isEmpty(val);
@@ -27,9 +27,9 @@ const createFormula = curry(async (account, endpointFormulas, jobId, processId, 
       return null;
     }
 
-    logDebug(`Creating formula for formula name - ${formula.name}`);
+    logDebug(`Creating formula for formula name - ${formula.name}`, jobId);
     const result = await http.post('formulas', formula, account);
-    logDebug(`Created formula for formula name - ${formula.name}`);
+    logDebug(`Created formula for formula name - ${formula.name}`, jobId);
 
     emitter.emit(EventTopic.ASSET_STATUS, {
       processId,
@@ -67,9 +67,9 @@ const updateFormula = curry(async (account, jobId, processId, formula) => {
       return null;
     }
 
-    logDebug(`Uploading formula for formula name - ${formula.name}`);
+    logDebug(`Uploading formula for formula name - ${formula.name}`, jobId);
     await http.update(makePath(formula), formula, account);
-    logDebug(`Uploaded formula for formula name - ${formula.name}`);
+    logDebug(`Uploaded formula for formula name - ${formula.name}`, jobId);
 
     emitter.emit(EventTopic.ASSET_STATUS, {
       processId,
@@ -79,6 +79,7 @@ const updateFormula = curry(async (account, jobId, processId, formula) => {
       metadata: '',
     });
   } catch (error) {
+    logError(`Failed to create/upload formula ${error}`, jobId);
     emitter.emit(EventTopic.ASSET_STATUS, {
       processId,
       assetType: Assets.FORMULAS,
@@ -114,9 +115,10 @@ module.exports = async (account, formulas, jobId, processId) => {
           }))(formula.subFormulas)
         : [],
     }))(formulas);
-    logDebug('Initiating the upload process for formulas');
+    logDebug('Initiating the upload process for formulas', jobId);
     return Promise.all(map(updateFormula(account, jobId, processId))(newFormulas));
   } catch (error) {
+    logError(`Failed to upload formulas: ${error}`, jobId);
     throw error;
   }
 };
