@@ -1,11 +1,12 @@
-const {map, pipe, converge, prop, curry, pipeP, tap} = require('ramda');
-const remove = require('../../utils/remove');
-const get = require('../../utils/get');
+const {__, converge, curry, map, pipe, prop, pipeP} = require('ramda');
+const http = require('../../utils/http');
 
-const getFormulaInstances = () => get('formulas/instances', '');
+const getFormulaInstances = account => http.get('formulas/instances', {}, account);
 const makePath = curry((formulaId, instanceId) => `formulas/${formulaId}/instances/${instanceId}`);
+const deleteFormulaInstance = curry((endpoint, account) => http.delete(endpoint, {}, account));
 
-module.exports = pipeP(
-  getFormulaInstances,
-  map(pipe(converge(makePath, [pipe(prop('formula'), prop('id')), prop('id')]), remove)),
-);
+module.exports = account =>
+  pipeP(
+    getFormulaInstances,
+    map(pipe(converge(makePath, [pipe(prop('formula'), prop('id')), prop('id')]), deleteFormulaInstance(__, account))),
+  )(account);

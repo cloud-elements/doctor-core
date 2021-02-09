@@ -4,9 +4,9 @@ const {logError} = require('../../utils/logger');
 
 const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 
-module.exports = async (params = '') => {
+module.exports = async (account, params = '') => {
   try {
-    const vdrs = await http.get('vdrs', params);
+    const vdrs = await http.get('vdrs', params, account);
     return isNilOrEmpty(vdrs) ? [] : Array.from(vdrs, vdr => vdr.objectName);
   } catch (error) {
     logError('Failed to retrieve vdrs');

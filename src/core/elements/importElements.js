@@ -24,7 +24,7 @@ const {logDebug, logError} = require('../../utils/logger');
 
 const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 
-const importElements = curry(async (elements, options) => {
+const importElements = curry(async (elements, account, options) => {
   try {
     // From CLI - User can pass comma seperated string of elements key
     // From Service - It will be in Array of objects containing elementKey and private flag structure
@@ -44,6 +44,7 @@ const importElements = curry(async (elements, options) => {
                   : element.extended
                 : false,
             )(elements);
+
             if (isNilOrEmpty(elementToImport)) {
               logDebug(`The doctor was unable to find the element ${key}.`);
             } else {
@@ -60,14 +61,14 @@ const importElements = curry(async (elements, options) => {
         });
     }
     elementsToImport = isNilOrEmpty(elementsToImport) ? elements : elementsToImport;
-    await createElements(elementsToImport, options.jobId, options.processId);
+    await createElements(account, elementsToImport, options.jobId, options.processId);
   } catch (error) {
-    logError(`Failed to import elements: ${error.message}`);
+    logError(`Failed to import elements: ${error.message}`, options.jobId);
     throw error;
   }
 });
 
-module.exports = options => {
+module.exports = (account, options) => {
   try {
     return cond([
       [
@@ -77,13 +78,16 @@ module.exports = options => {
           cond([
             [
               pipe(type, equals('Object')) && pipe(prop('elements'), isNil, not),
-              pipe(prop('elements'), importElements(__, options)),
+              pipe(prop('elements'), importElements(__, account, options)),
             ],
-            [pipe(type, equals('Array')), importElements(__, options)],
+            [pipe(type, equals('Array')), importElements(__, account, options)],
           ]),
         ),
       ],
-      [pipe(prop('dir'), isNil, not), pipeP(useWith(buildElementsFromDir, [prop('dir')]), importElements(__, options))],
+      [
+        pipe(prop('dir'), isNil, not),
+        pipeP(useWith(buildElementsFromDir, [prop('dir')]), importElements(__, account, options)),
+      ],
     ])(options);
   } catch (error) {
     /* istanbul ignore next */

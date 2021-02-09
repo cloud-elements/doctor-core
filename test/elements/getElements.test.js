@@ -17,19 +17,21 @@ describe('getElements', () => {
     let elementsData = await buildElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
       if (
         equals(url, 'elements') &&
         equals(qs, {
           where: "private='true'",
-        })
+        }) &&
+        equals(account, __ACCOUNT__)
       ) {
         return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
       } else if (
         equals(url, 'elements') &&
         equals(qs, {
           where: "extended='true'",
-        })
+        }) &&
+        equals(account, __ACCOUNT__)
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));
       } else if (equals(url, 'elements/1/export')) {
@@ -44,7 +46,7 @@ describe('getElements', () => {
         return Promise.reject(new Error('not found'));
       }
     });
-    await getElements();
+    await getElements(__ACCOUNT__);
   });
   it('should be able to handle string element keys', async () => {
     let elementsData = await buildElementsFromDir(elementsDirectoryPath);
@@ -79,7 +81,7 @@ describe('getElements', () => {
         return Promise.reject(new Error('not found'));
       }
     });
-    await getElements(join(',', pluck('key', elementsData)));
+    await getElements(__ACCOUNT__, join(',', pluck('key', elementsData)));
   });
   it('should be able to handle array element keys where no private elements present ', async () => {
     let elementsData = await buildElementsFromDir(elementsDirectoryPath);
@@ -113,6 +115,7 @@ describe('getElements', () => {
       }
     });
     await getElements(
+      __ACCOUNT__,
       pluck('key', elementsData).map(elementKey => ({
         key: elementKey,
         private: equals(elementKey, 'bigcommerce-clone'),
@@ -154,6 +157,7 @@ describe('getElements', () => {
       }
     });
     await getElements(
+      __ACCOUNT__,
       pluck('key', elementsData).map(elementKey => ({
         key: elementKey,
         private: equals(elementKey, 'bigcommerce-clone'),
@@ -189,7 +193,30 @@ describe('getElements', () => {
       }
     });
     canceledJob.isJobCancelled.mockResolvedValue(true);
-    await getElements(join(',', pluck('key', elementsData)), 1, 2);
+    await getElements(__ACCOUNT__, join(',', pluck('key', elementsData)), 1, 2);
+  });
+  it('should throw error without account', async () => {
+    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    expect(elementsData).not.toBeNull();
+    elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
+    http.get.mockImplementation((url, qs, account) => {
+      if (
+        equals(url, 'elements') &&
+        equals(qs, {
+          where: "private='true'",
+        }) &&
+        equals(account, __ACCOUNT__)
+      ) {
+        return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
+      } else {
+        return Promise.reject(new Error('not found'));
+      }
+    });
+    try {
+      await getElements();
+    } catch (error) {
+      expect(http.get).toHaveBeenCalledTimes(1);
+    }
   });
   it('should be to handle and throw exception incase of failure', async () => {
     const elementsData = await buildElementsFromDir(elementsDirectoryPath);
@@ -227,7 +254,7 @@ describe('getElements', () => {
     console.error = jest.fn();
     canceledJob.isJobCancelled.mockImplementation(() => false);
     try {
-      await getElements(join(',', pluck('key', elementsData)), 1, 2, JobType.PROMOTE_EXPORT);
+      await getElements(__ACCOUNT__, join(',', pluck('key', elementsData)), 1, 2, JobType.PROMOTE_EXPORT);
     } catch (error) {
       expect(http.get).toHaveBeenCalledTimes(3);
     }

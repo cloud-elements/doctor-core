@@ -5,12 +5,12 @@ const {logDebug} = require('../../utils/logger');
 const makePath = (elementKey, objectName) => `organizations/elements/${elementKey}/transformations/${objectName}`;
 const makePathGet = elementKey => `organizations/elements/${elementKey}/transformations`;
 
-module.exports = async data => {
+module.exports = async (data, account) => {
   const {transformations} = data;
   map(async elementKey => {
     let endpointTransformations = [];
     try {
-      endpointTransformations = await http.get(makePathGet(elementKey), '');
+      endpointTransformations = await http.get(makePathGet(elementKey), {}, account);
     } catch (err) {
       /* ignore */
     }
@@ -21,14 +21,14 @@ module.exports = async data => {
           transformations[elementKey][endpointObjectName],
           data.objectDefinitions[endpointObjectName],
         );
-        await http.update(makePath(elementKey, endpointObjectName), cleaned);
+        await http.update(makePath(elementKey, endpointObjectName), cleaned, account);
         logDebug(`Updated Transformation: ${endpointObjectName} - ${elementKey}`);
       } else {
         const cleaned = cleanTransformation(
           transformations[elementKey][objectName],
           data.objectDefinitions[objectName],
         );
-        await http.post(makePath(elementKey, objectName), cleaned);
+        await http.post(makePath(elementKey, objectName), cleaned, account);
         logDebug(`Created Transformation: ${objectName} - ${elementKey}`);
       }
     })(keys(transformations[elementKey]));

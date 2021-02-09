@@ -1,3 +1,4 @@
+const EMPTY_STRING = '';
 const LOG_LEVEL = {
   DEBUG: 'debug',
   INFO: 'info',
@@ -7,8 +8,8 @@ const LOG_LEVEL = {
   CRITICAL: 'critical',
 };
 
-const logMessage = (message, logLevel = LOG_LEVEL.INFO) => {
-  message = `[${new Date().toISOString()}] Doctor-core: ${logLevel}: ${message}`;
+const logMessage = (message, jobId = EMPTY_STRING, logLevel = LOG_LEVEL.INFO) => {
+  message = `[${new Date().toISOString()}] Doctor_core_${logLevel}_${jobId || EMPTY_STRING}: ${message}`;
   switch (logLevel) {
     case LOG_LEVEL.DEBUG:
     case LOG_LEVEL.WARN:
@@ -28,13 +29,13 @@ const logMessage = (message, logLevel = LOG_LEVEL.INFO) => {
  * It is set either from doctor-cli (by default true) or doctor-service
  * @param {} message
  */
-const logDebug = message => {
+const logDebug = (message, jobId = EMPTY_STRING) => {
   if (process.env.ENABLE_DEBUG_LOG && process.env.ENABLE_DEBUG_LOG === 'true') {
-    logMessage(message, LOG_LEVEL.DEBUG);
+    logMessage(message, jobId, LOG_LEVEL.DEBUG);
   }
 };
 
-const logError = message => logMessage(message, LOG_LEVEL.ERROR);
+const logError = (message, jobId = EMPTY_STRING) => logMessage(message, jobId, LOG_LEVEL.ERROR);
 
 module.exports = {
   logDebug,

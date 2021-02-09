@@ -5,11 +5,11 @@ const saveToFile = require('./saveToFile');
 const saveToDir = require('./saveBackupToDir');
 const saveTo = require('./saveTo');
 
-const getData = async () => {
+const getData = async ({account}) => {
   return {
-    elements: await getElements(),
-    formulas: await getFormulas(),
-    vdrs: await getVdrs(),
+    elements: await getElements(account),
+    formulas: await getFormulas(account),
+    vdrs: await getVdrs(account),
   };
 };
 

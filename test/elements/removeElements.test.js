@@ -16,7 +16,10 @@ describe('removeElements', () => {
     let elementsData = await buildElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (
         equals(url, 'elements') &&
         (equals(qs, {
@@ -105,7 +108,10 @@ describe('removeElements', () => {
         return Promise.reject(new Error('not found'));
       }
     });
-    http.delete.mockImplementation(url => {
+    http.delete.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'elements/1')) {
         return Promise.resolve(elementsData.filter(element => equals(element.key, 'adpworkforcenow')));
       } else if (equals(url, 'elements/2')) {
@@ -116,25 +122,28 @@ describe('removeElements', () => {
         return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
       }
     });
-    await removeElements();
+    await removeElements(__ACCOUNT__);
   });
   it('should be able to handle invalid element keys', async () => {
     let elementsData = await buildElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
-    await removeElements('wow, how');
+    await removeElements(__ACCOUNT__, 'wow, how');
   });
   it('should be able to handle string element keys', async () => {
     let elementsData = await buildElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
-    await removeElements(join(',', pluck('key', elementsData)));
+    await removeElements(__ACCOUNT__, join(',', pluck('key', elementsData)));
   });
   it('should be able to handle array element keys ', async () => {
     let elementsData = await buildElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (
         equals(url, 'elements') &&
         equals(qs, {
@@ -168,6 +177,7 @@ describe('removeElements', () => {
       }
     });
     await removeElements(
+      __ACCOUNT__,
       pluck('key', elementsData).map(elementKey => ({
         key: elementKey,
         private: equals(elementKey, 'bigcommerce-clone'),

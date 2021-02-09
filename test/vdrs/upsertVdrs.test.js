@@ -18,7 +18,7 @@ describe('upsertVdrs', () => {
     const originalError = console.error;
     console.error = jest.fn();
     try {
-      await uploadMultipleVdrs({
+      await uploadMultipleVdrs(__ACCOUNT__, {
         dir: vdrsDirectoryPath,
         name: Object.keys(vdrsData).map(vdrName => ({name: vdrName})),
         useNew: true,
@@ -29,6 +29,7 @@ describe('upsertVdrs', () => {
     } catch (error) {
       expect(http.update).toHaveBeenCalledTimes(2);
     }
+    expect.assertions(2);
     console.error = originalError;
   });
   it('should be able to stop the import vdrs jobs', async () => {
@@ -36,12 +37,13 @@ describe('upsertVdrs', () => {
     expect(vdrsData).not.toBeNull();
     http.update.mockReturnValue(vdrsData);
     canceledJob.isJobCancelled.mockImplementation(() => true);
-    await uploadMultipleVdrs({
+    await uploadMultipleVdrs(__ACCOUNT__, {
       dir: vdrsDirectoryPath,
       name: Object.keys(vdrsData).map(vdrName => ({name: vdrName})),
       jobId: 1,
       jobType: JobType.PROMOTE_EXPORT,
       processId: 2,
     });
+    expect(http.update).toHaveBeenCalledTimes(0);
   });
 });

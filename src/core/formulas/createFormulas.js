@@ -4,12 +4,12 @@ const {emitter, EventTopic} = require('../../events/emitter');
 const {isJobCancelled} = require('../../events/cancelled-job');
 const {Assets, ArtifactStatus} = require('../../constants/artifact');
 const http = require('../../utils/http');
-const {logDebug} = require('../../utils/logger');
+const {logDebug, logError} = require('../../utils/logger');
 
 const makePath = formula => `formulas/${formula.id}`;
 const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 
-const createFormula = curry(async (endpointFormulas, jobId, processId, formula) => {
+const createFormula = curry(async (account, endpointFormulas, jobId, processId, formula) => {
   try {
     const endpointFormula = !isNilOrEmpty(endpointFormulas) ? find(propEq('name', formula.name))(endpointFormulas) : [];
     if (!isNilOrEmpty(endpointFormula)) {
@@ -26,9 +26,11 @@ const createFormula = curry(async (endpointFormulas, jobId, processId, formula) 
       });
       return null;
     }
-    logDebug(`Creating formula for formula name - ${formula.name}`);
-    const result = await http.post('formulas', formula);
-    logDebug(`Created formula for formula name - ${formula.name}`);
+
+    logDebug(`Creating formula for formula name - ${formula.name}`, jobId);
+    const result = await http.post('formulas', formula, account);
+    logDebug(`Created formula for formula name - ${formula.name}`, jobId);
+
     emitter.emit(EventTopic.ASSET_STATUS, {
       processId,
       assetType: Assets.FORMULAS,
@@ -51,7 +53,7 @@ const createFormula = curry(async (endpointFormulas, jobId, processId, formula) 
 });
 
 // eslint-disable-next-line consistent-return
-const updateFormula = curry(async (jobId, processId, formula) => {
+const updateFormula = curry(async (account, jobId, processId, formula) => {
   try {
     if (isJobCancelled(jobId)) {
       emitter.emit(EventTopic.ASSET_STATUS, {
@@ -64,9 +66,11 @@ const updateFormula = curry(async (jobId, processId, formula) => {
       });
       return null;
     }
-    logDebug(`Uploading formula for formula name - ${formula.name}`);
-    await http.update(makePath(formula), formula);
-    logDebug(`Uploaded formula for formula name - ${formula.name}`);
+
+    logDebug(`Uploading formula for formula name - ${formula.name}`, jobId);
+    await http.update(makePath(formula), formula, account);
+    logDebug(`Uploaded formula for formula name - ${formula.name}`, jobId);
+
     emitter.emit(EventTopic.ASSET_STATUS, {
       processId,
       assetType: Assets.FORMULAS,
@@ -75,6 +79,7 @@ const updateFormula = curry(async (jobId, processId, formula) => {
       metadata: '',
     });
   } catch (error) {
+    logError(`Failed to create/upload formula ${error}`, jobId);
     emitter.emit(EventTopic.ASSET_STATUS, {
       processId,
       assetType: Assets.FORMULAS,
@@ -87,10 +92,12 @@ const updateFormula = curry(async (jobId, processId, formula) => {
   }
 });
 
-module.exports = async (formulas, jobId, processId) => {
+module.exports = async (account, formulas, jobId, processId) => {
   try {
-    const endpointFormulas = await http.get('formulas', '');
-    const formulaIds = mergeAll(await Promise.all(map(createFormula(endpointFormulas, jobId, processId))(formulas)));
+    const endpointFormulas = await http.get('formulas', {}, account);
+    const formulaIds = mergeAll(
+      await Promise.all(map(createFormula(account, endpointFormulas, jobId, processId))(formulas)),
+    );
     const fixSteps = map(step =>
       equals(step.type, 'formula')
         ? assocPath(['properties', 'formulaId'], formulaIds[step.properties.formulaId] || -1, step)
@@ -108,9 +115,10 @@ module.exports = async (formulas, jobId, processId) => {
           }))(formula.subFormulas)
         : [],
     }))(formulas);
-    logDebug('Initiating the upload process for formulas');
-    return Promise.all(map(updateFormula(jobId, processId))(newFormulas));
+    logDebug('Initiating the upload process for formulas', jobId);
+    return Promise.all(map(updateFormula(account, jobId, processId))(newFormulas));
   } catch (error) {
+    logError(`Failed to upload formulas: ${error}`, jobId);
     throw error;
   }
 };

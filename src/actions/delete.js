@@ -39,16 +39,16 @@ const validateObject = (object, deleteOperationsObject) => {
   }
 };
 
-module.exports = async (object, account, options) => {
-  await loadAccount(account);
+module.exports = async (assetType, account, options) => {
   try {
     await startSpinner();
+    account = await loadAccount(account);
     if (options.name !== undefined && type(options.name) !== 'Function') {
-      validateObject(object, deleteSpecificOperationsObject);
-      await deleteSpecificOperationsObject[object](options);
+      validateObject(assetType, deleteSpecificOperationsObject);
+      await deleteSpecificOperationsObject[assetType](account, options);
     } else {
-      validateObject(object, deleteOperationsObject);
-      await deleteOperationsObject[object]();
+      validateObject(assetType, deleteOperationsObject);
+      await deleteOperationsObject[assetType](account, ...options);
     }
     clearCancelledJobId(options.jobId);
     await stopSpinner();

@@ -1,6 +1,13 @@
-const {pipeP} = require('ramda');
+const {__, curry, pipeP} = require('ramda');
+const http = require('../../utils/http');
 const deleteTransformations = require('./deleteTransformations');
-const deleteObjectDefinitions = require('./deleteObjectDefinitions');
 const findTransformations = require('./findTransformations');
 
-module.exports = pipeP(findTransformations, deleteTransformations, deleteObjectDefinitions);
+const deleteObjectDefinitions = account => http.delete('organizations/objects/definitions', {}, account);
+
+module.exports = account =>
+  pipeP(
+    findTransformations,
+    curry(deleteTransformations)(__, account),
+    curry(deleteObjectDefinitions)(account),
+  )(account);

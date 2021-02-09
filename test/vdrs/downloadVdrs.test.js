@@ -21,7 +21,10 @@ describe('downloadVdrs', () => {
   it('should be able to handle empty vdr names', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
       } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
@@ -39,6 +42,7 @@ describe('downloadVdrs', () => {
       }
     });
     await downloadVdrs({
+      account: __ACCOUNT__,
       object: Assets.VDRS,
       options: {
         dir: mockPath,
@@ -53,7 +57,10 @@ describe('downloadVdrs', () => {
   it('should be able to handle invalid vdr names', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
       } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
@@ -72,6 +79,7 @@ describe('downloadVdrs', () => {
       }
     });
     await downloadVdrs({
+      account: __ACCOUNT__,
       object: Assets.VDRS,
       options: {
         dir: mockPath,
@@ -87,7 +95,10 @@ describe('downloadVdrs', () => {
   it('should be able to handle valid string vdr names', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
       } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
@@ -106,6 +117,7 @@ describe('downloadVdrs', () => {
       }
     });
     await downloadVdrs({
+      account: __ACCOUNT__,
       object: Assets.VDRS,
       options: {
         dir: mockPath,
@@ -120,7 +132,10 @@ describe('downloadVdrs', () => {
   it('should be able to handle valid array vdr names', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockImplementation((url, qs) => {
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
       if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
       } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
@@ -139,6 +154,7 @@ describe('downloadVdrs', () => {
       }
     });
     await downloadVdrs({
+      account: __ACCOUNT__,
       object: Assets.VDRS,
       options: {
         dir: mockPath,
@@ -153,11 +169,17 @@ describe('downloadVdrs', () => {
   it('should be to handle and throw exception incase of failure', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
-    http.get.mockReturnValue(new Error('VDR not found'));
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
+      throw new Error('VDR not found');
+    });
     const originalError = console.error;
     console.error = jest.fn();
     try {
       await downloadVdrs({
+        account: __ACCOUNT__,
         object: Assets.VDRS,
         options: {
           dir: mockPath,
@@ -171,6 +193,7 @@ describe('downloadVdrs', () => {
     } catch (error) {
       expect(http.get).toHaveBeenCalledTimes(1);
     }
+    expect.assertions(2);
     console.error = originalError;
   });
 });

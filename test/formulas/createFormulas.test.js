@@ -18,7 +18,10 @@ describe('createFormulas', () => {
     http.get.mockResolvedValue(Promise.resolve(formulasData));
     http.post.mockResolvedValue(Promise.resolve(head(formulasData)));
     http.update.mockResolvedValue(Promise.resolve(head(formulasData)));
-    await createFormulas([], 1, 2);
+    await createFormulas(__ACCOUNT__, [], 1, 2);
+    expect(http.post).toHaveBeenCalledTimes(0);
+    expect(http.update).toHaveBeenCalledTimes(0);
+    expect(http.get).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
   });
   it('should be able to update existing formulas', async () => {
     let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
@@ -27,7 +30,11 @@ describe('createFormulas', () => {
     http.get.mockResolvedValue(Promise.resolve(formulasData));
     http.post.mockResolvedValue(Promise.resolve(head(formulasData)));
     http.update.mockResolvedValue(Promise.resolve(head(formulasData)));
-    await createFormulas(formulasData, 1, 2);
+    await createFormulas(__ACCOUNT__, formulasData, 1, 2);
+    expect(http.post).toHaveBeenCalledTimes(0);
+    expect(http.update).toHaveBeenCalledTimes(2);
+    expect(http.get).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
+    expect(http.update).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
   });
   it('should be able to create new formulas', async () => {
     let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
@@ -36,7 +43,11 @@ describe('createFormulas', () => {
     http.get.mockResolvedValue(Promise.resolve([]));
     http.post.mockResolvedValue(Promise.resolve(head(formulasData)));
     http.update.mockResolvedValue(Promise.resolve(head(formulasData)));
-    await createFormulas(formulasData, 1, 2);
+    await createFormulas(__ACCOUNT__, formulasData, 1, 2);
+    expect(http.post).toHaveBeenCalledTimes(2);
+    expect(http.update).toHaveBeenCalledTimes(2);
+    expect(http.get).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
+    expect(http.post).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
   });
   it('should be to handle and throw exception incase of update failure', async () => {
     let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
@@ -48,10 +59,14 @@ describe('createFormulas', () => {
     const originalError = console.error;
     console.error = jest.fn();
     try {
-      await createFormulas(formulasData, 1, 2);
+      await createFormulas(__ACCOUNT__, formulasData, 1, 2);
     } catch (error) {
       expect(http.get).toHaveBeenCalledTimes(1);
+      expect(http.update).toHaveBeenCalledTimes(2);
+      expect(http.get).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
+      expect(http.update).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
     }
+    expect.assertions(5);
     console.error = originalError;
   });
   it('should be to handle and throw exception incase of create failure', async () => {
@@ -68,10 +83,14 @@ describe('createFormulas', () => {
     const originalError = console.error;
     console.error = jest.fn();
     try {
-      await createFormulas(formulasData, 1, 2);
+      await createFormulas(__ACCOUNT__, formulasData, 1, 2);
     } catch (error) {
       expect(http.get).toHaveBeenCalledTimes(1);
+      expect(http.post).toHaveBeenCalledTimes(2);
+      expect(http.get).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
+      expect(http.post).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
     }
+    expect.assertions(5);
     console.error = originalError;
   });
   it('should stop execution if job gets canceled', async () => {
@@ -84,6 +103,6 @@ describe('createFormulas', () => {
     canceledJob.isJobCancelled.mockResolvedValue(true);
     canceledJob.addCancelledJobId.mockResolvedValue(true);
     canceledJob.removeCancelledJobId.mockResolvedValue(true);
-    await createFormulas(formulasData, 1, 2);
+    await createFormulas(__ACCOUNT__, formulasData, 1, 2);
   });
 });

@@ -7,7 +7,7 @@ const {logError} = require('../../utils/logger');
 
 const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 
-module.exports = async (keys, jobId) => {
+module.exports = async (keys, jobId, account) => {
   // From CLI - User can pass comma seperated string of elements key
   // From Doctor-service - It will be in Array of objects containing elementKey and private flag structure
   const privateElementsKey = !isNilOrEmpty(keys)
@@ -31,9 +31,9 @@ module.exports = async (keys, jobId) => {
       : ''
     : {where: `private='true' AND key in (${applyQuotes(privateElementsKey)})`};
   try {
-    return !isNilOrEmpty(privateQuery) ? await http.get(Assets.ELEMENTS, privateQuery) : [];
+    return !isNilOrEmpty(privateQuery) ? await http.get(Assets.ELEMENTS, privateQuery, account) : [];
   } catch (error) {
-    logError('Failed to retrieve private elements');
+    logError('Failed to retrieve private elements', jobId);
     throw error;
   }
 };

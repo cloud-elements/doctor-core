@@ -27,12 +27,13 @@ const {logDebug, logError} = require('../../utils/logger');
 
 const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 
-const importVdrsV1 = async (commonResources, options) => {
+const importVdrsV1 = async (commonResources, account, options) => {
+  const {name, jobId} = options;
   try {
     // From CLI - User can pass comma seperated string of vdrs name
     // From Service - It will be in Array of objects containing vdr name
-    if (!isNilOrEmpty(options.name) && !equals(type(options.name), 'Function')) {
-      const vdrNames = Array.isArray(options.name) ? options.name.map(vdr => vdr.name) : options.name.split(',');
+    if (!isNilOrEmpty(name) && !equals(type(name), 'Function')) {
+      const vdrNames = Array.isArray(name) ? name.map(vdr => vdr.name) : name.split(',');
       vdrNames &&
         vdrNames.forEach(async vdrName => {
           const transformations = {};
@@ -52,22 +53,24 @@ const importVdrsV1 = async (commonResources, options) => {
           }
         });
     }
-    await pipeP(createObjectDefinitions, createTransformations)(commonResources);
+    await createObjectDefinitions(commonResources, account);
+    await createTransformations(commonResources, account);
   } catch (error) {
     /* istanbul ignore next */
-    logError('Failed to upload vdrs');
+    logError(`Failed to upload vdrs ${error}`, jobId);
     /* istanbul ignore next */
     throw error;
   }
 };
 
-const importVdrsV2 = async (vdrs, options) => {
+const importVdrsV2 = async (vdrs, account, options) => {
+  const {name, jobId, processId} = options;
   try {
     // From CLI - User can pass comma seperated string of elements key
     // From Service - It will be in Array of objects containing elementKey and private flag structure
     let vdrsToImport = {};
-    if (!isNilOrEmpty(options.name) && !equals(type(options.name), 'Function')) {
-      const vdrNames = Array.isArray(options.name) ? options.name.map(vdr => vdr.name) : options.name.split(',');
+    if (!isNilOrEmpty(name) && !equals(type(name), 'Function')) {
+      const vdrNames = Array.isArray(name) ? name.map(vdr => vdr.name) : name.split(',');
       vdrNames &&
         vdrNames.forEach(vdrName => {
           const vdrToImport = propOr({}, vdrName)(vdrs);
@@ -79,21 +82,21 @@ const importVdrsV2 = async (vdrs, options) => {
         });
     }
     vdrsToImport = isNilOrEmpty(vdrsToImport) ? vdrs : vdrsToImport;
-    await upsertVdrs(vdrsToImport, options.jobId, options.processId);
+    await upsertVdrs(vdrsToImport, jobId, processId, account);
   } catch (error) {
     /* istanbul ignore next */
-    logError('Failed to upload vdrs');
+    logError(`Failed to upload vdrs ${error}`, jobId);
     /* istanbul ignore next */
     throw error;
   }
 };
 
-const importVdrs = curry(async (vdrs, options) => {
+const importVdrs = curry(async (vdrs, account, options) => {
   try {
     if (has('objectDefinitions', vdrs) && has('transformations', vdrs)) {
-      await importVdrsV1(vdrs, options);
+      await importVdrsV1(vdrs, account, options);
     } else {
-      await importVdrsV2(vdrs, options);
+      await importVdrsV2(vdrs, account, options);
     }
   } catch (error) {
     logError('Failed to upload vdrs');
@@ -101,21 +104,21 @@ const importVdrs = curry(async (vdrs, options) => {
   }
 });
 
-module.exports = async options => {
+module.exports = async (account, options) => {
   try {
     return cond([
       [
         pipe(prop('file'), isNil, not),
-        pipeP(useWith(readFile, [prop('file')]), applyVersion(__, options), importVdrs(__, options)),
+        pipeP(useWith(readFile, [prop('file')]), applyVersion(__, options), importVdrs(__, account, options)),
       ],
       [
         pipe(prop('dir'), isNil, not),
-        pipeP(useWith(buildVdrsFromDir, [prop('dir')]), applyVersion(__, options), importVdrs(__, options)),
+        pipeP(useWith(buildVdrsFromDir, [prop('dir')]), applyVersion(__, options), importVdrs(__, account, options)),
       ],
     ])(options);
   } catch (error) {
     /* istanbul ignore next */
-    logDebug(`Failed to complete VDR operation: ${error.message}`);
+    logDebug(`Failed to complete VDR operation: ${error.message}`, options.jobId);
     /* istanbul ignore next */
     throw error;
   }
