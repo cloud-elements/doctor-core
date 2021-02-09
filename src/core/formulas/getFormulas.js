@@ -4,7 +4,7 @@ const {isJobCancelled} = require('../../events/cancelled-job');
 const {Assets, ArtifactStatus, JobType} = require('../../constants/artifact');
 const http = require('../../utils/http');
 const applyQuotes = require('../../utils/quoteString');
-const {logDebug} = require('../../utils/logger');
+const {logDebug, logError} = require('../../utils/logger');
 
 module.exports = async (account, formulaKeys, jobId, processId, jobType) => {
   let param = '';
@@ -21,7 +21,7 @@ module.exports = async (account, formulaKeys, jobId, processId, jobType) => {
   }
 
   try {
-    logDebug('Initiating the download process for formulas');
+    logDebug('Initiating the download process for formulas', jobId);
     if (isJobCancelled(jobId)) {
       formulaNames.forEach(formulaName =>
         emitter.emit(EventTopic.ASSET_STATUS, {
@@ -36,9 +36,9 @@ module.exports = async (account, formulaKeys, jobId, processId, jobType) => {
       return [];
     }
 
-    logDebug('Downloading formulas');
+    logDebug('Downloading formulas', jobId);
     const exportedFormulas = await http.get('formulas', param, account);
-    logDebug('Downloaded formulas');
+    logDebug('Downloaded formulas', jobId);
 
     formulaNames.forEach(formulaName =>
       emitter.emit(EventTopic.ASSET_STATUS, {

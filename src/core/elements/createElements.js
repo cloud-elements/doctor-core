@@ -45,7 +45,7 @@ const fetchExtendedAndPrivateResources = async (existingElementId, elementKey, a
 };
 
 module.exports = async (account, elements, jobId, processId) => {
-  logDebug('Initiating the upload process for elements');
+  logDebug('Initiating the upload process for elements', jobId);
   const allElements = await fetchAllElements(elements, account);
 
   // eslint-disable-next-line consistent-return
@@ -76,13 +76,13 @@ module.exports = async (account, elements, jobId, processId) => {
         return null;
       }
 
-      logDebug(`Uploading element for element key - ${element.key}`);
+      logDebug(`Uploading element for element key - ${element.key}`, jobId);
       if (isNilOrEmpty(existingElement)) {
         // Element doesn't exists in the db for given account
         if (element.private === true || element.actuallyExtended === false) {
           // Create non-extended element (Private element)
           const importedElement = await http.post('elements', element, account);
-          logDebug(`Uploaded element for element key - ${element.key}`);
+          logDebug(`Uploaded element for element key - ${element.key}`, jobId);
           emitter.emit(EventTopic.ASSET_STATUS, {
             processId,
             assetType: Assets.ELEMENTS,
@@ -90,7 +90,7 @@ module.exports = async (account, elements, jobId, processId) => {
             assetStatus: ArtifactStatus.COMPLETED,
             metadata: elementMetadata,
           });
-          logDebug(`Created Element: ${element.key}`);
+          logDebug(`Created Element: ${element.key}`, jobId);
           return importedElement;
         }
 
@@ -109,19 +109,19 @@ module.exports = async (account, elements, jobId, processId) => {
           if (isNilOrEmpty(systemElementToExtend) || isNilOrEmpty(systemElementToExtend.id)) {
             element.resources.forEach(resource => {
               promisesList.createdResources.push(http.post(`elements/${element.key}/resources`, resource, account));
-              logDebug(`Resource Created: ${resource.method} - ${resource.path}`);
+              logDebug(`Resource Created: ${resource.method} - ${resource.path}`, jobId);
             });
           } else {
             element.resources.forEach(resource => {
               promisesList.createdResources.push(
                 http.post(`elements/${systemElementToExtend.id}/resources`, resource, account),
               );
-              logDebug(`Resource Created: ${resource.method} - ${resource.path}`);
+              logDebug(`Resource Created: ${resource.method} - ${resource.path}`, jobId);
             });
           }
         }
 
-        logDebug(`Uploaded element for element key - ${element.key}`);
+        logDebug(`Uploaded element for element key - ${element.key}`, jobId);
         emitter.emit(EventTopic.ASSET_STATUS, {
           processId,
           assetType: Assets.ELEMENTS,
@@ -137,7 +137,7 @@ module.exports = async (account, elements, jobId, processId) => {
         if (element.private === true || element.actuallyExtended === false) {
           // Create non-extended element (Private element)
           const importedElement = await http.update(makePath(element), element, account);
-          logDebug(`Uploaded element for element key - ${element.key}`);
+          logDebug(`Uploaded element for element key - ${element.key}`, jobId);
           emitter.emit(EventTopic.ASSET_STATUS, {
             processId,
             assetType: Assets.ELEMENTS,
@@ -163,17 +163,17 @@ module.exports = async (account, elements, jobId, processId) => {
               promisesList.createdResources.push(
                 http.post(`elements/${existingElement.id}/resources`, resource, account),
               );
-              logDebug(`Resource Created: ${resource.method} - ${resource.path}`);
+              logDebug(`Resource Created: ${resource.method} - ${resource.path}`, jobId);
             } else {
               promisesList.updatedResources.push(
                 http.update(`elements/${existingElement.id}/resources/${existingResource.id}`, resource, account),
               );
-              logDebug(`Resource Updated: ${resource.method} - ${resource.path}`);
+              logDebug(`Resource Updated: ${resource.method} - ${resource.path}`, jobId);
             }
           });
         }
 
-        logDebug(`Uploaded element for element key - ${element.key}`);
+        logDebug(`Uploaded element for element key - ${element.key}`, jobId);
         emitter.emit(EventTopic.ASSET_STATUS, {
           processId,
           assetType: Assets.ELEMENTS,
@@ -186,6 +186,7 @@ module.exports = async (account, elements, jobId, processId) => {
         await Promise.all(allPromisesToResolve);
       }
     } catch (error) {
+      logError(`Failed to create element: ${error}`, jobId);
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.ELEMENTS,

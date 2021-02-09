@@ -33,7 +33,7 @@ module.exports = async (keys, jobId, account) => {
   try {
     return !isNilOrEmpty(privateQuery) ? await http.get(Assets.ELEMENTS, privateQuery, account) : [];
   } catch (error) {
-    logError('Failed to retrieve private elements');
+    logError('Failed to retrieve private elements', jobId);
     throw error;
   }
 };

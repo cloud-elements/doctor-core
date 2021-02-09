@@ -12,11 +12,11 @@ module.exports = async (account, options) => {
   const {name, jobId, processId} = options;
   const elements = await getPrivateElements(name, null, account);
   if (isEmpty(elements)) {
-    logDebug(`The doctor was unable to find the element ${name}.`);
+    logDebug(`The doctor was unable to find the element ${name}.`, jobId);
     return;
   }
 
-  logDebug('Initiating the delete process for elements');
+  logDebug('Initiating the delete process for elements', jobId);
   // eslint-disable-next-line consistent-return
   const removePromises = await elements.map(async element => {
     try {
@@ -32,9 +32,9 @@ module.exports = async (account, options) => {
         return null;
       }
 
-      logDebug(`Deleting element for element key - ${element.key}`);
+      logDebug(`Deleting element for element key - ${element.key}`, jobId);
       await http.delete(makePath(element.id), {}, account);
-      logDebug(`Deleted element for element key - ${element.key}`);
+      logDebug(`Deleted element for element key - ${element.key}`, jobId);
 
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
@@ -52,7 +52,7 @@ module.exports = async (account, options) => {
         error: error.toString(),
         metadata: '',
       });
-      logError(`Failed to delete elements: ${error.message}`);
+      logError(`Failed to delete elements: ${error.message}`, jobId);
       throw error;
     }
   });

@@ -9,7 +9,7 @@ const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 const transduceVdrs = vdrs => (!isNilOrEmpty(vdrs) ? pipe(reject(isNil), indexBy(prop('vdrName')))(vdrs) : {});
 
 const downloadVdrs = async (vdrNames, jobId, processId, jobType, account) => {
-  logDebug('Initiating the download process for VDRs');
+  logDebug('Initiating the download process for VDRs', jobId);
   const downloadPromise = await vdrNames.map(async vdrName => {
     try {
       if (isJobCancelled(jobId)) {
@@ -24,9 +24,9 @@ const downloadVdrs = async (vdrNames, jobId, processId, jobType, account) => {
         return null;
       }
 
-      logDebug(`Downloading VDR for VDR name - ${vdrName}`);
+      logDebug(`Downloading VDR for VDR name - ${vdrName}`, jobId);
       const exportedVdr = await http.get(`/vdrs/${vdrName}/export`, {}, account);
-      logDebug(`Downloaded VDR for VDR name - ${vdrName}`);
+      logDebug(`Downloaded VDR for VDR name - ${vdrName}`, jobId);
 
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,

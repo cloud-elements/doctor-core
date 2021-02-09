@@ -21,7 +21,7 @@ module.exports = async (account, vdrName, jobId, processId, jobType) => {
     const exportData = await exportVdrs(vdrNames, vdrName, jobId, processId, jobType, account);
     return exportData;
   } catch (error) {
-    logError('Failed to retrieve vdrs');
+    logError('Failed to retrieve vdrs', jobId);
     throw error;
   }
 };
