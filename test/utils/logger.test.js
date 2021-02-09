@@ -12,18 +12,24 @@ describe('logMessage', () => {
   });
   it('should log info log for debug', () => {
     let message = 'test debug';
-    loggerUtils.logMessage(message, loggerUtils.LOG_LEVEL.DEBUG);
+    loggerUtils.logMessage(message, 123, loggerUtils.LOG_LEVEL.DEBUG);
     expect(console.info).toHaveBeenCalledTimes(1);
 
-    loggerUtils.logMessage(message, loggerUtils.LOG_LEVEL.WARN);
+    loggerUtils.logMessage(message, 123, loggerUtils.LOG_LEVEL.WARN);
     expect(console.info).toHaveBeenCalledTimes(2);
 
-    loggerUtils.logMessage(message, loggerUtils.LOG_LEVEL.INFO);
+    loggerUtils.logMessage(message, 123, loggerUtils.LOG_LEVEL.INFO);
     expect(console.info).toHaveBeenCalledTimes(3);
+
+    loggerUtils.logMessage(message, 123);
+    expect(console.info).toHaveBeenCalledTimes(4);
+
+    loggerUtils.logMessage(message);
+    expect(console.info).toHaveBeenCalledTimes(4);
   });
   it('should log error log for error', () => {
     let message = 'test debug';
-    loggerUtils.logMessage(message, loggerUtils.LOG_LEVEL.ERROR);
+    loggerUtils.logMessage(message, 123, loggerUtils.LOG_LEVEL.ERROR);
     expect(console.error).toHaveBeenCalledTimes(1);
   });
   it('should log standard log for default', () => {
@@ -33,7 +39,7 @@ describe('logMessage', () => {
   });
   it('should log default log', () => {
     let message = 'test debug';
-    loggerUtils.logMessage(message, loggerUtils.LOG_LEVEL.TRACE);
+    loggerUtils.logMessage(message, 123, loggerUtils.LOG_LEVEL.TRACE);
     expect(console.log).toHaveBeenCalledTimes(1);
   });
   it('should log debug log if ENABLE_DEBUG_LOG is set to true', () => {
