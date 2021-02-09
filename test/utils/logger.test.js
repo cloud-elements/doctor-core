@@ -25,7 +25,7 @@ describe('logMessage', () => {
     expect(console.info).toHaveBeenCalledTimes(4);
 
     loggerUtils.logMessage(message);
-    expect(console.info).toHaveBeenCalledTimes(4);
+    expect(console.info).toHaveBeenCalledTimes(5);
   });
   it('should log error log for error', () => {
     let message = 'test debug';
