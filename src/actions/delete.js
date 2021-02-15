@@ -14,7 +14,7 @@ const deleteSpecificFormula = require('../core/formulas/removeFormula');
 const deleteSpecificVdr = require('../core/commonResources/removeCommonResource');
 const deleteSpecificCommonResource = require('../core/commonResources/removeCommonResource');
 
-const clearCancelledJobId = (jobId) => jobId && removeCancelledJobId(jobId);
+const clearCancelledJobId = jobId => jobId && removeCancelledJobId(jobId);
 
 const deleteOperationsObject = {
   commonResources: deleteCommonResources,

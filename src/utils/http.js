@@ -2,9 +2,9 @@ const rp = require('request-promise');
 const {isNil, isEmpty, test} = require('ramda');
 const {logError} = require('./logger');
 
-const isNilOrEmpty = (val) => isNil(val) || isEmpty(val);
+const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 const buildURL = (baseUrl, endpoint) => `${baseUrl}/elements/api-v2/${endpoint}`;
-const validateAccount = (account) => {
+const validateAccount = account => {
   if (isNilOrEmpty(account) || isNilOrEmpty(account.authorization) || isNilOrEmpty(account.baseUrl)) {
     logError('Missing authorization details');
     throw new Error('Missing authorization details');

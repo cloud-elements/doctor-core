@@ -8,7 +8,7 @@ const exportFormulas = require('../core/formulas/exportFormulas');
 const exportElements = require('../core/elements/exportElements');
 const exportAll = require('../utils/saveAll');
 
-const clearCancelledJobId = (jobId) => jobId && removeCancelledJobId(jobId);
+const clearCancelledJobId = jobId => jobId && removeCancelledJobId(jobId);
 
 const exportByAssetType = {
   vdrs: exportVdrs,

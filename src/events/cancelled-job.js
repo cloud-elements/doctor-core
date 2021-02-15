@@ -6,14 +6,14 @@ const getIdSet = () => {
 };
 
 /* istanbul ignore next */
-const addCancelledJobId = (jobId) => {
+const addCancelledJobId = jobId => {
   const idSet = getIdSet();
   // eslint-disable-next-line no-unused-expressions
   !idSet.has(jobId) && idSet.add(jobId);
   console.log('addCancelledJobId - Content of the Cancelled Job Id Queue', idSet);
 };
 
-const isJobCancelled = (jobId) => {
+const isJobCancelled = jobId => {
   if (!jobId) {
     return;
   }
@@ -24,7 +24,7 @@ const isJobCancelled = (jobId) => {
 };
 
 /* istanbul ignore next */
-const removeCancelledJobId = (jobId) => {
+const removeCancelledJobId = jobId => {
   const idSet = getIdSet();
   idSet.delete(jobId);
   console.log('removeCancelledJobId - Content of the Cancelled Job Id Queue', idSet);

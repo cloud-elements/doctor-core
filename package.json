@@ -7,7 +7,7 @@
     "test:unit": "npm run prettify && npx eslint src --fix && jest --silent",
     "test:unit:coverage": "npm run prettify && npx eslint src --fix && jest --coverage --silent && npm run jest:threshold:bumper",
     "jest:threshold:bumper": "jest-coverage-thresholds-bumper --coverage-summary-path=\"./coverage/coverage-summary.json\"",
-    "prettify": "./node_modules/.bin/prettier --write --print-width=120 --tab-width=2 --single-quote=true --trailing-comma=all --bracket-spacing=false src/**/**/* test/**/*"
+    "prettify": "./node_modules/.bin/prettier --write --print-width=120 --tab-width=2 --single-quote=true --trailing-comma=all --bracket-spacing=false src/**/**/* src/**/* test/**/*"
   },
   "repository": {
     "type": "git",

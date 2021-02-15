@@ -1,6 +1,6 @@
 const {repeat} = require('ramda');
 
-const boundedAlignment = (helper) => {
+const boundedAlignment = helper => {
   return (string, options) => {
     if (options.width <= string.length) {
       return string;
@@ -11,16 +11,16 @@ const boundedAlignment = (helper) => {
 };
 
 const align = {
-  center: boundedAlignment(function (string, options) {
+  center: boundedAlignment(function(string, options) {
     const left = Math.floor((options.width - string.length) / 2);
     const right = options.width - string.length - left;
 
     return options.placeholder.repeat(left) + string + options.placeholder.repeat(right);
   }),
-  left: boundedAlignment(function (string, options, whitespace) {
+  left: boundedAlignment(function(string, options, whitespace) {
     return (string + whitespace).slice(0, options.width);
   }),
-  right: boundedAlignment(function (string, options, whitespace) {
+  right: boundedAlignment(function(string, options, whitespace) {
     return (whitespace + string).slice(-options.width);
   }),
   fill(string, options) {

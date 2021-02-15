@@ -1,4 +1,4 @@
-const toDirectoryName = (name) =>
+const toDirectoryName = name =>
   name
     .replace(/[?>-]|(\|)|(\/)/g, ' ')
     .replace(/[|]+/g, ' ')

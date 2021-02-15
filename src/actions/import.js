@@ -8,7 +8,7 @@ const importFormulas = require('../core/formulas/importFormulas');
 const importElements = require('../core/elements/importElements');
 const importAll = require('../utils/importBackup');
 
-const clearCancelledJobId = (jobId) => jobId && removeCancelledJobId(jobId);
+const clearCancelledJobId = jobId => jobId && removeCancelledJobId(jobId);
 
 const importByAssetType = {
   vdrs: importVdrs,

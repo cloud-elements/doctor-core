@@ -1,4 +1,4 @@
-module.exports = (resource) => {
+module.exports = resource => {
   const resourceName = `${resource.method}-${resource.path}`;
   const cleanName = resourceName
     .replace(/\/hubs\/[^/]*\//, '')
