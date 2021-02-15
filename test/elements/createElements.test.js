@@ -23,14 +23,14 @@ describe('createElements', () => {
       if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "private='true'",
+          where: "private='true' AND abridged='true'",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
       } else if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "extended='true'",
+          where: "extended='true' AND abridged='true'",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));
@@ -87,7 +87,7 @@ describe('createElements', () => {
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "private='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "private='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
@@ -95,7 +95,7 @@ describe('createElements', () => {
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "extended='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));
@@ -174,7 +174,7 @@ describe('createElements', () => {
       Assets.ELEMENTS,
       {
         where:
-          "private='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          "private='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
       },
       __ACCOUNT__,
     );
@@ -182,7 +182,7 @@ describe('createElements', () => {
       Assets.ELEMENTS,
       {
         where:
-          "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          "extended='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
       },
       __ACCOUNT__,
     );
@@ -199,7 +199,7 @@ describe('createElements', () => {
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "private='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "private='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
@@ -207,7 +207,7 @@ describe('createElements', () => {
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "extended='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve([]);
@@ -266,7 +266,7 @@ describe('createElements', () => {
       Assets.ELEMENTS,
       {
         where:
-          "private='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          "private='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
       },
       __ACCOUNT__,
     );
@@ -274,7 +274,7 @@ describe('createElements', () => {
       Assets.ELEMENTS,
       {
         where:
-          "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          "extended='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
       },
       __ACCOUNT__,
     );
@@ -291,7 +291,7 @@ describe('createElements', () => {
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "private='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "private='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
@@ -299,7 +299,7 @@ describe('createElements', () => {
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "extended='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve([]);
@@ -355,7 +355,7 @@ describe('createElements', () => {
       Assets.ELEMENTS,
       {
         where:
-          "private='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          "private='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
       },
       __ACCOUNT__,
     );
@@ -363,7 +363,7 @@ describe('createElements', () => {
       Assets.ELEMENTS,
       {
         where:
-          "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          "extended='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
       },
       __ACCOUNT__,
     );
@@ -380,7 +380,7 @@ describe('createElements', () => {
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "private='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "private='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
@@ -388,7 +388,7 @@ describe('createElements', () => {
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "extended='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));
@@ -445,7 +445,7 @@ describe('createElements', () => {
       Assets.ELEMENTS,
       {
         where:
-          "private='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          "private='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
       },
       __ACCOUNT__,
     );
@@ -453,7 +453,7 @@ describe('createElements', () => {
       Assets.ELEMENTS,
       {
         where:
-          "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          "extended='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
       },
       __ACCOUNT__,
     );
@@ -470,7 +470,7 @@ describe('createElements', () => {
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "private='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "private='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
@@ -478,7 +478,7 @@ describe('createElements', () => {
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "extended='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));
@@ -492,7 +492,7 @@ describe('createElements', () => {
       Assets.ELEMENTS,
       {
         where:
-          "private='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          "private='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
       },
       __ACCOUNT__,
     );
@@ -500,7 +500,7 @@ describe('createElements', () => {
       Assets.ELEMENTS,
       {
         where:
-          "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          "extended='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
       },
       __ACCOUNT__,
     );
@@ -516,7 +516,7 @@ describe('createElements', () => {
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "private='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "private='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
@@ -524,7 +524,7 @@ describe('createElements', () => {
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "extended='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));

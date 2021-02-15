@@ -23,32 +23,32 @@ describe('removeElements', () => {
       if (
         equals(url, 'elements') &&
         (equals(qs, {
-          where: "private='true'",
+          where: "private='true' AND abridged='true'",
         }) ||
-          equals(qs, {where: "private='true' AND key in ('wow',' how')"}))
+          equals(qs, {where: "private='true' AND abridged='true' AND key in ('wow',' how')"}))
       ) {
         return Promise.resolve([]);
       } else if (
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "private='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "private='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
       } else if (
         equals(url, 'elements') &&
         (equals(qs, {
-          where: "extended='true'",
+          where: "extended='true' AND abridged='true'",
         }) ||
-          equals(qs, {where: "extended='true' AND key in ('wow',' how')"}))
+          equals(qs, {where: "extended='true' AND abridged='true' AND key in ('wow',' how')"}))
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));
       } else if (
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "extended='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));
@@ -147,13 +147,16 @@ describe('removeElements', () => {
       if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "private='true' AND key in ('bigcommerce-clone')",
+          where: "private='true' AND abridged='true' AND key in ('bigcommerce-clone')",
         })
       ) {
         return Promise.resolve([]);
       } else if (
         equals(url, 'elements') &&
-        equals(qs, {where: "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce')"})
+        equals(qs, {
+          where:
+            "extended='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce')",
+        })
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));
       } else if (equals(url, 'elements/1')) {

@@ -13,7 +13,7 @@ describe('getPrivateElements', () => {
     expect(result).toEqual(resp);
     expect(http.get).toHaveBeenCalledWith(
       Assets.ELEMENTS,
-      {where: "private='true' AND key in (''acton'',' 'jira'')"},
+      {where: "private='true' AND abridged='true' AND key in (''acton'',' 'jira'')"},
       __ACCOUNT__,
     );
   });
@@ -22,7 +22,11 @@ describe('getPrivateElements', () => {
     http.get.mockResolvedValue(resp);
     const result = await getPrivateElements([{key: 'jira', private: true}, {key: 'acton'}], 123, __ACCOUNT__);
     expect(result).toEqual(resp);
-    expect(http.get).toHaveBeenCalledWith(Assets.ELEMENTS, {where: "private='true' AND key in ('jira')"}, __ACCOUNT__);
+    expect(http.get).toHaveBeenCalledWith(
+      Assets.ELEMENTS,
+      {where: "private='true' AND abridged='true' AND key in ('jira')"},
+      __ACCOUNT__,
+    );
   });
   it('should not get private elements and return empty', async () => {
     http.get.mockResolvedValue([{name: 'jira'}]);
@@ -36,7 +40,7 @@ describe('getPrivateElements', () => {
     const result = await getPrivateElements([], null, __ACCOUNT__);
     expect(result).toEqual(resp);
     expect(http.get).toHaveBeenCalledTimes(1);
-    expect(http.get).toHaveBeenCalledWith(Assets.ELEMENTS, {where: "private='true'"}, __ACCOUNT__);
+    expect(http.get).toHaveBeenCalledWith(Assets.ELEMENTS, {where: "private='true' AND abridged='true'"}, __ACCOUNT__);
   });
   it('should throw exception incase of failure', async () => {
     http.get.mockRejectedValue(() => new Error('Failed'));
@@ -47,7 +51,11 @@ describe('getPrivateElements', () => {
       expect(result).toHaveLength(0);
     } catch (error) {
       expect(http.get).toHaveBeenCalledTimes(1);
-      expect(http.get).toHaveBeenCalledWith(Assets.ELEMENTS, {where: "private='true'"}, __ACCOUNT__);
+      expect(http.get).toHaveBeenCalledWith(
+        Assets.ELEMENTS,
+        {where: "private='true' AND abridged='true'"},
+        __ACCOUNT__,
+      );
     }
     console.error = originalError;
   });
