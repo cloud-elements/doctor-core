@@ -1,6 +1,6 @@
 const {cond, curry, isNil, not, pipe, pipeP, prop, useWith} = require('ramda');
 const importElements = require('../core/elements/importElements');
-const importVdrs = require('../core/vdrs/uploadMultipleVdrs');
+const importVdrs = require('../core/vdrs/importVdrs');
 const importFormulas = require('../core/formulas/importFormulas');
 const createObjectDefinitions = require('../core/commonResources/createObjectDefinitions');
 const createTransformations = require('../core/commonResources/createTransformations');
@@ -24,13 +24,7 @@ const importBackupFromDir = async (account, params) => {
 
 module.exports = (account, options) => {
   cond([
-    [
-      pipe(prop('file'), isNil, not),
-      pipeP(useWith(readFile, [prop('file')]), curry(importBackupFromFile)(account)),
-    ],
-    [
-      pipe(prop('dir'), isNil, not),
-      curry(importBackupFromDir)(account),
-    ],
+    [pipe(prop('file'), isNil, not), pipeP(useWith(readFile, [prop('file')]), curry(importBackupFromFile)(account))],
+    [pipe(prop('dir'), isNil, not), curry(importBackupFromDir)(account)],
   ])(options);
 };

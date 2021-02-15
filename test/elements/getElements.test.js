@@ -4,7 +4,7 @@ const {equals, pluck, addIndex, map, join} = require('ramda');
 const {JobType} = require('../../src/constants/artifact');
 const canceledJob = require('../../src/events/cancelled-job');
 const getElements = require('../../src/core/elements/getElements');
-const buildElementsFromDir = require('../../src/core/elements/buildElementsFromDir');
+const readElementsFromDir = require('../../src/core/elements/readElementsFromDir');
 const http = require('../../src/utils/http');
 
 const mapIndex = addIndex(map);
@@ -14,7 +14,7 @@ jest.mock('../../src/events/cancelled-job');
 
 describe('getElements', () => {
   it('should be able to handle empty element keys', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     http.get.mockImplementation((url, qs, account) => {
@@ -49,7 +49,7 @@ describe('getElements', () => {
     await getElements(__ACCOUNT__);
   });
   it('should be able to handle string element keys', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     http.get.mockImplementation((url, qs) => {
@@ -84,7 +84,7 @@ describe('getElements', () => {
     await getElements(__ACCOUNT__, join(',', pluck('key', elementsData)));
   });
   it('should be able to handle array element keys where no private elements present ', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     http.get.mockImplementation((url, qs) => {
@@ -126,7 +126,7 @@ describe('getElements', () => {
     );
   });
   it('should be able to handle array element keys where no extended elements present ', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     http.get.mockImplementation((url, qs) => {
@@ -168,7 +168,7 @@ describe('getElements', () => {
     );
   });
   it('should stop execution if job gets canceled', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     expect(elementsData).not.toBeNull();
     http.get.mockImplementation((url, qs) => {
@@ -196,7 +196,7 @@ describe('getElements', () => {
     await getElements(__ACCOUNT__, join(',', pluck('key', elementsData)), 1, 2);
   });
   it('should throw error without account', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     http.get.mockImplementation((url, qs, account) => {
@@ -219,7 +219,7 @@ describe('getElements', () => {
     }
   });
   it('should be to handle and throw exception incase of failure', async () => {
-    const elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    const elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     http.get.mockImplementation((url, qs) => {
       if (

@@ -3,7 +3,7 @@ const path = require('path');
 const {JobType} = require('../../src/constants/artifact');
 const {equals, pluck, addIndex, map, join} = require('ramda');
 const removeElements = require('../../src/core/elements/removeElements');
-const buildElementsFromDir = require('../../src/core/elements/buildElementsFromDir');
+const readElementsFromDir = require('../../src/core/elements/readElementsFromDir');
 const http = require('../../src/utils/http');
 
 const mapIndex = addIndex(map);
@@ -13,7 +13,7 @@ jest.mock('../../src/utils/http');
 
 describe('removeElements', () => {
   it('should be able to handle empty element keys', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     http.get.mockImplementation((url, qs, account) => {
@@ -125,19 +125,19 @@ describe('removeElements', () => {
     await removeElements(__ACCOUNT__);
   });
   it('should be able to handle invalid element keys', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     await removeElements(__ACCOUNT__, 'wow, how');
   });
   it('should be able to handle string element keys', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     await removeElements(__ACCOUNT__, join(',', pluck('key', elementsData)));
   });
   it('should be able to handle array element keys ', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     http.get.mockImplementation((url, qs, account) => {

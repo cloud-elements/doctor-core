@@ -3,7 +3,7 @@ const path = require('path');
 const {equals, head, map, addIndex} = require('ramda');
 const canceledJob = require('../../src/events/cancelled-job');
 const createFormulas = require('../../src/core/formulas/createFormulas');
-const buildFormulasFromDir = require('../../src/core/formulas/buildFormulasFromDir');
+const readFormulasFromDir = require('../../src/core/formulas/readFormulasFromDir');
 const http = require('../../src/utils/http');
 
 const mapIdex = addIndex(map);
@@ -13,7 +13,7 @@ jest.mock('../../src/events/cancelled-job');
 
 describe('createFormulas', () => {
   it('should be able to handle empty formulas', async () => {
-    const formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    const formulasData = await readFormulasFromDir(formulasDirectoryPath);
     expect(formulasData).not.toBeNull();
     http.get.mockResolvedValue(Promise.resolve(formulasData));
     http.post.mockResolvedValue(Promise.resolve(head(formulasData)));
@@ -24,7 +24,7 @@ describe('createFormulas', () => {
     expect(http.get).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
   });
   it('should be able to update existing formulas', async () => {
-    let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
     formulasData = mapIdex((formula, index) => ({...formula, id: index}), formulasData);
     expect(formulasData).not.toBeNull();
     http.get.mockResolvedValue(Promise.resolve(formulasData));
@@ -37,7 +37,7 @@ describe('createFormulas', () => {
     expect(http.update).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
   });
   it('should be able to create new formulas', async () => {
-    let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
     formulasData = mapIdex((formula, index) => ({...formula, id: index}), formulasData);
     expect(formulasData).not.toBeNull();
     http.get.mockResolvedValue(Promise.resolve([]));
@@ -50,7 +50,7 @@ describe('createFormulas', () => {
     expect(http.post).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
   });
   it('should be to handle and throw exception incase of update failure', async () => {
-    let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
     formulasData = mapIdex((formula, index) => ({...formula, id: index}), formulasData);
     expect(formulasData).not.toBeNull();
     http.get.mockResolvedValue(Promise.resolve(formulasData));
@@ -70,7 +70,7 @@ describe('createFormulas', () => {
     console.error = originalError;
   });
   it('should be to handle and throw exception incase of create failure', async () => {
-    let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
     formulasData = mapIdex(
       (formula, index) =>
         equals(index, 0) ? {...formula, id: index, subFormulas: {...formula, id: index}} : {...formula, id: index},
@@ -94,7 +94,7 @@ describe('createFormulas', () => {
     console.error = originalError;
   });
   it('should stop execution if job gets canceled', async () => {
-    let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
     formulasData = mapIdex((formula, index) => ({...formula, id: index}), formulasData);
     expect(formulasData).not.toBeNull();
     http.get.mockResolvedValue(Promise.resolve(formulasData));

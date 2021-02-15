@@ -4,7 +4,7 @@ const path = require('path');
 const {equals} = require('ramda');
 const fsExtra = require('fs-extra');
 const saveFormulasToDir = require('../../src/core/formulas/saveFormulasToDir');
-const buildFormulasFromDir = require('../../src/core/formulas/buildFormulasFromDir');
+const readFormulasFromDir = require('../../src/core/formulas/readFormulasFromDir');
 
 jest.spyOn(fs, 'existsSync');
 jest.spyOn(fs, 'writeFileSync');
@@ -21,7 +21,7 @@ describe('saveFormulasToDir', () => {
     }
   });
   it('should save the formulas data to formulas new directory path', async () => {
-    const elementsData = await buildFormulasFromDir(formulasDirectoryPath);
+    const elementsData = await readFormulasFromDir(formulasDirectoryPath);
     expect(elementsData).not.toBeNull();
     fs.writeFileSync.mockReturnValue(true);
     const originalError = console.error;

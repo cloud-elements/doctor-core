@@ -4,8 +4,8 @@ const path = require('path');
 const {equals} = require('ramda');
 const fsExtra = require('fs-extra');
 const saveBackupToDir = require('../../src/utils/saveBackupToDir');
-const buildElementsFromDir = require('../../src/core/elements/buildElementsFromDir');
-const buildFormulasFromDir = require('../../src/core/formulas/buildFormulasFromDir');
+const readElementsFromDir = require('../../src/core/elements/readElementsFromDir');
+const readFormulasFromDir = require('../../src/core/formulas/readFormulasFromDir');
 const buildVdrsFromDir = require('../../src/core/vdrs/readVdrsFromDir');
 
 jest.spyOn(fs, 'existsSync');
@@ -23,8 +23,8 @@ describe('saveBackupToDir', () => {
     }
   });
   const getDataObject = async () => {
-    const elementsData = await buildElementsFromDir(`${resourcesDirectoryPath}/elements`);
-    const formulasData = await buildFormulasFromDir(`${resourcesDirectoryPath}/formulas`);
+    const elementsData = await readElementsFromDir(`${resourcesDirectoryPath}/elements`);
+    const formulasData = await readFormulasFromDir(`${resourcesDirectoryPath}/formulas`);
     const vdrsData = await buildVdrsFromDir(`${resourcesDirectoryPath}/vdrs`);
     return {
       elements: elementsData,

@@ -1,5 +1,3 @@
 const fs = require('fs');
 
-module.exports = async fileName => {
-  return new Promise((resolve, reject) => resolve(JSON.parse(fs.readFileSync(fileName))));
-};
+module.exports = async (fileName) => new Promise((resolve) => resolve(JSON.parse(fs.readFileSync(fileName))));

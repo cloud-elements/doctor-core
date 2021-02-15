@@ -26,7 +26,7 @@ module.exports = curry((params, data) => {
             const transformationObject = params.transformations;
             const transformationKeys = Object.keys(transformationObject);
             const newTransformedObject = {};
-            transformationKeys.forEach(key => {
+            transformationKeys.forEach((key) => {
               const transformationIndividualObject = transformationObject[key];
               const objectName = Object.keys(transformationIndividualObject)[0];
               transformationIndividualObject[objectName].objectName = objectNameNoVersion;
@@ -91,7 +91,7 @@ module.exports = curry((params, data) => {
         const transformationObject = params.transformations;
         const transformationKeys = Object.keys(transformationObject);
         const newTransformedObject = {};
-        transformationKeys.forEach(key => {
+        transformationKeys.forEach((key) => {
           const transformationIndividualObject = transformationObject[key];
           const objectName = Object.keys(transformationIndividualObject)[0];
           transformationIndividualObject[objectName].objectName = versionedObjectName;

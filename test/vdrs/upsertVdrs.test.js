@@ -2,7 +2,7 @@
 const path = require('path');
 const {JobType} = require('../../src/constants/artifact');
 const canceledJob = require('../../src/events/cancelled-job');
-const uploadMultipleVdrs = require('../../src/core/vdrs/uploadMultipleVdrs');
+const importVdrs = require('../../src/core/vdrs/importVdrs');
 const buildVdrsFromDir = require('../../src/core/vdrs/readVdrsFromDir');
 const http = require('../../src/utils/http');
 
@@ -18,7 +18,7 @@ describe('upsertVdrs', () => {
     const originalError = console.error;
     console.error = jest.fn();
     try {
-      await uploadMultipleVdrs(__ACCOUNT__, {
+      await importVdrs(__ACCOUNT__, {
         dir: vdrsDirectoryPath,
         name: Object.keys(vdrsData).map(vdrName => ({name: vdrName})),
         useNew: true,
@@ -37,7 +37,7 @@ describe('upsertVdrs', () => {
     expect(vdrsData).not.toBeNull();
     http.update.mockReturnValue(vdrsData);
     canceledJob.isJobCancelled.mockImplementation(() => true);
-    await uploadMultipleVdrs(__ACCOUNT__, {
+    await importVdrs(__ACCOUNT__, {
       dir: vdrsDirectoryPath,
       name: Object.keys(vdrsData).map(vdrName => ({name: vdrName})),
       jobId: 1,

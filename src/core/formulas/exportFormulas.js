@@ -1,15 +1,12 @@
 const {pipe, prop, isNil, not} = require('ramda');
-const getVdrs = require('./getVdrs');
+const getFormulas = require('./getFormulas');
 const saveToFile = require('../../utils/saveToFile');
-const {saveVdrsToDirNew, saveVdrsToDirOld} = require('./saveVdrsToDir');
-const {logError} = require('../../utils/logger');
+const saveToFolder = require('./saveFormulasToDir');
+const {logDebug} = require('../../utils/logger');
 
 module.exports = async params => {
   try {
-    const saveToFolder = Object.prototype.hasOwnProperty.call(params.options, 'useNew')
-      ? saveVdrsToDirNew
-      : saveVdrsToDirOld;
-    const vdrsDataToExport = await getVdrs(
+    const formulasDataToExport = await getFormulas(
       pipe(prop('account'))(params),
       pipe(prop('options'), prop('name'))(params),
       pipe(prop('options'), prop('jobId'))(params),
@@ -17,12 +14,12 @@ module.exports = async params => {
       pipe(prop('options'), prop('jobType'))(params),
     );
     if (pipe(prop('options'), prop('file'), isNil, not)(params)) {
-      await saveToFile(pipe(prop('options'), prop('file'))(params), vdrsDataToExport);
+      await saveToFile(pipe(prop('options'), prop('file'))(params), formulasDataToExport);
     } else if (pipe(prop('options'), prop('dir'), isNil, not)(params)) {
-      await saveToFolder(pipe(prop('options'), prop('dir'))(params), vdrsDataToExport);
+      await saveToFolder(pipe(prop('options'), prop('dir'))(params), formulasDataToExport);
     }
   } catch (error) {
-    logError(`Failed to complete VDR operation: ${error.message}`);
+    logDebug(`Failed to complete formula operation: ${error.message}`);
     throw error;
   }
 };
