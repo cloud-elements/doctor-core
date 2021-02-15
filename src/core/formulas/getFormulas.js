@@ -17,7 +17,7 @@ module.exports = async (account, formulaKeys, jobId, processId, jobType) => {
     formulaNames = formulaKeys.map(formula => formula.name);
     param = {where: `name in (${applyQuotes(join(',', formulaNames))})`};
   } else {
-    return http.get('formulas', param, account);
+    return await http.get('formulas', param, account);
   }
 
   try {
