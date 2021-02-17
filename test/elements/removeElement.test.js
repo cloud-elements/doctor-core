@@ -24,10 +24,10 @@ describe('removeElement', () => {
       if (
         equals(url, 'elements') &&
         (equals(qs, {
-          where: "private='true'",
+          where: "private='true' AND abridged='true'",
         }) ||
           equals(qs, {
-            where: "private='true' AND key in ('wow')",
+            where: "private='true' AND abridged='true' AND key in ('wow')",
           }))
       ) {
         return Promise.resolve([]);
@@ -35,7 +35,7 @@ describe('removeElement', () => {
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "private='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "private='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
@@ -43,7 +43,7 @@ describe('removeElement', () => {
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "extended='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));
@@ -146,14 +146,15 @@ describe('removeElement', () => {
       if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "private='true' AND key in ('bigcommerce-clone')",
+          where: "private='true' AND abridged='true' AND key in ('bigcommerce-clone')",
         })
       ) {
         return Promise.resolve([]);
       } else if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "extended='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          where:
+            "extended='true' AND abridged='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));
@@ -188,14 +189,15 @@ describe('removeElement', () => {
       if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "private='true' AND key in ('bigcommerce-clone')",
+          where: "private='true' AND abridged='true' AND key in ('bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
       } else if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "extended='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          where:
+            "extended='true' AND abridged='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));
@@ -234,14 +236,15 @@ describe('removeElement', () => {
       if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "private='true' AND key in ('bigcommerce-clone')",
+          where: "private='true' AND abridged='true' AND key in ('bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
       } else if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "extended='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          where:
+            "extended='true' AND abridged='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));

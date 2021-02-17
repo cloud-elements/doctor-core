@@ -24,7 +24,7 @@ describe('importElements', () => {
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "private='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "private='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
@@ -32,7 +32,7 @@ describe('importElements', () => {
         equals(url, 'elements') &&
         equals(qs, {
           where:
-            "extended='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+            "extended='true' AND abridged='true' AND key in ('adpwfnSDF','adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));
@@ -178,14 +178,16 @@ describe('importElements', () => {
       if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "private='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          where:
+            "private='true' AND abridged='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve([]);
       } else if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "extended='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          where:
+            "extended='true' AND abridged='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));
@@ -222,14 +224,16 @@ describe('importElements', () => {
       if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "private='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          where:
+            "private='true' AND abridged='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve([]);
       } else if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "extended='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          where:
+            "extended='true' AND abridged='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve([]);
@@ -287,14 +291,16 @@ describe('importElements', () => {
       if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "private='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          where:
+            "private='true' AND abridged='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => equals(element.key, 'bigcommerce-clone')));
       } else if (
         equals(url, 'elements') &&
         equals(qs, {
-          where: "extended='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
+          where:
+            "extended='true' AND abridged='true' AND key in ('adpworkforcenow','actessentials','bigcommerce','bigcommerce-clone')",
         })
       ) {
         return Promise.resolve(elementsData.filter(element => !equals(element.key, 'bigcommerce-clone')));

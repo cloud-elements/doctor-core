@@ -27,9 +27,9 @@ module.exports = async (keys, jobId, account) => {
   // For Doctor-service, if any private or extended keys are empty then don't make API call
   const privateQuery = isNilOrEmpty(privateElementsKey)
     ? isNilOrEmpty(jobId)
-      ? {where: "private='true'"}
+      ? {where: "private='true' AND abridged='true'"}
       : ''
-    : {where: `private='true' AND key in (${applyQuotes(privateElementsKey)})`};
+    : {where: `private='true' AND abridged='true' AND key in (${applyQuotes(privateElementsKey)})`};
   try {
     return !isNilOrEmpty(privateQuery) ? await http.get(Assets.ELEMENTS, privateQuery, account) : [];
   } catch (error) {

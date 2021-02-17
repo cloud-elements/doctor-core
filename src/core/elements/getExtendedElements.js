@@ -27,9 +27,9 @@ module.exports = async (keys, jobId, account) => {
   // For Doctor-service, if any private or extended keys are empty then don't make API call
   const extendedQuery = isNilOrEmpty(extendedElementsKey)
     ? isNilOrEmpty(jobId)
-      ? {where: "extended='true'"}
+      ? {where: "extended='true' AND abridged='true'"}
       : ''
-    : {where: `extended='true' AND key in (${applyQuotes(extendedElementsKey)})`};
+    : {where: `extended='true' AND abridged='true' AND key in (${applyQuotes(extendedElementsKey)})`};
 
   try {
     const allExtendedElements = !isNilOrEmpty(extendedQuery)

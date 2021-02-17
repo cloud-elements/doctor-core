@@ -17,7 +17,7 @@ describe('getExtendedElements', () => {
     expect(result).toEqual([{name: 'jira', extended: true}]);
     expect(http.get).toHaveBeenCalledWith(
       Assets.ELEMENTS,
-      {where: "extended='true' AND key in (''acton'',' 'jira'')"},
+      {where: "extended='true' AND abridged='true' AND key in (''acton'',' 'jira'')"},
       __ACCOUNT__,
     );
   });
@@ -28,7 +28,7 @@ describe('getExtendedElements', () => {
     expect(http.get).toHaveBeenCalled();
     expect(http.get).toHaveBeenCalledWith(
       Assets.ELEMENTS,
-      {where: "extended='true' AND key in ('acton')"},
+      {where: "extended='true' AND abridged='true' AND key in ('acton')"},
       __ACCOUNT__,
     );
   });
@@ -43,7 +43,7 @@ describe('getExtendedElements', () => {
     const result = await getExtendedElements([], null, __ACCOUNT__);
     expect(result).toHaveLength(0);
     expect(http.get).toHaveBeenCalledTimes(1);
-    expect(http.get).toHaveBeenCalledWith(Assets.ELEMENTS, {where: "extended='true'"}, __ACCOUNT__);
+    expect(http.get).toHaveBeenCalledWith(Assets.ELEMENTS, {where: "extended='true' AND abridged='true'"}, __ACCOUNT__);
   });
   it('should throw exception incase of failure', async () => {
     http.get.mockRejectedValue(() => new Error('Failed'));
@@ -54,7 +54,11 @@ describe('getExtendedElements', () => {
       expect(result).toHaveLength(0);
     } catch (error) {
       expect(http.get).toHaveBeenCalledTimes(1);
-      expect(http.get).toHaveBeenCalledWith(Assets.ELEMENTS, {where: "extended='true'"}, __ACCOUNT__);
+      expect(http.get).toHaveBeenCalledWith(
+        Assets.ELEMENTS,
+        {where: "extended='true' AND abridged='true'"},
+        __ACCOUNT__,
+      );
     }
     console.error = originalError;
   });
