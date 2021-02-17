@@ -2,7 +2,7 @@ const {type} = require('ramda');
 const loadAccount = require('../core/accounts/loadAccount');
 const {startSpinner, stopSpinner} = require('../utils/spinner');
 const {removeCancelledJobId} = require('../events/cancelled-job');
-const {logDebug} = require('../utils/logger');
+const {logDebug, logError} = require('../utils/logger');
 const deleteCommonResources = require('../core/commonResources/removeCommonResources');
 const deleteVdrs = require('../core/commonResources/removeCommonResources');
 const deleteFormulaInstances = require('../core/formulaInstances/removeFormulaInstances');
@@ -41,6 +41,7 @@ const validateObject = (object, deleteOperationsObject) => {
 
 module.exports = async (assetType, account, options) => {
   try {
+    logDebug(`Starting executing specified operation on core for asset type: ${assetType}`);
     await startSpinner();
     account = await loadAccount(account);
     if (options.name !== undefined && type(options.name) !== 'Function') {
@@ -50,11 +51,12 @@ module.exports = async (assetType, account, options) => {
       validateObject(assetType, deleteOperationsObject);
       await deleteOperationsObject[assetType](account, ...options);
     }
+  } catch (error) {
+    logError(`An error occured during export operation for asset type: ${assetType}, error: ${error.message}`);
+    throw error;
+  } finally {
+    logDebug(`Successfully completed specified operation on core for asset type: ${assetType}`);
     clearCancelledJobId(options.jobId);
     await stopSpinner();
-  } catch (err) {
-    clearCancelledJobId(options.jobId);
-    await stopSpinner();
-    throw err;
   }
 };

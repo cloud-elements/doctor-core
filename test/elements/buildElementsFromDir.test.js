@@ -1,14 +1,14 @@
 /* eslint-disable no-undef */
 const path = require('path');
 const {indexBy, prop} = require('ramda');
-const buildElementsFromDir = require('../../src/core/elements/buildElementsFromDir');
+const readElementsFromDir = require('../../src/core/elements/readElementsFromDir');
 
 const elementsDirectoryPath = path.resolve('./test/assets/snapshot_export_103230_2020-11-27T05_53_21/elements');
 
-describe('buildElementsFromDir', () => {
+describe('readElementsFromDir', () => {
   it('should return the elements data from elements directory path', async () => {
     const expectedElementsKey = ['adpwfnSDF', 'adpworkforcenow', 'actessentials', 'bigcommerce', 'bigcommerce'];
-    const elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    const elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     expect(elementsData).toHaveLength(expectedElementsKey.length);
     expectedElementsKey.forEach(elementKey => {

@@ -1,24 +1,8 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-unused-expressions */
-const {
-  pipe,
-  pipeP,
-  cond,
-  prop,
-  isNil,
-  not,
-  useWith,
-  type,
-  equals,
-  isEmpty,
-  find,
-  toLower,
-  __,
-  curry,
-  has,
-} = require('ramda');
+const {pipe, prop, isNil, not, type, equals, isEmpty, find, toLower, curry, has} = require('ramda');
 const readFile = require('../../utils/readFile');
-const buildElementsFromDir = require('./buildElementsFromDir');
+const readElementsFromDir = require('./readElementsFromDir');
 const createElements = require('./createElements');
 const {logDebug, logError} = require('../../utils/logger');
 
@@ -31,34 +15,32 @@ const importElements = curry(async (elements, account, options) => {
     let elementsToImport = [];
     if (!isNilOrEmpty(options.name) && !equals(type(options.name), 'Function')) {
       const elementKeys = Array.isArray(options.name) ? options.name : options.name.split(',');
-      elementKeys &&
-        elementKeys.forEach(elementKey => {
-          if (equals(type(elementKey), 'Object') && !isNilOrEmpty(options.jobId)) {
-            const {key} = elementKey;
-            const elementToImport = find(element =>
-              equals(toLower(element.key), toLower(key))
-                ? elementKey.private
-                  ? has('private', element) && element.private
-                  : has('private', element)
-                  ? !element.private && element.extended
-                  : element.extended
-                : false,
-            )(elements);
-
-            if (isNilOrEmpty(elementToImport)) {
-              logDebug(`The doctor was unable to find the element ${key}.`);
-            } else {
-              elementsToImport.push(elementToImport);
-            }
+      elementKeys.forEach(elementKey => {
+        if (equals(type(elementKey), 'Object') && !isNilOrEmpty(options.jobId)) {
+          const {key} = elementKey;
+          const elementToImport = find(element =>
+            equals(toLower(element.key), toLower(key))
+              ? elementKey.private
+                ? has('private', element) && element.private
+                : has('private', element)
+                ? !element.private && element.extended
+                : element.extended
+              : false,
+          )(elements);
+          if (isNilOrEmpty(elementToImport)) {
+            logDebug(`The doctor was unable to find the element ${key}.`);
           } else {
-            const elementToImport = find(element => equals(toLower(element.key), toLower(elementKey)))(elements);
-            if (isNilOrEmpty(elementToImport)) {
-              logDebug(`The doctor was unable to find the element ${elementKey}.`);
-            } else {
-              elementsToImport.push(elementToImport);
-            }
+            elementsToImport.push(elementToImport);
           }
-        });
+        } else {
+          const elementToImport = find(element => equals(toLower(element.key), toLower(elementKey)))(elements);
+          if (isNilOrEmpty(elementToImport)) {
+            logDebug(`The doctor was unable to find the element ${elementKey}.`);
+          } else {
+            elementsToImport.push(elementToImport);
+          }
+        }
+      });
     }
     elementsToImport = isNilOrEmpty(elementsToImport) ? elements : elementsToImport;
     await createElements(account, elementsToImport, options.jobId, options.processId);
@@ -68,31 +50,26 @@ const importElements = curry(async (elements, account, options) => {
   }
 });
 
-module.exports = (account, options) => {
+module.exports = async (account, options) => {
   try {
-    return cond([
-      [
-        pipe(prop('file'), isNil, not),
-        pipeP(
-          useWith(readFile, [prop('file')]),
-          cond([
-            [
-              pipe(type, equals('Object')) && pipe(prop('elements'), isNil, not),
-              pipe(prop('elements'), importElements(__, account, options)),
-            ],
-            [pipe(type, equals('Array')), importElements(__, account, options)],
-          ]),
-        ),
-      ],
-      [
-        pipe(prop('dir'), isNil, not),
-        pipeP(useWith(buildElementsFromDir, [prop('dir')]), importElements(__, account, options)),
-      ],
-    ])(options);
+    let elementsDataToImport;
+    if (pipe(prop('file'), isNil, not)(options)) {
+      elementsDataToImport = await readFile(options.file);
+    } else if (pipe(prop('dir'), isNil, not)(options)) {
+      elementsDataToImport = await readElementsFromDir(options.dir);
+    }
+    if (isNilOrEmpty(elementsDataToImport)) {
+      logError(`No elements found for import operation`);
+      return;
+    }
+    if (pipe(type, equals('Object')) && pipe(prop('elements'), isNil, not)(elementsDataToImport)) {
+      /* istanbul ignore next */
+      await importElements(pipe(prop('elements'))(elementsDataToImport), account, options);
+    } else if (pipe(type, equals('Array'))(elementsDataToImport)) {
+      await importElements(elementsDataToImport, account, options);
+    }
   } catch (error) {
-    /* istanbul ignore next */
-    logDebug(`Failed to import elements: ${error.message}`);
-    /* istanbul ignore next */
+    logDebug(`Failed to complete element import operation: ${error.message}`);
     throw error;
   }
 };

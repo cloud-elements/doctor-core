@@ -4,7 +4,7 @@ const fsExtra = require('fs-extra');
 const path = require('path');
 const {equals} = require('ramda');
 const saveElementsToDir = require('../../src/core/elements/saveElementsToDir');
-const buildElementsFromDir = require('../../src/core/elements/buildElementsFromDir');
+const readElementsFromDir = require('../../src/core/elements/readElementsFromDir');
 
 jest.spyOn(fs, 'existsSync');
 jest.spyOn(fs, 'writeFileSync');
@@ -21,7 +21,7 @@ describe('saveElementsToDir', () => {
     }
   });
   it('should save the elements data to elements new directory path', async () => {
-    const elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    const elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     fs.writeFileSync.mockReturnValue(true);
     const originalError = console.error;

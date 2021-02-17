@@ -3,7 +3,7 @@ const path = require('path');
 const {equals, join} = require('ramda');
 const {JobType} = require('../../src/constants/artifact');
 const canceledJob = require('../../src/events/cancelled-job');
-const uploadMultipleVdrs = require('../../src/core/vdrs/uploadMultipleVdrs');
+const importVdrs = require('../../src/core/vdrs/importVdrs');
 const buildVdrsFromDir = require('../../src/core/vdrs/readVdrsFromDir');
 const http = require('../../src/utils/http');
 
@@ -14,7 +14,7 @@ const commonResourcesDirectoryPath = path.resolve(
 jest.mock('../../src/utils/http');
 jest.mock('../../src/events/cancelled-job');
 
-describe('uploadMultipleVdrs', () => {
+describe('importVdrs', () => {
   it('should be able to import vdrs for empty vdr names', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
@@ -39,7 +39,7 @@ describe('uploadMultipleVdrs', () => {
       }
     });
     http.update.mockReturnValue(vdrsData);
-    await uploadMultipleVdrs(__ACCOUNT__, {
+    await importVdrs(__ACCOUNT__, {
       dir: vdrsDirectoryPath,
       name: null,
       jobId: 1,
@@ -71,7 +71,7 @@ describe('uploadMultipleVdrs', () => {
       }
     });
     http.update.mockReturnValue(vdrsData);
-    await uploadMultipleVdrs(__ACCOUNT__, {
+    await importVdrs(__ACCOUNT__, {
       dir: vdrsDirectoryPath,
       name: 'wow',
       jobId: 1,
@@ -79,7 +79,7 @@ describe('uploadMultipleVdrs', () => {
       processId: 2,
     });
   });
-  it('should be able to import vdrs for string vdr names', async () => {
+  it('should be able to handle empty file or directory', async () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
     http.get.mockImplementation((url, qs, account) => {
@@ -103,7 +103,70 @@ describe('uploadMultipleVdrs', () => {
       }
     });
     http.update.mockReturnValue(vdrsData);
-    await uploadMultipleVdrs(__ACCOUNT__, {
+    await importVdrs(__ACCOUNT__, {
+      name: join(',', Object.keys(vdrsData)),
+      jobId: 1,
+      jobType: JobType.EXPORT,
+      processId: 2,
+    });
+  });
+  it('should be able to import vdrs for string vdr names for file', async () => {
+    const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
+    expect(vdrsData).not.toBeNull();
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
+      if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
+        return Promise.resolve(vdrsData['ErpCatalogCategory']);
+      } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
+        return Promise.resolve(vdrsData['autotaskVDR']);
+      } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory','autotaskVDR')"})) {
+        return Promise.resolve(vdrsData);
+      } else if (equals(url, 'vdrs') && (equals(qs, {where: "objectName in ('')"}) || equals(qs, ''))) {
+        return Promise.resolve(vdrsData);
+      } else if (equals(url, '/vdrs/ErpCatalogCategory/export')) {
+        return Promise.resolve(vdrsData['ErpCatalogCategory']);
+      } else if (equals(url, '/vdrs/autotaskVDR/export')) {
+        return Promise.resolve(vdrsData['autotaskVDR']);
+      } else {
+        return Promise.reject(new Error('not found'));
+      }
+    });
+    http.update.mockReturnValue(vdrsData);
+    await importVdrs(__ACCOUNT__, {
+      file: `${vdrsDirectoryPath}/autotaskVDR/autotaskVDR.json`,
+      name: join(',', Object.keys(vdrsData)),
+      jobId: 1,
+      jobType: JobType.EXPORT,
+      processId: 2,
+    });
+  });
+  it('should be able to import vdrs for string vdr names for directory', async () => {
+    const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
+    expect(vdrsData).not.toBeNull();
+    http.get.mockImplementation((url, qs, account) => {
+      if (!equals(account, __ACCOUNT__)) {
+        throw new Error('This should never happen');
+      }
+      if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory')"})) {
+        return Promise.resolve(vdrsData['ErpCatalogCategory']);
+      } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('autotaskVDR')"})) {
+        return Promise.resolve(vdrsData['autotaskVDR']);
+      } else if (equals(url, 'vdrs') && equals(qs, {where: "objectName in ('ErpCatalogCategory','autotaskVDR')"})) {
+        return Promise.resolve(vdrsData);
+      } else if (equals(url, 'vdrs') && (equals(qs, {where: "objectName in ('')"}) || equals(qs, ''))) {
+        return Promise.resolve(vdrsData);
+      } else if (equals(url, '/vdrs/ErpCatalogCategory/export')) {
+        return Promise.resolve(vdrsData['ErpCatalogCategory']);
+      } else if (equals(url, '/vdrs/autotaskVDR/export')) {
+        return Promise.resolve(vdrsData['autotaskVDR']);
+      } else {
+        return Promise.reject(new Error('not found'));
+      }
+    });
+    http.update.mockReturnValue(vdrsData);
+    await importVdrs(__ACCOUNT__, {
       dir: vdrsDirectoryPath,
       name: join(',', Object.keys(vdrsData)),
       jobId: 1,
@@ -135,7 +198,7 @@ describe('uploadMultipleVdrs', () => {
       }
     });
     http.update.mockReturnValue(vdrsData);
-    await uploadMultipleVdrs(__ACCOUNT__, {
+    await importVdrs(__ACCOUNT__, {
       dir: vdrsDirectoryPath,
       name: Object.keys(vdrsData).map(vdrName => ({name: vdrName})),
       jobId: 1,
@@ -170,7 +233,7 @@ describe('uploadMultipleVdrs', () => {
     });
     http.update.mockReturnValue(vdrsData);
     http.post.mockReturnValue(vdrsData);
-    await uploadMultipleVdrs(__ACCOUNT__, {
+    await importVdrs(__ACCOUNT__, {
       dir: commonResourcesDirectoryPath,
       name: null,
       version: 'v1',
@@ -206,7 +269,7 @@ describe('uploadMultipleVdrs', () => {
     });
     http.update.mockReturnValue(vdrsData);
     http.post.mockReturnValue(vdrsData);
-    await uploadMultipleVdrs(__ACCOUNT__, {
+    await importVdrs(__ACCOUNT__, {
       dir: commonResourcesDirectoryPath,
       name: null,
       version: 'v1',
@@ -242,7 +305,7 @@ describe('uploadMultipleVdrs', () => {
     });
     http.update.mockReturnValue(vdrsData);
     http.post.mockReturnValue(vdrsData);
-    await uploadMultipleVdrs(__ACCOUNT__, {
+    await importVdrs(__ACCOUNT__, {
       dir: commonResourcesDirectoryPath,
       name: join(',', Object.keys(vdrsData)),
       version: 'v1',
@@ -278,7 +341,7 @@ describe('uploadMultipleVdrs', () => {
     });
     http.update.mockReturnValue(vdrsData);
     http.post.mockReturnValue(vdrsData);
-    await uploadMultipleVdrs(__ACCOUNT__, {
+    await importVdrs(__ACCOUNT__, {
       dir: commonResourcesDirectoryPath,
       name: Object.keys(vdrsData).map(vdrName => ({name: vdrName})),
       version: 'v1',
@@ -320,7 +383,7 @@ describe('uploadMultipleVdrs', () => {
     const originalError = console.error;
     console.error = jest.fn();
     try {
-      await uploadMultipleVdrs(__ACCOUNT__, {
+      await importVdrs(__ACCOUNT__, {
         dir: vdrsDirectoryPath,
         name: Object.keys(vdrsData).map(vdrName => ({name: vdrName})),
         useNew: true,
@@ -369,7 +432,7 @@ describe('uploadMultipleVdrs', () => {
     const originalError = console.error;
     console.error = jest.fn();
     try {
-      await uploadMultipleVdrs(__ACCOUNT__, {
+      await importVdrs(__ACCOUNT__, {
         dir: commonResourcesDirectoryPath,
         name: null,
         version: 'v1',
@@ -391,7 +454,7 @@ describe('uploadMultipleVdrs', () => {
     const vdrsData = await buildVdrsFromDir(vdrsDirectoryPath);
     expect(vdrsData).not.toBeNull();
     canceledJob.isJobCancelled.mockImplementation(() => true);
-    await uploadMultipleVdrs(__ACCOUNT__, {
+    await importVdrs(__ACCOUNT__, {
       dir: vdrsDirectoryPath,
       name: Object.keys(vdrsData).map(vdrName => ({name: vdrName})),
       jobId: 1,

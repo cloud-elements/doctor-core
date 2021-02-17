@@ -3,7 +3,7 @@ const path = require('path');
 const {equals, pluck, addIndex, map, join} = require('ramda');
 const canceledJob = require('../../src/events/cancelled-job');
 const removeElement = require('../../src/core/elements/removeElement');
-const buildElementsFromDir = require('../../src/core/elements/buildElementsFromDir');
+const readElementsFromDir = require('../../src/core/elements/readElementsFromDir');
 const http = require('../../src/utils/http');
 
 const mapIndex = addIndex(map);
@@ -14,7 +14,7 @@ jest.mock('../../src/events/cancelled-job');
 
 describe('removeElement', () => {
   it('should be able to handle empty element keys', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     http.get.mockImplementation((url, qs, account) => {
@@ -116,7 +116,7 @@ describe('removeElement', () => {
     });
   });
   it('should be able to handle invalid element keys', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     await removeElement(__ACCOUNT__, {
@@ -126,7 +126,7 @@ describe('removeElement', () => {
     });
   });
   it('should be able to handle string element keys', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     await removeElement(__ACCOUNT__, {
@@ -136,7 +136,7 @@ describe('removeElement', () => {
     });
   });
   it('should be able to handle array element keys ', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     http.get.mockImplementation((url, qs, account) => {
@@ -179,7 +179,7 @@ describe('removeElement', () => {
     });
   });
   it('should stop execution if job gets canceled', async () => {
-    const elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    const elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     http.get.mockImplementation((url, qs, account) => {
       if (!equals(account, __ACCOUNT__)) {
@@ -222,7 +222,7 @@ describe('removeElement', () => {
     });
   });
   it('should be to handle and throw exception incase of failure', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     const originalError = console.error;

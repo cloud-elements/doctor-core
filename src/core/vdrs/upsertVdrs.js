@@ -20,11 +20,9 @@ module.exports = async (vdrs, jobId, processId, account) => {
         });
         return null;
       }
-
       logDebug(`Uploading VDR for VDR name - ${vdrName}`, jobId);
       await http.update('vdrs/import', vdr, account);
       logDebug(`Uploaded VDR for VDR name - ${vdrName}`, jobId);
-
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
         assetType: Assets.VDRS,

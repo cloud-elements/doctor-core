@@ -2,10 +2,10 @@ const loadAccount = require('../core/accounts/loadAccount');
 const {startSpinner, stopSpinner} = require('../utils/spinner');
 const eventListener = require('../events/event-listener');
 const {removeCancelledJobId} = require('../events/cancelled-job');
-const {logDebug} = require('../utils/logger');
-const exportVdrs = require('../core/vdrs/downloadVdrs');
-const exportFormulas = require('../core/formulas/saveFormulas');
-const exportElements = require('../core/elements/saveElements');
+const {logDebug, logError} = require('../utils/logger');
+const exportVdrs = require('../core/vdrs/exportVdrs');
+const exportFormulas = require('../core/formulas/exportFormulas');
+const exportElements = require('../core/elements/exportElements');
 const exportAll = require('../utils/saveAll');
 
 const clearCancelledJobId = jobId => jobId && removeCancelledJobId(jobId);
@@ -19,6 +19,7 @@ const exportByAssetType = {
 
 module.exports = async (assetType, account, options) => {
   try {
+    logDebug(`Starting executing specified operation on core for asset type: ${assetType}`);
     await startSpinner();
     account = await loadAccount(account);
     if (!options.file && !options.dir) {
@@ -30,11 +31,12 @@ module.exports = async (assetType, account, options) => {
     }
     eventListener.addListener();
     await exportByAssetType[assetType]({account, assetType, options});
+  } catch (error) {
+    logError(`An error occured during export operation for asset type: ${assetType}, error: ${error.message}`);
+    throw error;
+  } finally {
+    logDebug(`Successfully completed specified operation on core for asset type: ${assetType}`);
     clearCancelledJobId(options.jobId);
     await stopSpinner();
-  } catch (err) {
-    clearCancelledJobId(options.jobId);
-    await stopSpinner();
-    throw err;
   }
 };

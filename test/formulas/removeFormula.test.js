@@ -3,7 +3,7 @@ const path = require('path');
 const {pluck, addIndex, map, join} = require('ramda');
 const canceledJob = require('../../src/events/cancelled-job');
 const removeFormula = require('../../src/core/formulas/removeFormula');
-const buildFormulasFromDir = require('../../src/core/formulas/buildFormulasFromDir');
+const readFormulasFromDir = require('../../src/core/formulas/readFormulasFromDir');
 const http = require('../../src/utils/http');
 
 const mapIndex = addIndex(map);
@@ -14,7 +14,7 @@ jest.mock('../../src/events/cancelled-job');
 
 describe('removeFormula', () => {
   it('should be able to handle empty formula name', async () => {
-    let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
     expect(formulasData).not.toBeNull();
     formulasData = mapIndex((formula, index) => ({...formula, id: index}), formulasData);
     http.get.mockResolvedValue(formulasData);
@@ -26,7 +26,7 @@ describe('removeFormula', () => {
     });
   });
   it('should be able to handle invalid formula name', async () => {
-    let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
     expect(formulasData).not.toBeNull();
     formulasData = mapIndex((formula, index) => ({...formula, id: index}), formulasData);
     http.get.mockResolvedValue(formulasData);
@@ -38,7 +38,7 @@ describe('removeFormula', () => {
     });
   });
   it('should be able to handle string formula name', async () => {
-    let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
     expect(formulasData).not.toBeNull();
     formulasData = mapIndex((formula, index) => ({...formula, id: index}), formulasData);
     http.get.mockResolvedValue(formulasData);
@@ -50,7 +50,7 @@ describe('removeFormula', () => {
     });
   });
   it('should be able to handle array formula name ', async () => {
-    let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
     expect(formulasData).not.toBeNull();
     formulasData = mapIndex((formula, index) => ({...formula, id: index}), formulasData);
     http.get.mockResolvedValue(formulasData);
@@ -64,7 +64,7 @@ describe('removeFormula', () => {
     });
   });
   it('should stop execution if job gets canceled at GET operation', async () => {
-    let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
     expect(formulasData).not.toBeNull();
     formulasData = mapIndex((formula, index) => ({...formula, id: index}), formulasData);
     const originalError = console.error;
@@ -84,7 +84,7 @@ describe('removeFormula', () => {
     console.error = originalError;
   });
   it('should stop execution if job gets canceled at DELETE operation', async () => {
-    let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
     expect(formulasData).not.toBeNull();
     formulasData = mapIndex((formula, index) => ({...formula, id: index}), formulasData);
     const originalError = console.error;
@@ -102,7 +102,7 @@ describe('removeFormula', () => {
     console.error = originalError;
   });
   it('should be to handle and throw exception incase of failure', async () => {
-    let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
     expect(formulasData).not.toBeNull();
     formulasData = mapIndex((formula, index) => ({...formula, id: index}), formulasData);
     const originalError = console.error;
