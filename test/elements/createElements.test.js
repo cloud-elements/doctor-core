@@ -4,7 +4,7 @@ const {equals, pluck, addIndex, map, head} = require('ramda');
 const {Assets} = require('../../src/constants/artifact');
 const canceledJob = require('../../src/events/cancelled-job');
 const createElements = require('../../src/core/elements/createElements');
-const buildElementsFromDir = require('../../src/core/elements/buildElementsFromDir');
+const readElementsFromDir = require('../../src/core/elements/readElementsFromDir');
 const http = require('../../src/utils/http');
 
 const mapIndex = addIndex(map);
@@ -14,7 +14,7 @@ jest.mock('../../src/events/cancelled-job');
 
 describe('createElements', () => {
   it('should be able to handle empty elements', async () => {
-    const elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    const elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     http.get.mockImplementation((url, qs, account) => {
       if (!equals(account, __ACCOUNT__)) {
@@ -77,7 +77,7 @@ describe('createElements', () => {
     await createElements(__ACCOUNT__, []);
   });
   it('should be able to update existing elements or resources if already exists', async () => {
-    const elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    const elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     http.get.mockImplementation((url, qs, account) => {
       if (!equals(account, __ACCOUNT__)) {
@@ -188,7 +188,7 @@ describe('createElements', () => {
     );
   });
   it("should be able to extende system element if elements doesn't exists", async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     expect(elementsData).not.toBeNull();
     http.get.mockImplementation((url, qs, account) => {
@@ -280,7 +280,7 @@ describe('createElements', () => {
     );
   });
   it("should be able to create new elements if doesn't exists", async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     expect(elementsData).not.toBeNull();
     http.get.mockImplementation((url, qs, account) => {
@@ -369,7 +369,7 @@ describe('createElements', () => {
     );
   });
   it('should be able to update existing resources if already exists', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     expect(elementsData).not.toBeNull();
     http.get.mockImplementation((url, qs, account) => {
@@ -459,7 +459,7 @@ describe('createElements', () => {
     );
   });
   it('should stop execution if job gets canceled', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     expect(elementsData).not.toBeNull();
     http.get.mockImplementation((url, qs, account) => {
@@ -506,7 +506,7 @@ describe('createElements', () => {
     );
   });
   it('should be to handle and throw exception incase of failure', async () => {
-    const elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    const elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     http.get.mockImplementation((url, qs, account) => {
       if (!equals(account, __ACCOUNT__)) {

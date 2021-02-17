@@ -7,9 +7,10 @@ const applyQuotes = require('../../utils/quoteString');
 const {logDebug, logError} = require('../../utils/logger');
 
 module.exports = async (account, formulaKeys, jobId, processId, jobType) => {
+  // From CLI - User can pass comma seperated string of vdrs name
+  // From Service - It will be in Array of objects containing vdr name
   let param = '';
   let formulaNames = [];
-
   if (type(formulaKeys) === 'String') {
     formulaNames = formulaKeys.split(',');
     param = {where: `name in (${applyQuotes(join(',', formulaNames))})`};
@@ -19,7 +20,6 @@ module.exports = async (account, formulaKeys, jobId, processId, jobType) => {
   } else {
     return await http.get('formulas', param, account);
   }
-
   try {
     logDebug('Initiating the download process for formulas', jobId);
     if (isJobCancelled(jobId)) {
@@ -35,11 +35,9 @@ module.exports = async (account, formulaKeys, jobId, processId, jobType) => {
       );
       return [];
     }
-
     logDebug('Downloading formulas', jobId);
     const exportedFormulas = await http.get('formulas', param, account);
     logDebug('Downloaded formulas', jobId);
-
     formulaNames.forEach(formulaName =>
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
@@ -49,12 +47,10 @@ module.exports = async (account, formulaKeys, jobId, processId, jobType) => {
         metadata: '',
       }),
     );
-
     const newlyCreatedFormulas =
       formulaKeys && Array.isArray(formulaKeys)
         ? formulaKeys.filter(key => !exportedFormulas.some(formula => formula.name === key.name))
         : [];
-
     newlyCreatedFormulas.forEach(formula =>
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,
@@ -66,6 +62,7 @@ module.exports = async (account, formulaKeys, jobId, processId, jobType) => {
     );
     return exportedFormulas;
   } catch (error) {
+    logError('Failed to retrieve formulas', jobId);
     formulaNames.forEach(formulaName =>
       emitter.emit(EventTopic.ASSET_STATUS, {
         processId,

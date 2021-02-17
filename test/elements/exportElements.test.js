@@ -4,8 +4,8 @@ const fsExtra = require('fs-extra');
 const path = require('path');
 const {addIndex, equals, find, join, map, pluck} = require('ramda');
 const canceledJob = require('../../src/events/cancelled-job');
-const saveElements = require('../../src/core/elements/saveElements');
-const buildElementsFromDir = require('../../src/core/elements/buildElementsFromDir');
+const exportElements = require('../../src/core/elements/exportElements');
+const readElementsFromDir = require('../../src/core/elements/readElementsFromDir');
 const http = require('../../src/utils/http');
 
 const mapIndex = addIndex(map);
@@ -14,14 +14,14 @@ const elementsDirectoryPath = path.resolve('./test/assets/snapshot_export_103230
 jest.mock('../../src/utils/http');
 jest.mock('../../src/events/cancelled-job');
 
-describe('saveElements', () => {
+describe('exportElements', () => {
   beforeEach(() => {
     if (!fs.existsSync(mockPath)) {
       fsExtra.ensureDirSync(mockPath);
     }
   });
   it('should be able to handle empty element keys', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     http.get.mockImplementation((url, qs, account) => {
@@ -137,7 +137,7 @@ describe('saveElements', () => {
         );
       }
     });
-    await saveElements({
+    await exportElements({
       account: __ACCOUNT__,
       options: {
         dir: mockPath,
@@ -148,10 +148,10 @@ describe('saveElements', () => {
     });
   });
   it('should be able to handle invalid element keys', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
-    await saveElements({
+    await exportElements({
       account: __ACCOUNT__,
       options: {
         dir: mockPath,
@@ -161,11 +161,38 @@ describe('saveElements', () => {
       },
     });
   });
-  it('should be able to handle string element keys', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+  it('should be able to handle invalid/empty file or directory', async () => {
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
-    await saveElements({
+    await exportElements({
+      account: __ACCOUNT__,
+      options: {
+        name: 'wow',
+        jobId: 1,
+        processId: 2,
+      },
+    });
+  });
+  it('should be able to handle string element keys for file', async () => {
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
+    expect(elementsData).not.toBeNull();
+    elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
+    await exportElements({
+      account: __ACCOUNT__,
+      options: {
+        file: `${mockPath}/element.json`,
+        name: join(',', pluck('key', elementsData)),
+        jobId: 1,
+        processId: 2,
+      },
+    });
+  });
+  it('should be able to handle string element keys for directory', async () => {
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
+    expect(elementsData).not.toBeNull();
+    elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
+    await exportElements({
       account: __ACCOUNT__,
       options: {
         dir: mockPath,
@@ -176,7 +203,7 @@ describe('saveElements', () => {
     });
   });
   it('should be able to handle array element keys where no private elements present ', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     http.get.mockImplementation((url, qs, account) => {
@@ -218,7 +245,7 @@ describe('saveElements', () => {
         return Promise.reject(new Error('Not found'));
       }
     });
-    await saveElements({
+    await exportElements({
       account: __ACCOUNT__,
       options: {
         dir: mockPath,
@@ -232,7 +259,7 @@ describe('saveElements', () => {
     });
   });
   it('should be able to handle array element keys where no extended elements present ', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     http.get.mockImplementation((url, qs) => {
@@ -267,7 +294,7 @@ describe('saveElements', () => {
         return Promise.reject(new Error('not found'));
       }
     });
-    await saveElements({
+    await exportElements({
       account: __ACCOUNT__,
       options: {
         dir: mockPath,
@@ -281,11 +308,11 @@ describe('saveElements', () => {
     });
   });
   it('should stop execution if job gets canceled', async () => {
-    let elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    let elementsData = await readElementsFromDir(elementsDirectoryPath);
     elementsData = mapIndex((element, index) => ({...element, id: index}), elementsData);
     expect(elementsData).not.toBeNull();
     canceledJob.isJobCancelled.mockResolvedValue(true);
-    await saveElements({
+    await exportElements({
       account: __ACCOUNT__,
       options: {
         dir: mockPath,
@@ -302,7 +329,7 @@ describe('saveElements', () => {
     expect(http.update).toHaveBeenCalledTimes(0);
   });
   it('should be to handle and throw exception incase of failure', async () => {
-    const elementsData = await buildElementsFromDir(elementsDirectoryPath);
+    const elementsData = await readElementsFromDir(elementsDirectoryPath);
     expect(elementsData).not.toBeNull();
     http.get.mockImplementation((url, qs, account) => {
       if (!equals(account, __ACCOUNT__)) {
@@ -326,7 +353,7 @@ describe('saveElements', () => {
     console.error = jest.fn();
     canceledJob.isJobCancelled.mockImplementation(() => false);
     try {
-      await saveElements({
+      await exportElements({
         account: __ACCOUNT__,
         options: {
           dir: mockPath,

@@ -3,7 +3,7 @@ const path = require('path');
 const {pluck, addIndex, map, join} = require('ramda');
 const canceledJob = require('../../src/events/cancelled-job');
 const importFormulas = require('../../src/core/formulas/importFormulas');
-const buildFormulasFromDir = require('../../src/core/formulas/buildFormulasFromDir');
+const readFormulasFromDir = require('../../src/core/formulas/readFormulasFromDir');
 const http = require('../../src/utils/http');
 
 const mapIndex = addIndex(map);
@@ -13,7 +13,7 @@ jest.mock('../../src/events/cancelled-job');
 
 describe('importFormulas', () => {
   it('should be able to handle empty formula names', async () => {
-    let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
     expect(formulasData).not.toBeNull();
     formulasData = mapIndex((formula, index) => ({...formula, id: index}), formulasData);
     http.post.mockResolvedValue({id: 1});
@@ -24,8 +24,35 @@ describe('importFormulas', () => {
       processId: 2,
     });
   });
+  it('should be able to handle for empty file or directory', async () => {
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
+    expect(formulasData).not.toBeNull();
+    formulasData = mapIndex(
+      (formula, index) => ({
+        ...formula,
+        steps: [
+          ...formula.steps,
+          {
+            name: 'sub-formula',
+            onFailure: [],
+            onSuccess: [],
+            properties: {},
+            type: 'formula',
+          },
+        ],
+        id: index,
+      }),
+      formulasData,
+    );
+    http.post.mockResolvedValue({id: 1});
+    await importFormulas(__ACCOUNT__, {
+      name: 'wow',
+      jobId: 1,
+      processId: 2,
+    });
+  });
   it('should be able to handle invalid formula names', async () => {
-    let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
     expect(formulasData).not.toBeNull();
     formulasData = mapIndex(
       (formula, index) => ({
@@ -52,8 +79,20 @@ describe('importFormulas', () => {
       processId: 2,
     });
   });
-  it('should be able to handle string formula names', async () => {
-    let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+  it('should be able to handle string formula names for file', async () => {
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
+    expect(formulasData).not.toBeNull();
+    formulasData = mapIndex((formula, index) => ({...formula, id: index}), formulasData);
+    http.post.mockResolvedValue({id: 1});
+    await importFormulas(__ACCOUNT__, {
+      file: `${formulasDirectoryPath}/DHI/formula.json`,
+      name: join(',', pluck('name', formulasData)),
+      jobId: 1,
+      processId: 2,
+    });
+  });
+  it('should be able to handle string formula names for directory', async () => {
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
     expect(formulasData).not.toBeNull();
     formulasData = mapIndex((formula, index) => ({...formula, id: index}), formulasData);
     http.post.mockResolvedValue({id: 1});
@@ -65,7 +104,7 @@ describe('importFormulas', () => {
     });
   });
   it('should be able to handle array formula names', async () => {
-    let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
     expect(formulasData).not.toBeNull();
     formulasData = mapIndex((formula, index) => ({...formula, id: index}), formulasData);
     http.post.mockResolvedValue({id: 1});
@@ -79,7 +118,7 @@ describe('importFormulas', () => {
     });
   });
   it('should be to handle and throw exception incase of failure', async () => {
-    const formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    const formulasData = await readFormulasFromDir(formulasDirectoryPath);
     expect(formulasData).not.toBeNull();
     http.post.mockRejectedValue(new Error('Failed to create formula'));
     http.update.mockRejectedValue(new Error('Failed to update formula'));
@@ -101,7 +140,7 @@ describe('importFormulas', () => {
     console.error = originalError;
   });
   it('should stop execution if job gets canceled', async () => {
-    let formulasData = await buildFormulasFromDir(formulasDirectoryPath);
+    let formulasData = await readFormulasFromDir(formulasDirectoryPath);
     formulasData = mapIndex((formula, index) => ({...formula, id: index}), formulasData);
     expect(formulasData).not.toBeNull();
     canceledJob.isJobCancelled.mockResolvedValue(true);

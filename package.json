@@ -1,13 +1,13 @@
 {
   "name": "@cloudelements/doctor-core",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "The Core functionality of Doctor - The Cloud Elements Asset Management Tool",
   "main": "index.js",
   "scripts": {
     "test:unit": "npm run prettify && npx eslint src --fix && jest --silent",
     "test:unit:coverage": "npm run prettify && npx eslint src --fix && jest --coverage --silent && npm run jest:threshold:bumper",
     "jest:threshold:bumper": "jest-coverage-thresholds-bumper --coverage-summary-path=\"./coverage/coverage-summary.json\"",
-    "prettify": "./node_modules/.bin/prettier --write --print-width=120 --tab-width=2 --single-quote=true --trailing-comma=all --bracket-spacing=false src/**/**/* test/**/*"
+    "prettify": "./node_modules/.bin/prettier --write --print-width=120 --tab-width=2 --single-quote=true --trailing-comma=all --bracket-spacing=false src/**/**/* src/**/* test/**/*"
   },
   "repository": {
     "type": "git",

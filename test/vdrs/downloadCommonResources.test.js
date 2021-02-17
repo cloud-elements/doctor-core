@@ -2,7 +2,7 @@
 const path = require('path');
 const {equals, join} = require('ramda');
 const {JobType, Assets} = require('../../src/constants/artifact');
-const downloadVdrs = require('../../src/core/vdrs/downloadVdrs');
+const exportVdrs = require('../../src/core/vdrs/exportVdrs');
 const buildVdrsFromDir = require('../../src/core/vdrs/readVdrsFromDir');
 const http = require('../../src/utils/http');
 
@@ -34,7 +34,7 @@ describe('downloadCommonResources', () => {
         return Promise.reject(new Error('not found'));
       }
     });
-    await downloadVdrs({
+    await exportVdrs({
       account: __ACCOUNT__,
       object: Assets.VDRS,
       options: {
@@ -70,7 +70,7 @@ describe('downloadCommonResources', () => {
         return Promise.resolve([]);
       }
     });
-    await downloadVdrs({
+    await exportVdrs({
       account: __ACCOUNT__,
       object: Assets.VDRS,
       options: {
@@ -107,7 +107,7 @@ describe('downloadCommonResources', () => {
         return Promise.reject(new Error('not found'));
       }
     });
-    await downloadVdrs({
+    await exportVdrs({
       account: __ACCOUNT__,
       object: Assets.VDRS,
       options: {
@@ -143,7 +143,7 @@ describe('downloadCommonResources', () => {
         return Promise.reject(new Error('not found'));
       }
     });
-    await downloadVdrs({
+    await exportVdrs({
       account: __ACCOUNT__,
       object: Assets.VDRS,
       options: {
@@ -162,7 +162,7 @@ describe('downloadCommonResources', () => {
     const originalError = console.error;
     console.error = jest.fn();
     try {
-      await downloadVdrs({
+      await exportVdrs({
         account: __ACCOUNT__,
         object: Assets.VDRS,
         options: {
