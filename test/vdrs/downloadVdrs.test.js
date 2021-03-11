@@ -20,9 +20,9 @@ describe('downloadVdrs', () => {
       if (!equals(account, __ACCOUNT__)) {
         throw new Error('This should never happen');
       }
-      if (equals(url, '/vdrs/ErpCatalogCategory/export')) {
+      if (equals(url, 'vdrs/ErpCatalogCategory/export')) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
-      } else if (equals(url, '/vdrs/autotaskVDR/export')) {
+      } else if (equals(url, 'vdrs/autotaskVDR/export')) {
         return Promise.resolve(vdrsData['autotaskVDR']);
       } else {
         return Promise.reject(new Error('not found'));
@@ -38,9 +38,9 @@ describe('downloadVdrs', () => {
       if (!equals(account, __ACCOUNT__)) {
         throw new Error('This should never happen');
       }
-      if (equals(url, '/vdrs/ErpCatalogCategory/export')) {
+      if (equals(url, 'vdrs/ErpCatalogCategory/export')) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
-      } else if (equals(url, '/vdrs/autotaskVDR/export')) {
+      } else if (equals(url, 'vdrs/autotaskVDR/export')) {
         return Promise.resolve(vdrsData['autotaskVDR']);
       } else {
         return Promise.reject(new Error('not found'));
@@ -56,9 +56,9 @@ describe('downloadVdrs', () => {
       if (!equals(account, __ACCOUNT__)) {
         throw new Error('This should never happen');
       }
-      if (equals(url, '/vdrs/ErpCatalogCategory/export')) {
+      if (equals(url, 'vdrs/ErpCatalogCategory/export')) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
-      } else if (equals(url, '/vdrs/autotaskVDR/export')) {
+      } else if (equals(url, 'vdrs/autotaskVDR/export')) {
         return Promise.resolve(vdrsData['autotaskVDR']);
       } else {
         return Promise.reject(new Error('not found'));
@@ -74,9 +74,9 @@ describe('downloadVdrs', () => {
       if (!equals(account, __ACCOUNT__)) {
         throw new Error('This should never happen');
       }
-      if (equals(url, '/vdrs/ErpCatalogCategory/export')) {
+      if (equals(url, 'vdrs/ErpCatalogCategory/export')) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
-      } else if (equals(url, '/vdrs/autotaskVDR/export')) {
+      } else if (equals(url, 'vdrs/autotaskVDR/export')) {
         return Promise.resolve(vdrsData['autotaskVDR']);
       } else {
         return Promise.reject(new Error('not found'));
@@ -92,9 +92,9 @@ describe('downloadVdrs', () => {
       if (!equals(account, __ACCOUNT__)) {
         throw new Error('This should never happen');
       }
-      if (equals(url, '/vdrs/ErpCatalogCategory/export')) {
+      if (equals(url, 'vdrs/ErpCatalogCategory/export')) {
         return Promise.resolve([]);
-      } else if (equals(url, '/vdrs/autotaskVDR/export')) {
+      } else if (equals(url, 'vdrs/autotaskVDR/export')) {
         return Promise.resolve(vdrsData);
       } else {
         return Promise.reject(new Error('not found'));
@@ -117,9 +117,9 @@ describe('downloadVdrs', () => {
       if (!equals(account, __ACCOUNT__)) {
         throw new Error('This should never happen');
       }
-      if (equals(url, '/vdrs/ErpCatalogCategory/export')) {
+      if (equals(url, 'vdrs/ErpCatalogCategory/export')) {
         return Promise.resolve(vdrsData['ErpCatalogCategory']);
-      } else if (equals(url, '/vdrs/autotaskVDR/export')) {
+      } else if (equals(url, 'vdrs/autotaskVDR/export')) {
         return Promise.resolve(vdrsData['autotaskVDR']);
       } else {
         return Promise.reject(new Error('not found'));
@@ -144,9 +144,9 @@ describe('downloadVdrs', () => {
       if (!equals(account, __ACCOUNT__)) {
         throw new Error('This should never happen');
       }
-      if (equals(url, '/vdrs/ErpCatalogCategory/export')) {
+      if (equals(url, 'vdrs/ErpCatalogCategory/export')) {
         return Promise.reject(vdrsData['ErpCatalogCategory']);
-      } else if (equals(url, '/vdrs/autotaskVDR/export')) {
+      } else if (equals(url, 'vdrs/autotaskVDR/export')) {
         return Promise.resolve(vdrsData['autotaskVDR']);
       } else {
         return Promise.reject(new Error('not found'));
