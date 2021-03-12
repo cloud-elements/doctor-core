@@ -2,14 +2,13 @@
 const {existsSync} = require('fs');
 const fsExtra = require('fs-extra');
 const {forEach, dissoc, map, omit, pipe, tap, gt, propOr, pluck, countBy, identity, isNil, isEmpty} = require('ramda');
-const sortobject = require('deep-sort-object');
 const {toDirectoryName} = require('../../utils/regex');
 const getResourceName = require('../../utils/getResourceName');
 
 const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 
 module.exports = async (dir, data) => {
-  const elements = await data;
+  const elements = data;
   if (!existsSync(dir)) {
     fsExtra.ensureDirSync(dir);
   }
@@ -22,7 +21,7 @@ module.exports = async (dir, data) => {
   forEach(element => {
     const elementFolder =
       gt(Number(propOr(1, element.name)(allElementsNameCount)), 1) &&
-      (isNilOrEmpty(element.private) ? element.extended : !element.private)
+        (isNilOrEmpty(element.private) ? element.extended : !element.private)
         ? `${dir}/${toDirectoryName(element.name)}_extended`
         : `${dir}/${toDirectoryName(element.name)}`;
 
@@ -68,6 +67,6 @@ module.exports = async (dir, data) => {
         return omit(['createdDate', 'updatedDate'], resource);
       })(element.resources).sort((a, b) => a.path.localeCompare(b.path) || a.method.localeCompare(b.method));
     }
-    fsExtra.outputFileSync(`${elementFolder}/element.json`, JSON.stringify(sortobject(element), null, 4), 'utf8');
+    fsExtra.outputFileSync(`${elementFolder}/element.json`, JSON.stringify(element), 'utf8');
   })(elements);
 };

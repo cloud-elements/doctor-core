@@ -4,7 +4,6 @@
 const {existsSync, renameSync, readdir, lstatSync} = require('fs');
 const fsExtra = require('fs-extra');
 const {forEachObjIndexed, dissoc, isNil, isEmpty} = require('ramda');
-const sortobject = require('deep-sort-object');
 const {join} = require('path');
 const {promisify} = require('util');
 const {replaceall} = require('replaceall');
@@ -64,13 +63,13 @@ const moveOldFilestoBackup = async dirPath => {
  */
 const saveVdrsToDirNew = async (dir, data) => {
   try {
-    const vdrs = await data;
+    const vdrs = data;
     createDirIfNotExist(dir);
     moveOldFilestoBackup(dir);
     forEachObjIndexed((vdrNameObject, vdrName) => {
       const vdrDir = `${dir}/${vdrName}`;
       createDirIfNotExist(vdrDir);
-      fsExtra.outputFileSync(`${vdrDir}/${vdrName}.json`, JSON.stringify(sortobject(vdrNameObject), null, 4), 'utf8');
+      fsExtra.outputFileSync(`${vdrDir}/${vdrName}.json`, JSON.stringify(vdrNameObject), 'utf8');
       // save defintion
       const {definition} = vdrNameObject;
       const definitionDir = `${vdrDir}/definition`;
@@ -81,7 +80,7 @@ const saveVdrsToDirNew = async (dir, data) => {
           : [];
       fsExtra.outputFileSync(
         `${definitionDir}/objectDefinition.json`,
-        JSON.stringify(sortobject(definition), null, 4),
+        JSON.stringify(definition),
         'utf8',
       );
       // save transformation
@@ -102,7 +101,7 @@ const saveVdrsToDirNew = async (dir, data) => {
         }
         fsExtra.outputFileSync(
           `${elementTransformtaionDir}/transformation.json`,
-          JSON.stringify(sortobject(elementTransformtaion), null, 4),
+          JSON.stringify(elementTransformtaion),
           'utf8',
         );
       })(transformations);
@@ -124,7 +123,7 @@ const saveVdrsToDirNew = async (dir, data) => {
  */
 const saveVdrsToDirOld = async (dir, data) => {
   try {
-    const vdrs = await data;
+    const vdrs = data;
     createDirIfNotExist(dir);
     const definitionDir = `${dir}/objectDefinitions`;
     createDirIfNotExist(definitionDir);
@@ -140,7 +139,7 @@ const saveVdrsToDirOld = async (dir, data) => {
           : [];
       fsExtra.outputFileSync(
         `${objectDirName}/objectDefinition.json`,
-        JSON.stringify(sortobject(dissoc('id', vdr.definition)), null, 4),
+        JSON.stringify(dissoc('id', vdr.definition)),
         'utf8',
       );
       // save transformation
@@ -159,7 +158,7 @@ const saveVdrsToDirOld = async (dir, data) => {
         }
         fsExtra.outputFileSync(
           `${elementTransformtaionByVdrNameDir}/transformation.json`,
-          JSON.stringify(sortobject(elementTransformation), null, 4),
+          JSON.stringify(elementTransformation),
           'utf8',
         );
       })(vdr.transformation);

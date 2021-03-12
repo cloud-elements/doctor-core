@@ -2,7 +2,6 @@
 const {existsSync} = require('fs');
 const fsExtra = require('fs-extra');
 const {forEach, map, dissoc, omit, when, dissocPath, pipe, tap} = require('ramda');
-const sortobject = require('deep-sort-object');
 const {toDirectoryName} = require('../../utils/regex');
 const {logError} = require('../../utils/logger');
 
@@ -52,7 +51,7 @@ const cleanFormula = formula => {
 
 module.exports = async (dir, data) => {
   try {
-    let formulas = await data;
+    let formulas = data;
     formulas = map(cleanFormula)(formulas);
     if (!existsSync(dir)) {
       fsExtra.ensureDirSync(dir);
@@ -75,7 +74,7 @@ module.exports = async (dir, data) => {
             ),
           ),
         )(formula.steps);
-        fsExtra.outputFileSync(`${formulaFolder}/formula.json`, JSON.stringify(sortobject(formula), null, 4), 'utf8');
+        fsExtra.outputFileSync(`${formulaFolder}/formula.json`, JSON.stringify(formula), 'utf8');
       } catch (error) {
         logError(`Failed to save data into formula file: ${dir}`);
         throw error;
