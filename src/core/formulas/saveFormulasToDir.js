@@ -51,7 +51,7 @@ const cleanFormula = formula => {
 
 module.exports = async (dir, data) => {
   try {
-    let formulas = await data;
+    let formulas = data;
     formulas = map(cleanFormula)(formulas);
     if (!existsSync(dir)) {
       fsExtra.ensureDirSync(dir);

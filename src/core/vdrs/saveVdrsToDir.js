@@ -63,7 +63,7 @@ const moveOldFilestoBackup = async dirPath => {
  */
 const saveVdrsToDirNew = async (dir, data) => {
   try {
-    const vdrs = await data;
+    const vdrs = data;
     createDirIfNotExist(dir);
     moveOldFilestoBackup(dir);
     forEachObjIndexed((vdrNameObject, vdrName) => {
@@ -123,7 +123,7 @@ const saveVdrsToDirNew = async (dir, data) => {
  */
 const saveVdrsToDirOld = async (dir, data) => {
   try {
-    const vdrs = await data;
+    const vdrs = data;
     createDirIfNotExist(dir);
     const definitionDir = `${dir}/objectDefinitions`;
     createDirIfNotExist(definitionDir);

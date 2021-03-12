@@ -8,7 +8,7 @@ const getResourceName = require('../../utils/getResourceName');
 const isNilOrEmpty = val => isNil(val) || isEmpty(val);
 
 module.exports = async (dir, data) => {
-  const elements = await data;
+  const elements = data;
   if (!existsSync(dir)) {
     fsExtra.ensureDirSync(dir);
   }
