@@ -36,15 +36,17 @@ module.exports = async (account, formulaKeys, jobId, processId, jobType) => {
       return [];
     }
 
-    formulaNames.forEach(formulaName =>
-      emitter.emit(EventTopic.ASSET_STATUS, {
-        processId,
-        assetType: Assets.FORMULAS,
-        assetName: formulaName,
-        assetStatus: ArtifactStatus.INPROGRESS,
-        metadata: '',
-      }),
-    );
+    if (!equals(jobType, JobType.PROMOTE_EXPORT)) {
+      formulaNames.forEach(formulaName =>
+        emitter.emit(EventTopic.ASSET_STATUS, {
+          processId,
+          assetType: Assets.FORMULAS,
+          assetName: formulaName,
+          assetStatus: ArtifactStatus.INPROGRESS,
+          metadata: '',
+        }),
+      );
+    }
 
     logDebug('Downloading formulas', jobId);
     const exportedFormulas = await http.get('formulas', param, account);

@@ -31,13 +31,15 @@ const downloadElements = async (elements, query, jobId, processId, isPrivate, jo
         return null;
       }
 
-      emitter.emit(EventTopic.ASSET_STATUS, {
-        processId,
-        assetType: Assets.ELEMENTS,
-        assetName: element.key,
-        assetStatus: ArtifactStatus.INPROGRESS,
-        metadata: elementMetadata,
-      });
+      if (!equals(jobType, JobType.PROMOTE_EXPORT)) {
+        emitter.emit(EventTopic.ASSET_STATUS, {
+          processId,
+          assetType: Assets.ELEMENTS,
+          assetName: element.key,
+          assetStatus: ArtifactStatus.INPROGRESS,
+          metadata: elementMetadata,
+        });
+      }
 
       logDebug(`Downloading element for element key - ${element.key}`, jobId);
       const exportedElement = await http.get(makePath(element), query, account);

@@ -24,13 +24,15 @@ const downloadVdrs = async (vdrNames, jobId, processId, jobType, account) => {
         return null;
       }
 
-      emitter.emit(EventTopic.ASSET_STATUS, {
-        processId,
-        assetType: Assets.VDRS,
-        assetName: vdrName,
-        assetStatus: ArtifactStatus.INPROGRESS,
-        metadata: '',
-      });
+      if (!equals(jobType, JobType.PROMOTE_EXPORT)) {
+        emitter.emit(EventTopic.ASSET_STATUS, {
+          processId,
+          assetType: Assets.VDRS,
+          assetName: vdrName,
+          assetStatus: ArtifactStatus.INPROGRESS,
+          metadata: '',
+        });
+      }
 
       logDebug(`Downloading VDR for VDR name - ${vdrName}`, jobId);
       const exportedVdr = await http.get(`vdrs/${vdrName}/export`, {}, account);
