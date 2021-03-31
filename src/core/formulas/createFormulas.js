@@ -27,6 +27,14 @@ const createFormula = curry(async (account, endpointFormulas, jobId, processId, 
       return null;
     }
 
+    emitter.emit(EventTopic.ASSET_STATUS, {
+      processId,
+      assetType: Assets.FORMULAS,
+      assetName: formula.name,
+      assetStatus: ArtifactStatus.INPROGRESS,
+      metadata: '',
+    });
+
     logDebug(`Creating formula for formula name - ${formula.name}`, jobId);
     const result = await http.post('formulas', formula, account);
     logDebug(`Created formula for formula name - ${formula.name}`, jobId);

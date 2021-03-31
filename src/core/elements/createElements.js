@@ -75,7 +75,14 @@ module.exports = async (account, elements, jobId, processId) => {
         });
         return null;
       }
-
+      emitter.emit(EventTopic.ASSET_STATUS, {
+        processId,
+        assetType: Assets.ELEMENTS,
+        assetName: element.key,
+        assetStatus: ArtifactStatus.INPROGRESS,
+        metadata: elementMetadata,
+      });
+      
       logDebug(`Uploading element for element key - ${element.key}`, jobId);
       if (isNilOrEmpty(existingElement)) {
         // Element doesn't exists in the db for given account
