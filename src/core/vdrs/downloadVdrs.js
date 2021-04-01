@@ -23,16 +23,32 @@ const downloadVdrs = async (vdrNames, jobId, processId, jobType, account) => {
         });
         return null;
       }
+
+      if (!equals(jobType, JobType.PROMOTE_EXPORT)) {
+        emitter.emit(EventTopic.ASSET_STATUS, {
+          processId,
+          assetType: Assets.VDRS,
+          assetName: vdrName,
+          assetStatus: ArtifactStatus.INPROGRESS,
+          metadata: '',
+        });
+      }
+
       logDebug(`Downloading VDR for VDR name - ${vdrName}`, jobId);
       const exportedVdr = await http.get(`vdrs/${vdrName}/export`, {}, account);
       logDebug(`Downloaded VDR for VDR name - ${vdrName}`, jobId);
-      emitter.emit(EventTopic.ASSET_STATUS, {
-        processId,
-        assetType: Assets.VDRS,
-        assetName: vdrName,
-        assetStatus: equals(jobType, JobType.PROMOTE_EXPORT) ? ArtifactStatus.INPROGRESS : ArtifactStatus.COMPLETED,
-        metadata: '',
-      });
+
+      // If 'promote_export' job, the final artifact
+      // status update will happen in doctor-service
+      if (!equals(jobType, JobType.PROMOTE_EXPORT)) {
+        emitter.emit(EventTopic.ASSET_STATUS, {
+          processId,
+          assetType: Assets.VDRS,
+          assetName: vdrName,
+          assetStatus: ArtifactStatus.COMPLETED,
+          metadata: '',
+        });
+      }
       return !isNilOrEmpty(exportedVdr) ? exportedVdr : {};
     } catch (error) {
       emitter.emit(EventTopic.ASSET_STATUS, {

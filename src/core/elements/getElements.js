@@ -31,17 +31,31 @@ const downloadElements = async (elements, query, jobId, processId, isPrivate, jo
         return null;
       }
 
+      if (!equals(jobType, JobType.PROMOTE_EXPORT)) {
+        emitter.emit(EventTopic.ASSET_STATUS, {
+          processId,
+          assetType: Assets.ELEMENTS,
+          assetName: element.key,
+          assetStatus: ArtifactStatus.INPROGRESS,
+          metadata: elementMetadata,
+        });
+      }
+
       logDebug(`Downloading element for element key - ${element.key}`, jobId);
       const exportedElement = await http.get(makePath(element), query, account);
       logDebug(`Downloaded element for element key - ${element.key}`, jobId);
 
-      emitter.emit(EventTopic.ASSET_STATUS, {
-        processId,
-        assetType: Assets.ELEMENTS,
-        assetName: element.key,
-        assetStatus: equals(jobType, JobType.PROMOTE_EXPORT) ? ArtifactStatus.INPROGRESS : ArtifactStatus.COMPLETED,
-        metadata: elementMetadata,
-      });
+      // If 'promote_export' job, the final artifact
+      // status update will happen in doctor-service
+      if (!equals(jobType, JobType.PROMOTE_EXPORT)) {
+        emitter.emit(EventTopic.ASSET_STATUS, {
+          processId,
+          assetType: Assets.ELEMENTS,
+          assetName: element.key,
+          assetStatus: ArtifactStatus.COMPLETED,
+          metadata: elementMetadata,
+        });
+      }
       return !isNilOrEmpty(exportedElement) ? exportedElement : {};
     } catch (error) {
       emitter.emit(EventTopic.ASSET_STATUS, {

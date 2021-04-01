@@ -35,18 +35,37 @@ module.exports = async (account, formulaKeys, jobId, processId, jobType) => {
       );
       return [];
     }
+
+    if (!equals(jobType, JobType.PROMOTE_EXPORT)) {
+      formulaNames.forEach(formulaName =>
+        emitter.emit(EventTopic.ASSET_STATUS, {
+          processId,
+          assetType: Assets.FORMULAS,
+          assetName: formulaName,
+          assetStatus: ArtifactStatus.INPROGRESS,
+          metadata: '',
+        }),
+      );
+    }
+
     logDebug('Downloading formulas', jobId);
     const exportedFormulas = await http.get('formulas', param, account);
     logDebug('Downloaded formulas', jobId);
-    formulaNames.forEach(formulaName =>
-      emitter.emit(EventTopic.ASSET_STATUS, {
-        processId,
-        assetType: Assets.FORMULAS,
-        assetName: formulaName,
-        assetStatus: equals(jobType, JobType.PROMOTE_EXPORT) ? ArtifactStatus.INPROGRESS : ArtifactStatus.COMPLETED,
-        metadata: '',
-      }),
-    );
+
+    // If 'promote_export' job, the final artifact
+    // status update will happen in doctor-service
+    if (!equals(jobType, JobType.PROMOTE_EXPORT)) {
+      formulaNames.forEach(formulaName =>
+        emitter.emit(EventTopic.ASSET_STATUS, {
+          processId,
+          assetType: Assets.FORMULAS,
+          assetName: formulaName,
+          assetStatus: ArtifactStatus.COMPLETED,
+          metadata: '',
+        }),
+      );
+    }
+
     const newlyCreatedFormulas =
       formulaKeys && Array.isArray(formulaKeys)
         ? formulaKeys.filter(key => !exportedFormulas.some(formula => formula.name === key.name))
