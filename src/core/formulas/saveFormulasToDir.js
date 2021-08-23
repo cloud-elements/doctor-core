@@ -5,39 +5,6 @@ const {forEach, map, dissoc, omit, when, dissocPath, pipe, tap} = require('ramda
 const {toDirectoryName} = require('../../utils/regex');
 const {logError} = require('../../utils/logger');
 
-const addStep = (stepName, stepsMap, sortedSteps) => {
-  const step = stepsMap[stepName];
-  if (!sortedSteps.includes(step)) {
-    sortedSteps.push(step);
-    forEach(nextStepName => {
-      addStep(nextStepName, stepsMap, sortedSteps);
-    })(step.onSuccess);
-
-    forEach(nextStepName => {
-      addStep(nextStepName, stepsMap, sortedSteps);
-    })(step.onFailure);
-  }
-};
-
-const sortSteps = formula => {
-  const sortedSteps = [];
-  const stepsMap = formula.steps.reduce((stepsMap, step) => {
-    stepsMap[step.name] = step;
-    return stepsMap;
-  }, {});
-  forEach(trigger => {
-    forEach(stepName => {
-      addStep(stepName, stepsMap, sortedSteps);
-    })(trigger.onSuccess);
-
-    forEach(stepName => {
-      addStep(stepName, stepsMap, sortedSteps);
-    })(trigger.onFailure);
-  })(formula.triggers);
-
-  formula.steps = sortedSteps;
-};
-
 const cleanFormula = formula => {
   const result = omit(['accountId', 'userId', 'createdDate'])(formula);
   result.configuration = map(dissoc('id'))(formula.configuration);
@@ -62,7 +29,6 @@ module.exports = async (dir, data) => {
         if (!existsSync(formulaFolder)) {
           fsExtra.ensureDirSync(formulaFolder);
         }
-        sortSteps(formula);
         formula.steps = map(
           when(
             s => s.type === 'filter' || s.type === 'script',
