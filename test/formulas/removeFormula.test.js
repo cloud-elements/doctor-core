@@ -121,7 +121,7 @@ describe('removeFormula', () => {
     } catch (error) {
       expect(error).toEqual(new Error('Invalid'));
       expect(http.get).toHaveBeenCalledTimes(1);
-      expect(http.delete).toHaveBeenCalledTimes(2);
+      expect(http.delete).toHaveBeenCalledTimes(3);
     }
     expect.assertions(4);
     console.error = originalError;
