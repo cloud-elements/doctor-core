@@ -1,7 +1,7 @@
 {
   "name": "@cloudelements/doctor-core",
-  "version": "1.0.13",
-  "description": "The Core functionality of Doctor - The Cloud Elements Asset Management Tool",
+  "version": "1.0.15",
+  "description": "Core functionality of Doctor - The Cloud Elements Asset Management Tool",
   "main": "index.js",
   "scripts": {
     "test:unit": "npm run prettify && npx eslint src --fix && jest --silent",
