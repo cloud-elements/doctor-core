@@ -1,6 +1,6 @@
 {
   "name": "@cloudelements/doctor-core",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "The Core functionality of Doctor - The Cloud Elements Asset Management Tool",
   "main": "index.js",
   "scripts": {
