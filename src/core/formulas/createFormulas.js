@@ -122,8 +122,9 @@ module.exports = async (account, formulas, jobId, processId) => {
     const fixSteps = map(step =>
       equals(step.type, 'formula')
         ? assocPath(['properties', 'formulaId'],
-            formulaIds[step.properties.formulaId] || subformulaIds[step.properties.formulaId] || step.properties.formulaId,
-            step)
+            formulaIds[step.properties.formulaId] || subformulaIds[step.properties.formulaId] || -1,
+            step,
+          )
         : step,
     );
     const newFormulas = map(formula => ({
