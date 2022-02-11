@@ -100,15 +100,31 @@ const updateFormula = curry(async (account, jobId, processId, formula) => {
   }
 });
 
+const getSubFormulaIds = curry((endpointFormulas, formula) => {
+  const subFrmlaIds = {};
+  const subFormulas = !isNilOrEmpty(formula.subFormulas) ? formula.subFormulas : [];
+  subFormulas.forEach(subFormula => {
+    const endpointFormula = !isNilOrEmpty(endpointFormulas)? find(propEq('name', subFormula.name))(endpointFormulas): [];
+    if (!isNilOrEmpty(endpointFormula)) {
+      subFrmlaIds[subFormula.id] = endpointFormula.id;
+    }
+  });
+  return subFrmlaIds;
+});
+
 module.exports = async (account, formulas, jobId, processId) => {
   try {
     const endpointFormulas = await http.get('formulas', {}, account);
     const formulaIds = mergeAll(
       await Promise.all(map(createFormula(account, endpointFormulas, jobId, processId))(formulas)),
     );
+    const subformulaIds = mergeAll(map(getSubFormulaIds(endpointFormulas))(formulas));
     const fixSteps = map(step =>
       equals(step.type, 'formula')
-        ? assocPath(['properties', 'formulaId'], formulaIds[step.properties.formulaId] || -1, step)
+        ? assocPath(['properties', 'formulaId'],
+            formulaIds[step.properties.formulaId] || subformulaIds[step.properties.formulaId] || -1,
+            step,
+          )
         : step,
     );
     const newFormulas = map(formula => ({

@@ -32,7 +32,7 @@ describe('createFormulas', () => {
     http.update.mockResolvedValue(Promise.resolve(head(formulasData)));
     await createFormulas(__ACCOUNT__, formulasData, 1, 2);
     expect(http.post).toHaveBeenCalledTimes(0);
-    expect(http.update).toHaveBeenCalledTimes(2);
+    expect(http.update).toHaveBeenCalledTimes(3);
     expect(http.get).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
     expect(http.update).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
   });
@@ -44,8 +44,8 @@ describe('createFormulas', () => {
     http.post.mockResolvedValue(Promise.resolve(head(formulasData)));
     http.update.mockResolvedValue(Promise.resolve(head(formulasData)));
     await createFormulas(__ACCOUNT__, formulasData, 1, 2);
-    expect(http.post).toHaveBeenCalledTimes(2);
-    expect(http.update).toHaveBeenCalledTimes(2);
+    expect(http.post).toHaveBeenCalledTimes(3);
+    expect(http.update).toHaveBeenCalledTimes(3);
     expect(http.get).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
     expect(http.post).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
   });
@@ -62,7 +62,7 @@ describe('createFormulas', () => {
       await createFormulas(__ACCOUNT__, formulasData, 1, 2);
     } catch (error) {
       expect(http.get).toHaveBeenCalledTimes(1);
-      expect(http.update).toHaveBeenCalledTimes(2);
+      expect(http.update).toHaveBeenCalledTimes(3);
       expect(http.get).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
       expect(http.update).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
     }
@@ -86,7 +86,7 @@ describe('createFormulas', () => {
       await createFormulas(__ACCOUNT__, formulasData, 1, 2);
     } catch (error) {
       expect(http.get).toHaveBeenCalledTimes(1);
-      expect(http.post).toHaveBeenCalledTimes(2);
+      expect(http.post).toHaveBeenCalledTimes(3);
       expect(http.get).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
       expect(http.post).toHaveBeenCalledWith(expect.anything(), expect.anything(), __ACCOUNT__);
     }
