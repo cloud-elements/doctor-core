@@ -27,7 +27,7 @@ module.exports = {
       return await rp(options);
     } catch (err) {
       if (pathSatisfies(res => !isNilOrEmpty(res), ['error', 'message'], err)
-        && (test(/^No (.*) found$/, err.error.message) || test(/^VDR (.*) doesn't exist$/, err.error.message))){
+        && test(/^No (.*) found$/, err.error.message)){
         return {};
       }
       throw err;
