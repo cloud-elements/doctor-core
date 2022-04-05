@@ -1,5 +1,5 @@
 const rp = require('request-promise');
-const {isNil, isEmpty, test} = require('ramda');
+const {isNil, isEmpty, test, pathSatisfies} = require('ramda');
 const {logError} = require('./logger');
 
 const isNilOrEmpty = val => isNil(val) || isEmpty(val);
@@ -26,7 +26,8 @@ module.exports = {
     try {
       return await rp(options);
     } catch (err) {
-      if (test(/^No (.*) found$/, err.error.message)) {
+      if (pathSatisfies(res => !isNilOrEmpty(res), ['error', 'message'], err)
+        && test(/^No (.*) found$/, err.error.message)){
         return {};
       }
       throw err;
